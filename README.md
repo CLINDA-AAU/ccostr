@@ -3,7 +3,7 @@
 CenCost
 =======
 
-A R package to calculate estimates of total costs with censored data
+An R package to calculate estimates of total costs with censored data
 
 Overview
 --------
@@ -21,10 +21,10 @@ Data format
 
 Cost data should look something like this
 
-    #>  id totalcost delta surv
-    #>   A      2544     0  343
-    #>   B      4245     0  903
-    #>   C       590     1  445
+    #>  id tcost delta surv
+    #>   A  2544     0  343
+    #>   B  4245     0  903
+    #>   C   590     1  445
 
 It is possible to get better estimates of the true mean if cost history is available, if so the data should look something like this:
 
