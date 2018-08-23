@@ -16,8 +16,8 @@ Installation
 devtools::install_github("")
 ```
 
-Usage
------
+Data format
+-----------
 
 Cost data should look something like this
 
@@ -36,8 +36,23 @@ It is possible to get better estimates of the true mean if cost history is avail
     #>   C     1    5   23     1  445
     #>   C    67   88  567     1  445
 
-$$Full Sample Mean = \\frac{\\sum\_{i=n}^nM\_i}{n}$$
+Explanation of estimates
+------------------------
 
-$$Complete Case Mean = \\frac{\\sum\_{i=n}^n \\Delta\_iM\_i}{\\sum\_{i=n}^n \\Delta\_i}$$
+The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
-![equation](http://www.sciweavers.org/tex2img.php?eq=%24%24Complete%20Case%20Mean%20%3D%20%5Cfrac%7B%5Csum_%7Bi%3Dn%7D%5En%20%5CDelta_iM_i%7D%7B%5Csum_%7Bi%3Dn%7D%5En%5CDelta_i%7D%24%24&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+<img src="img/fullsample.png"/>
+
+The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
+
+<img src="img/completecase.png"/>
+
+It is possible to come up with better estimates of the mean costs, there are two fundamental different approaches. The first takes into account only total costs over the whole period, but it is possible to improve this type of estimates if cost history is present. If that is the case this additional information is used in
+
+### Estimates without cost history
+
+LinT BT
+
+### Estimates with cost history
+
+LinA LinB ZT BTp
