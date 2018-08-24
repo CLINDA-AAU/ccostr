@@ -98,15 +98,22 @@ sc <- summary(survfit(Surv(x$surv, x$delta == 0) ~ 1),
               times = x$surv[x$delta == 1])
 
 # Save changes of censoring and time in seperate dataframe
-sct <- data.frame(sv$time, sv$surv)
+sct <- data.frame(sc$time, sc$surv)
 
 
 # Merge with the dataset by surv, as that tells which the chance of being censored in each death
-t <- merge(x,sct,by.x="surv", by.y="sv.time", all.x=T)
+t <- merge(x,sct,by.x="surv", by.y="sc.time", all.x=T)
 
 
 # Calculating Band and Tsiatis cost estimator
-BT <- mean((t$tcost*t$delta)/t$sv.surv, na.rm=T)
+BT <- mean((t$tcost*t$delta)/t$sc.surv, na.rm=T)
+
+
+
+
+
+
+
 
 
 

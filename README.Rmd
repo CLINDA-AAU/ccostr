@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 ```
 
 # CenCost
+**(warning estimates might be wrong)**
+
 R package to calculate estimates of total costs with censored data
 
 
@@ -52,7 +54,8 @@ print(df_0, row.names=FALSE)
 
 
 
-It is possible to get better estimates of the true mean if cost history is available, if so the data should look something like this:
+It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discreet or contenious
+if so the data should look something like this:
 ```{r echo=FALSE}
 id      <- c("A", "A", "A", "B" ,"C", "C")
 

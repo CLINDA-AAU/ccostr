@@ -3,7 +3,7 @@
 CenCost
 =======
 
-R package to calculate estimates of total costs with censored data
+**(warning estimates might be wrong)** R package to calculate estimates of total costs with censored data
 
 Overview
 --------
