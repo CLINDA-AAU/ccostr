@@ -1,20 +1,19 @@
-
-
-id           <- c("A", "B" ,"C")
-tcost        <- c(2544,4245,590)
-delta        <- c(0,0,1)
-surv         <- c(343,903,445)
-
-df_0 <- data.frame(id, tcost, delta, surv)
-
-
-
-
-
-
-
-
-
+#' Calculates estimates of mean valus given censored cost data 
+#'
+#' This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted Life Years. 
+#' 
+#' 
+#' - Naive "full sample"
+#' - Naive "complete case"
+#' - Lin's method
+#' - Bang and Tsiatis's method 
+#' 
+#' 
+#' @param ccmean Converts the questionare scores
+#' @return Different estimates
+#' @export
+#' @examples
+#' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
 
 
 ccmean <- function(x, id="id", tcost="tcost", delta="delta", surv="surv") {
@@ -95,8 +94,7 @@ LinT <- sum(d$dif*d$mean, na.rm=T) + (tail(d$sv.surv, n=1)*tail(d$mean, n=1))
 #################################################################
 
 # Opposite Kaplain Meier - chance of censoring - for each period (cummulative)
-sc <- summary(survfit(Surv(x$surv, 
-                           x$delta == 0) ~ 1), 
+sc <- summary(survfit(Surv(x$surv, x$delta == 0) ~ 1), 
               times = x$surv[x$delta == 1])
 
 # Save changes of censoring and time in seperate dataframe
@@ -118,11 +116,13 @@ BT <- mean((t$tcost*t$delta)/t$sv.surv, na.rm=T)
 ##                                                             ##
 #################################################################
 
-results <- list("These results should be checked before ...",data.frame(full_sample, complete_case, LinT, BT))
+results <- list("These results should be checked before ...",
+                data.frame(full_sample, 
+                           complete_case, 
+                           LinT, 
+                           BT))
 
 return(results)
 
 
 }
-
-ccmean(df_0)
