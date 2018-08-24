@@ -13,35 +13,31 @@ knitr::opts_chunk$set(
 ```
 
 # CenCost
-An R package to calculate estimates of total costs with censored data
+R package to calculate estimates of total costs with censored data
+
+
+
 
 ## Overview
+The ccmean function returns 4 estimates, these are:
 
-
-
-
-
+ - Naive "full sample"
+ - Naive "complete case"
+ - Lin's method: *Lin et al. (1997)*
+ - Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
 
 
 
 
 ## Installation
 ```{r, eval = FALSE}
-# The easiest way to install:
-devtools::install_github("")
+devtools::install_github("LarsHernandez/CenCost")
 ```
 
 
 
 
-
-
-
-
-
-
 ## Data format
-
 Cost data should look something like this
 ```{r echo=FALSE}
 id           <- c("A", "B" ,"C")
@@ -66,13 +62,14 @@ cost    <- c(550,1949,45,4245,23,567)
 delta   <- c(0,0,0,0,1,1)
 surv    <- c(343,343,343,903,445,445)
 
-df_0 <- data.frame(id, start,stop,cost,delta,surv)
-print(df_0, row.names=FALSE)
+df_1 <- data.frame(id, start,stop,cost,delta,surv)
+print(df_1, row.names=FALSE)
 ```
 
 
-## Explanation of estimates
 
+
+## Explanation of estimates
 The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
 <img src="img/fullsample.png"/>
@@ -86,8 +83,17 @@ It is possible to come up with better estimates of the mean costs, there are two
 
 ### Estimates without cost history
 
+<img src="img/LinT.png"/>
+<img src="img/LinTa.png"/>
+
+
 LinT
 BT
+
+
+<img src="img/BT.png"/>
+
+
 
 ### Estimates with cost history
 
@@ -97,7 +103,37 @@ ZT
 BTp
 
 
+## Usage
 
+```{r}
+library(cencost)
+library(survival)
+library(dplyr)
+
+ccmean(df_0)
+```
+
+## References
+
+1. Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. "Estimating Medical Costs from Incomplete Follow-Up Data." Biometrics 53, no. 2 (1997): 419-34.
+
+2. H Bang, AA Tsiatis; Estimating medical costs with censored data, Biometrika, Volume 87, Issue 2, 1 June 2000, Pages 329-343.
+
+3. Zhao, Hongwei, and Lili Tian. "On Estimating Medical Cost and Incremental Cost-Effectiveness Ratios with Censored Data." Biometrics 57, no. 4 (2001): 1002-008.
+
+
+
+
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+# BT = \frac{1}{n}\sum_{i=1}^n\frac{\Delta_iM_i}{\hat{K}(T_i)}
+# LinT = \sum_{k=1}^{K+1}A_k(S_k-S_{k+1})
+# \hat{A}_k=\frac{\sum_{i=1}^nY_{ki}C_i}{\sum_{i=1}^nY_{ki}}
+
+```
 
 
 

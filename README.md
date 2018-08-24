@@ -3,17 +3,23 @@
 CenCost
 =======
 
-An R package to calculate estimates of total costs with censored data
+R package to calculate estimates of total costs with censored data
 
 Overview
 --------
+
+The ccmean function returns 4 estimates, these are:
+
+-   Naive "full sample"
+-   Naive "complete case"
+-   Lin's method: *Lin et al. (1997)*
+-   Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
 
 Installation
 ------------
 
 ``` r
-# The easiest way to install:
-devtools::install_github("")
+devtools::install_github("LarsHernandez/CenCost")
 ```
 
 Data format
@@ -51,8 +57,46 @@ It is possible to come up with better estimates of the mean costs, there are two
 
 ### Estimates without cost history
 
+<img src="img/LinT.png"/> <img src="img/LinTa.png"/>
+
 LinT BT
+
+<img src="img/BT.png"/>
 
 ### Estimates with cost history
 
 LinA LinB ZT BTp
+
+Usage
+-----
+
+``` r
+library(cencost)
+library(survival)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+
+ccmean(df_0)
+#> [[1]]
+#> [1] "These results should be checked before ..."
+#> 
+#> [[2]]
+#>   full_sample complete_case LinT   BT
+#> 1    2459.667           590  295 1180
+```
+
+References
+----------
+
+1.  Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. "Estimating Medical Costs from Incomplete Follow-Up Data." Biometrics 53, no. 2 (1997): 419-34.
+
+2.  H Bang, AA Tsiatis; Estimating medical costs with censored data, Biometrika, Volume 87, Issue 2, 1 June 2000, Pages 329-343.
+
+3.  Zhao, Hongwei, and Lili Tian. "On Estimating Medical Cost and Incremental Cost-Effectiveness Ratios with Censored Data." Biometrics 57, no. 4 (2001): 1002-008.
