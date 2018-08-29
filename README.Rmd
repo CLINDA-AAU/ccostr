@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# CenCost
+# ccostr
 **(warning estimates might be wrong)**
 
 R package to calculate estimates of total costs with censored data
