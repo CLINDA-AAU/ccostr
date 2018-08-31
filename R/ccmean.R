@@ -3,32 +3,46 @@
 #' This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted Life Years. 
 #' 
 #' 
-#' - Naive "full sample"
-#' - Naive "complete case"
-#' - Lin's method
-#' - Bang and Tsiatis's method 
+#' - Naive "Available Sample"
+#' - Naive "Complete Case"
 #' 
+#' - LinT - Lin's method
+#' - BT - Bang and Tsiatis's method 
+#' - ZT - Zhao and Tian's method
 #' 
-#' @param ccmean Converts the questionare scores
+#' @param ccmean Caldulates the estimates of mean costs
 #' @return Different estimates
 #' @export
 #' @examples
 #' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
 
 
-ccmean <- function(x, id="id", tcost="tcost", delta="delta", surv="surv") {
+ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv") {
 
+# Ordering the dataset
+x <- x[order(x$id, x$delta),]
+row.names(x) <- 1:nrow(x)
+
+
+# Some calculations don't use cost history and therefore collapse by ID
+  xf <- x %>% 
+    group_by(id) %>% 
+    summarize(cost = sum(cost, na.rm=T),
+              delta = last(delta),
+              surv = first(surv))
+
+  
 #################################################################
 ##                          section 1:                         ##
-##                     Naive (full sample)                     ##
+##                   Naive (Avaiable Sample)                   ##
 #################################################################
 
 # Costs are summed and a mean are found
-full_sample <- x %>% 
+available_sample <- xf %>% 
   group_by(id) %>% 
-  mutate(costs = sum(tcost, na.rm=T)) %>% 
+  mutate(sumcost = sum(cost, na.rm=T)) %>% 
   ungroup() %>% 
-  summarize(m = mean(costs, na.rm=T)) %>%
+  summarize(m = mean(sumcost, na.rm=T)) %>%
   as.numeric()
 
 
@@ -40,15 +54,15 @@ full_sample <- x %>%
 #################################################################
 
 # Restricted to only full cases where the patient dies before 1461
-b <- subset(x, x$delta == 1)
+b <- subset(xf, xf$delta == 1)
 
 
 # Costs are summed up and calculated mean
 complete_case <- b %>% 
   group_by(id) %>% 
-  mutate(costs = sum(tcost, na.rm=T)) %>% 
+  mutate(sumcost = sum(cost, na.rm=T)) %>% 
   ungroup() %>% 
-  summarize(m = mean(costs, na.rm=T)) %>%
+  summarize(m = mean(sumcost, na.rm=T)) %>%
   as.numeric()
 
 
@@ -60,21 +74,18 @@ complete_case <- b %>%
 #################################################################
 
 # a calculation of chance of survival for each interval (cummulative) (interval = censoring)
-sv <- summary(survfit(Surv(x$surv, x$delta == 1) ~ 1))
+sv <- summary(survfit(Surv(xf$surv, xf$delta == 1) ~ 1))
 
 
 # calculate average costs of patients deceased within each interval
-a <- subset(x, delta == 1) %>% 
+a <- subset(xf, delta == 1) %>% 
   mutate(ints = cut(surv, breaks = c(sv$time))) %>% 
   group_by(ints) %>% 
-  summarise(mean = mean(tcost))
+  summarise(mean = mean(cost))
 
 
-# Function to calculate chance of death within each interval
-mydiff <- function(data, diff){
-  c(diff(data, lag = diff), rep(NA, diff))
-}
-dif <- mydiff(sv$surv, 1)*-1
+# calculate chance of death within each interval
+dif <- c(diff(sv$surv, lag= 1), rep(NA,1))*-1
 
 
 # Gathering the data in a new dataframe
@@ -94,40 +105,110 @@ LinT <- sum(d$dif*d$mean, na.rm=T) + (tail(d$sv.surv, n=1)*tail(d$mean, n=1))
 #################################################################
 
 # Opposite Kaplain Meier - chance of censoring - for each period (cummulative)
-sc <- summary(survfit(Surv(x$surv, x$delta == 0) ~ 1), 
-              times = x$surv[x$delta == 1])
+sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1), 
+              times = xf$surv)
 
 # Save changes of censoring and time in seperate dataframe
 sct <- data.frame(sc$time, sc$surv)
 
+# adjust for last proparbility = 0 (why we do this i'm not sure)
+sct$sc.surv[sct$sc.surv == 0] <- min(sct$sc.surv[sct$sc.surv != 0])
+
+# remove non unique to avoid errors when merging
+sct <- unique(sct)
 
 # Merge with the dataset by surv, as that tells which the chance of being censored in each death
-t <- merge(x,sct,by.x="surv", by.y="sc.time", all.x=T)
+t <- merge(xf,sct,by.x="surv", by.y="sc.time", all.x=T)
 
 
 # Calculating Band and Tsiatis cost estimator
-BT <- mean((t$tcost*t$delta)/t$sc.surv, na.rm=T)
-
-
-
-
-
-
-
+BT <- mean((t$cost*t$delta)/t$sc.surv)
 
 
 
 
 #################################################################
 ##                          section 6:                         ##
-##                                                             ##
+##                Zhao and Tian's method (2001)                ##
+#################################################################
+
+# Opposite Kaplain Meier - chance of censoring - for each period (cummulative)
+sb <- summary(survfit(Surv(xf$surv, 
+                           xf$delta == 0) ~ 1),
+              times = (xf$surv))
+#times = t_data$surv[t_data$delta %in% c(0,1)])
+
+
+# new dataframe with values from the list and only unique so that we can merge them
+sbt <- data.frame(sb$time, sb$surv)
+
+# adjust for last proparbility = 0 (why we do this i'm not sure)
+sbt$sb.surv[sbt$sb.surv == 0] <- min(sbt$sb.surv[sbt$sb.surv != 0])
+
+# remove non unique to avoid errors when merging
+sbt <- unique(sbt)
+
+
+# Merge with the dataset by surv, as that tells which the chance of being censored in each death
+e <- merge(x,sbt,by.x="surv", by.y="sb.time", all.x=T)
+
+
+# Forward loop to calculate mean cost of patients with longer survival than patient i at patient i's surv
+e$mcostlsurv <- NA
+
+for(i in 1:nrow(e)){
+  # temp set for longer survival than i
+  t_data2 <- subset(x, start < e$surv[i])
+  # Calculating the cost running costs of split periods
+  t_data2$ncost <- ifelse(t_data2$stop> e$surv[i], (t_data2$cost/(t_data2$stop-t_data2$start))*(e$surv[i]-t_data2$start),0)
+  # Don't double include split costs
+  t_data2$cost <- ifelse(t_data2$stop > e$surv[i],0,t_data2$cost)
+  # Now added to the other costs
+  t_data2$cost <- t_data2$cost + t_data2$ncost
+  
+  # summarized  
+  t_data_total_temp <- t_data2 %>% 
+    group_by(id) %>% 
+    summarize(cost = sum(cost, na.rm=T),
+              surv= first(surv))
+  
+  # calculating the individual mean costs of everyone who lives longer 
+  e$mcostlsurv[i] <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= e$surv[i]])
+  
+}
+rm(i)
+# Summarizing the dataset
+ee <- e %>% 
+  group_by(id) %>% 
+  summarize(cost = sum(cost, na.rm=T),
+            delta = first(delta),
+            sb.surv= first(sb.surv),
+            surv= first(surv),
+            mcostlsurv = mean(mcostlsurv, na.rm=T))
+
+
+# The ZT estimator of mean costs
+ZT <- mean((ee$delta * (ee$cost / ee$sb.surv)) + ((1-ee$delta) * ((ee$cost-ee$mcostlsurv) / ee$sb.surv)), na.rm=T)
+ZT
+
+
+
+
+
+
+
+
+#################################################################
+##                          section 7:                         ##
+##                           Results                           ##
 #################################################################
 
 results <- list("These results should be checked before ...",
-                data.frame(full_sample, 
+                data.frame(available_sample, 
                            complete_case, 
                            LinT, 
-                           BT))
+                           BT,
+                           ZT))
 
 return(results)
 

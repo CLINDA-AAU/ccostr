@@ -23,17 +23,17 @@ R package to calculate estimates of total costs with censored data
 ## Overview
 The ccmean function returns 4 estimates, these are:
 
- - Naive "full sample"
- - Naive "complete case"
+ - Naive "Available Sample"
+ - Naive "Complete Case"
  - Lin's method: *Lin et al. (1997)*
  - Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
-
+ - Zhao and Tian's method:
 
 
 
 ## Installation
 ```{r, eval = FALSE}
-devtools::install_github("LarsHernandez/CenCost")
+devtools::install_github("HaemAalborg/ccostr")
 ```
 
 
