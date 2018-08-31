@@ -4,11 +4,11 @@
 \alias{ccmean}
 \title{Calculates estimates of mean valus given censored cost data}
 \usage{
-ccmean(x, id = "id", tcost = "tcost", delta = "delta",
-  surv = "surv")
+ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
+  delta = "delta", surv = "surv")
 }
 \arguments{
-\item{ccmean}{Converts the questionare scores}
+\item{ccmean}{Caldulates the estimates of mean costs}
 }
 \value{
 Different estimates
@@ -17,10 +17,12 @@ Different estimates
 This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted Life Years.
 }
 \details{
-- Naive "full sample"
-- Naive "complete case"
-- Lin's method
-- Bang and Tsiatis's method
+- Naive "Available Sample"
+- Naive "Complete Case"
+
+- LinT - Lin's method
+- BT - Bang and Tsiatis's method 
+- ZT - Zhao and Tian's method
 }
 \examples{
 ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
