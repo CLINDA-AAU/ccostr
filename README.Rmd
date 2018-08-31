@@ -109,11 +109,11 @@ BTp
 ## Usage
 
 ```{r}
-library(cencost)
+library(ccostr)
 library(survival)
 library(dplyr)
 
-ccmean(df_0)
+ccmean(df_1)
 ```
 
 ## References

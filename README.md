@@ -74,7 +74,7 @@ Usage
 -----
 
 ``` r
-library(cencost)
+library(ccostr)
 library(survival)
 library(dplyr)
 #> 
@@ -86,13 +86,13 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 
-ccmean(df_0)
+ccmean(df_1)
 #> [[1]]
 #> [1] "These results should be checked before ..."
 #> 
 #> [[2]]
-#>   full_sample complete_case LinT   BT
-#> 1    2459.667           590  295 1180
+#>   available_sample complete_case LinT  BT       ZT
+#> 1         2459.667           590  295 295 337.1667
 ```
 
 References
