@@ -1,25 +1,28 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-CenCost
-=======
+ccostr
+======
 
-**(warning estimates might be wrong)** R package to calculate estimates of total costs with censored data
+**(warning estimates might be wrong)**
+
+R package to calculate estimates of total costs with censored data
 
 Overview
 --------
 
 The ccmean function returns 4 estimates, these are:
 
--   Naive "full sample"
--   Naive "complete case"
+-   Naive "Available Sample"
+-   Naive "Complete Case"
 -   Lin's method: *Lin et al. (1997)*
 -   Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
+-   Zhao and Tian's method:
 
 Installation
 ------------
 
 ``` r
-devtools::install_github("LarsHernandez/CenCost")
+devtools::install_github("HaemAalborg/ccostr")
 ```
 
 Data format
@@ -32,7 +35,7 @@ Cost data should look something like this
     #>   B  4245     0  903
     #>   C   590     1  445
 
-It is possible to get better estimates of the true mean if cost history is available, if so the data should look something like this:
+It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discreet or contenious if so the data should look something like this:
 
     #>  id start stop cost delta surv
     #>   A     1    1  550     0  343
