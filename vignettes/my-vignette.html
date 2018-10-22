@@ -14,7 +14,7 @@
 
 <meta name="date" content="2018-10-22" />
 
-<title>Controlling estimates</title>
+<title>Estimates - simulated data</title>
 
 
 
@@ -68,214 +68,130 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Controlling estimates</h1>
+<h1 class="title toc-ignore">Estimates - simulated data</h1>
 <h4 class="author"><em>HAEM AALBORG</em></h4>
 <h4 class="date"><em>2018-10-22</em></h4>
 
 
 
-<p>Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The <code>html_vignette</code> output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The <code>html_vignette</code> format:</p>
+<p>This vignettes shows how to use the functions of the ccostr package to verify the estimates in the ccmean function</p>
 <ul>
-<li>Never uses retina figures</li>
-<li>Has a smaller default figure size</li>
-<li>Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style</li>
+<li>Data is simulated two different ways</li>
+<li>something</li>
+<li>someth8nhg</li>
 </ul>
-<div id="vignette-info" class="section level2">
-<h2>Vignette Info</h2>
-<p>Note the various macros within the <code>vignette</code> section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the <code>title</code> field and the <code>\VignetteIndexEntry</code> to match the title of your vignette.</p>
+<div id="simulation-of-data" class="section level2">
+<h2>Simulation of data</h2>
+<p><span class="math display">\[M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(T_i\leq10)\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ccostr)
+<span class="kw">library</span>(parallel)
+<span class="kw">library</span>(msm)
+<span class="kw">library</span>(dplyr)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="kw">library</span>(survival)
+
+nSim   &lt;-<span class="st"> </span><span class="dv">1</span>
+nYears &lt;-<span class="st"> </span><span class="dv">10</span>
+
+## true mean for unif is 40000 and 
+## true mean for exp is 35956 (Bang &amp; Tsiatis, 2000)
+
+unif_light &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">dist =</span> <span class="st">&quot;unif&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;light&quot;</span>, <span class="dt">L=</span>nYears))
+unif_heavy &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">dist =</span> <span class="st">&quot;unif&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;heavy&quot;</span>, <span class="dt">L=</span>nYears))
+exp_light &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">dist =</span> <span class="st">&quot;exp&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;light&quot;</span>, <span class="dt">L=</span>nYears))
+exp_heavy &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">dist =</span> <span class="st">&quot;exp&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;heavy&quot;</span>, <span class="dt">L=</span>nYears))
+IDM_none &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">sim.patients</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">censor =</span> <span class="dv">0</span>, <span class="dt">cost =</span> <span class="dv">100</span>))
+<span class="co">#&gt; Warning in xxx$id == xxx$id[-1]: longer object length is not a multiple of</span>
+<span class="co">#&gt; shorter object length</span>
+IDM_light &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">sim.patients</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">censor =</span> <span class="fl">0.05</span>, <span class="dt">cost =</span> <span class="dv">100</span>))
+<span class="co">#&gt; Warning in xxx$id == xxx$id[-1]: longer object length is not a multiple of</span>
+<span class="co">#&gt; shorter object length</span>
+IDM_heavy &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">sim.patients</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">censor =</span> <span class="fl">0.1</span>, <span class="dt">cost =</span> <span class="dv">100</span>))
+<span class="co">#&gt; Warning in xxx$id == xxx$id[-1]: longer object length is not a multiple of</span>
+<span class="co">#&gt; shorter object length</span></code></pre></div>
 </div>
-<div id="styles" class="section level2">
-<h2>Styles</h2>
-<p>The <code>html_vignette</code> template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:</p>
-<pre><code>output: 
-  rmarkdown::html_vignette:
-    css: mystyles.css</code></pre>
-</div>
-<div id="figures" class="section level2">
-<h2>Figures</h2>
-<p>The figure sizes have been customised so that you can easily put two images side-by-side.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)
-<span class="kw">plot</span>(<span class="dv">10</span><span class="op">:</span><span class="dv">1</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,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" /></p>
-<p>You can enable figure captions by <code>fig_caption: yes</code> in YAML:</p>
-<pre><code>output:
-  rmarkdown::html_vignette:
-    fig_caption: yes</code></pre>
-<p>Then you can use the chunk option <code>fig.cap = &quot;Your figure caption.&quot;</code> in <strong>knitr</strong>.</p>
-</div>
-<div id="more-examples" class="section level2">
-<h2>More Examples</h2>
-<p>You can write math expressions, e.g. <span class="math inline">\(Y = X\beta + \epsilon\)</span>, footnotes<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, and tables, e.g. using <code>knitr::kable()</code>.</p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">mpg</th>
-<th align="right">cyl</th>
-<th align="right">disp</th>
-<th align="right">hp</th>
-<th align="right">drat</th>
-<th align="right">wt</th>
-<th align="right">qsec</th>
-<th align="right">vs</th>
-<th align="right">am</th>
-<th align="right">gear</th>
-<th align="right">carb</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Mazda RX4</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.620</td>
-<td align="right">16.46</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td>Mazda RX4 Wag</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.875</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td>Datsun 710</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">108.0</td>
-<td align="right">93</td>
-<td align="right">3.85</td>
-<td align="right">2.320</td>
-<td align="right">18.61</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td>Hornet 4 Drive</td>
-<td align="right">21.4</td>
-<td align="right">6</td>
-<td align="right">258.0</td>
-<td align="right">110</td>
-<td align="right">3.08</td>
-<td align="right">3.215</td>
-<td align="right">19.44</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td>Hornet Sportabout</td>
-<td align="right">18.7</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">175</td>
-<td align="right">3.15</td>
-<td align="right">3.440</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td>Valiant</td>
-<td align="right">18.1</td>
-<td align="right">6</td>
-<td align="right">225.0</td>
-<td align="right">105</td>
-<td align="right">2.76</td>
-<td align="right">3.460</td>
-<td align="right">20.22</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td>Duster 360</td>
-<td align="right">14.3</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">245</td>
-<td align="right">3.21</td>
-<td align="right">3.570</td>
-<td align="right">15.84</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td>Merc 240D</td>
-<td align="right">24.4</td>
-<td align="right">4</td>
-<td align="right">146.7</td>
-<td align="right">62</td>
-<td align="right">3.69</td>
-<td align="right">3.190</td>
-<td align="right">20.00</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td>Merc 230</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">140.8</td>
-<td align="right">95</td>
-<td align="right">3.92</td>
-<td align="right">3.150</td>
-<td align="right">22.90</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td>Merc 280</td>
-<td align="right">19.2</td>
-<td align="right">6</td>
-<td align="right">167.6</td>
-<td align="right">123</td>
-<td align="right">3.92</td>
-<td align="right">3.440</td>
-<td align="right">18.30</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-</tbody>
-</table>
-<p>Also a quote using <code>&gt;</code>:</p>
-<blockquote>
-<p>“He who gives up [code] safety for [code] speed deserves neither.” (<a href="https://twitter.com/hadleywickham/status/504368538874703872">via</a>)</p>
-</blockquote>
-</div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>A footnote here.<a href="#fnref1">↩</a></p></li>
-</ol>
+<div id="controlling-estimates" class="section level2">
+<h2>Controlling estimates</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+### Estimate from censored data
+nCores &lt;-<span class="st"> </span><span class="dv">1</span>
+cl &lt;-<span class="st"> </span><span class="kw">makeCluster</span>(nCores)
+<span class="kw">clusterExport</span>(<span class="dt">cl =</span> cl, <span class="kw">c</span>(<span class="st">&quot;unif_light&quot;</span>, <span class="st">&quot;unif_heavy&quot;</span>, <span class="st">&quot;exp_light&quot;</span>, <span class="st">&quot;exp_heavy&quot;</span>, <span class="st">&quot;IDM_none&quot;</span>, <span class="st">&quot;IDM_light&quot;</span>, <span class="st">&quot;IDM_heavy&quot;</span>))
+<span class="kw">clusterEvalQ</span>(<span class="dt">cl =</span> cl, {
+  <span class="kw">library</span>(dplyr)
+  <span class="kw">library</span>(ccostr)
+  <span class="kw">library</span>(survival)})
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt;  [1] &quot;survival&quot;  &quot;ccostr&quot;    &quot;dplyr&quot;     &quot;stats&quot;     &quot;graphics&quot; </span>
+<span class="co">#&gt;  [6] &quot;grDevices&quot; &quot;utils&quot;     &quot;datasets&quot;  &quot;methods&quot;   &quot;base&quot;</span>
+est_unif_light &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, unif_light, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_unif_heavy &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, unif_heavy, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_exp_light  &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, exp_light, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_exp_heavy  &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, exp_heavy, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_IDM_none   &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, IDM_none, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_IDM_light  &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, IDM_light, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+est_IDM_heavy  &lt;-<span class="st"> </span><span class="kw">parLapply</span>(cl, IDM_heavy, <span class="cf">function</span>(x) <span class="kw">ccmean</span>(x<span class="op">$</span>censoredCostHistory))
+<span class="kw">stopCluster</span>(cl)
+
+## Summarize
+results_unif_light &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_light, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_unif_heavy &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_heavy, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_exp_light  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_light, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_exp_heavy  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_heavy, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_IDM_none   &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_IDM_none, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_IDM_light  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_IDM_light, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+results_IDM_heavy  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_IDM_heavy, <span class="cf">function</span>(x) x[[<span class="dv">2</span>]]))
+
+results_true &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span><span class="dv">40000</span>,
+                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span><span class="dv">40000</span>,
+                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span><span class="dv">35956</span>,
+                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span><span class="dv">35956</span>,
+                           <span class="st">&quot;IDM_none&quot;</span>   =<span class="st"> </span><span class="kw">exact.cost</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)<span class="op">$</span>value,
+                           <span class="st">&quot;IDM_light&quot;</span>  =<span class="st"> </span><span class="kw">exact.cost</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)<span class="op">$</span>value,
+                           <span class="st">&quot;IDM_heavy&quot;</span>  =<span class="st"> </span><span class="kw">exact.cost</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="dv">100</span>)<span class="op">$</span>value)
+
+results_mean &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(unif_light, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),
+                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(unif_heavy, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),
+                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(exp_light, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),
+                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(exp_heavy, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),
+                           <span class="st">&quot;IDM_none&quot;</span>   =<span class="st"> </span><span class="ot">NA</span>,
+                           <span class="st">&quot;IDM_light&quot;</span>  =<span class="st"> </span><span class="ot">NA</span>,
+                           <span class="st">&quot;IDM_heavy&quot;</span>  =<span class="st"> </span><span class="ot">NA</span>)
+
+results_bias &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(results_unif_light)),
+                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(results_unif_heavy)),
+                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_exp_light)),
+                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_exp_heavy)),
+                           <span class="st">&quot;IDM_none&quot;</span>   =<span class="st"> </span>(<span class="kw">colMeans</span>(results_IDM_none)),
+                           <span class="st">&quot;IDM_light&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_IDM_light)),
+                           <span class="st">&quot;IDM_heavy&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_IDM_heavy)))
+
+results &lt;-<span class="st"> </span><span class="kw">rbind</span>(results_true, results_mean, results_bias)
+<span class="kw">row.names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;true_mean&quot;</span>, <span class="st">&quot;simulation_mean&quot;</span>, <span class="kw">colnames</span>(results_unif_light))
+results
+<span class="co">#&gt;                  unif_light unif_heavy exp_light exp_heavy IDM_none</span>
+<span class="co">#&gt; true_mean          40000.00   40000.00  35956.00  35956.00 250.0000</span>
+<span class="co">#&gt; simulation_mean    41245.97   40097.65  35393.59  36988.61       NA</span>
+<span class="co">#&gt; available_sample   32313.45   30575.68  31494.86  27478.06 153.4357</span>
+<span class="co">#&gt; complete_case      39493.94   38658.90  36907.28  36310.62 153.4357</span>
+<span class="co">#&gt; LinT               41457.30   39618.89  34221.39  36512.99 153.4357</span>
+<span class="co">#&gt; BT                 41764.29   39983.98  30366.46  31797.89 153.4357</span>
+<span class="co">#&gt; ZT                 40637.12   39764.94  30421.28  31962.70 153.4357</span>
+<span class="co">#&gt;                  IDM_light IDM_heavy</span>
+<span class="co">#&gt; true_mean        250.00000 250.00000</span>
+<span class="co">#&gt; simulation_mean         NA        NA</span>
+<span class="co">#&gt; available_sample  79.15846  81.66168</span>
+<span class="co">#&gt; complete_case     88.77862  86.93259</span>
+<span class="co">#&gt; LinT             115.54402 115.13419</span>
+<span class="co">#&gt; BT               115.54402 115.13419</span>
+<span class="co">#&gt; ZT               126.20629 120.62140</span></code></pre></div>
 </div>
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Controlling estimates"
+title: "Estimates - simulated data"
 author: "HAEM AALBORG"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -16,33 +16,30 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+This vignettes shows how to use the functions of the ccostr package to verify the estimates in the ccmean function 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+- Data is simulated two different ways
+- something
+- someth8nhg
 
-## Vignette Info
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+## Simulation of data
 
-## Styles
+$$M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(T_i\leq10)$$
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+```{r}
+library(ccostr)
+library(parallel)
+library(msm)
+library(dplyr)
+library(survival)
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-nSim   <- 10
+nSim   <- 1
 nYears <- 10
+
 ## true mean for unif is 40000 and 
 ## true mean for exp is 35956 (Bang & Tsiatis, 2000)
+
 unif_light <- lapply(1:nSim, function(x) simCostData(dist = "unif", censor = "light", L=nYears))
 unif_heavy <- lapply(1:nSim, function(x) simCostData(dist = "unif", censor = "heavy", L=nYears))
 exp_light <- lapply(1:nSim, function(x) simCostData(dist = "exp", censor = "light", L=nYears))
@@ -50,9 +47,11 @@ exp_heavy <- lapply(1:nSim, function(x) simCostData(dist = "exp", censor = "heav
 IDM_none <- lapply(1:nSim, function(x) sim.patients(n = 100, censor = 0, cost = 100))
 IDM_light <- lapply(1:nSim, function(x) sim.patients(n = 100, censor = 0.05, cost = 100))
 IDM_heavy <- lapply(1:nSim, function(x) sim.patients(n = 100, censor = 0.1, cost = 100))
+```
 
+## Controlling estimates
 
-
+```{r}
 
 ### Estimate from censored data
 nCores <- 1
@@ -109,20 +108,4 @@ row.names(results) <- c("true_mean", "simulation_mean", colnames(results_unif_li
 results
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
