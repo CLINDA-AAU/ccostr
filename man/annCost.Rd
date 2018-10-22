@@ -6,6 +6,15 @@
 \usage{
 annCost(T, tau, L)
 }
+\arguments{
+\item{annCost}{something}
+}
+\value{
+something
+}
 \description{
 Sim
+}
+\examples{
+something
 }

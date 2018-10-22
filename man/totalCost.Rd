@@ -6,6 +6,15 @@
 \usage{
 totalCost(T, M0, b, d, tau, L)
 }
+\arguments{
+\item{totalCost}{something}
+}
+\value{
+something
+}
 \description{
 Sim
+}
+\examples{
+something
 }

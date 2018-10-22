@@ -1,9 +1,9 @@
 #' Sim
 #' 
-#' @param annCost
-#' @return
+#' @param annCost something
+#' @return something
 #' @export
-#' @examples
+#' @examples something
 
 ## function to summarize random annual cost
 annCost <- function(T, tau, L){
@@ -16,10 +16,10 @@ annCost <- function(T, tau, L){
 
 #' Sim
 #' 
-#' @param totalCost
-#' @return
+#' @param totalCost something
+#' @return something
 #' @export
-#' @examples
+#' @examples something
 
 ## Function to calculate totalcost
 totalCost <- function(T, M0, b, d, tau, L){
