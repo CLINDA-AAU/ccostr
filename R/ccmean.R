@@ -73,12 +73,14 @@ sc  <- survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
 intLow <- as.numeric(gsub("\\(", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[1]])))
 intHigh <- as.numeric(gsub("\\]", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[2]])))
 svLow <- summary(sc, times = intLow)$surv
-svHigh <- c(summary(sc, times = intHigh)$surv, 0) ## add zero for Inf
+svHigh <- c(summary(sc, times = intHigh)$surv)
+if(length(svHigh) < length(svLow)){ ## Add zero if last value of intHigh is Inf
+	svHigh <- c(svHigh,0)
+}
   
 # Gathering the data in a new dataframe
 d <- data.frame(a, "survDif" = svLow-svHigh)
-  
-  
+    
 # calculating Lin's T estimate of total costs 
 LinT <- sum(d$survDif*d$mean, na.rm=T)
 LinT_full <- c(LinT, NA, NA, NA, NA)
