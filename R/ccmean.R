@@ -126,8 +126,10 @@ for (i in 1:n) {
 t$GA <- t$sc.surv/(n - 1:n + t$sc.surv) * t$ssss
 t$GB <- t$sc.surv/(n - 1:n + t$sc.surv) * t$sss
 
-VARBT <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean((1-t$delta)/t$sc.surv^2 * (t$GA - t$GB^2)))
-SDBT <- sqrt(VARBT)
+BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean((1-t$delta)/t$sc.surv^2 * (t$GA - t$GB^2)))
+BT_sd <- sqrt(VARBT)
+BT_uci <- 
+BT_lci
 
 # END VAR BT --------------------------------------------------------------
 
