@@ -33,6 +33,7 @@ library(parallel)
 library(msm)
 library(dplyr)
 library(survival)
+library(knitr)
 
 nSim   <- 1
 nYears <- 10
@@ -105,7 +106,7 @@ results_bias <- data.frame("unif_light" = (colMeans(results_unif_light)),
 
 results <- rbind(results_true, results_mean, results_bias)
 row.names(results) <- c("true_mean", "simulation_mean", colnames(results_unif_light))
-results
+kable(results)
 ```
 
 

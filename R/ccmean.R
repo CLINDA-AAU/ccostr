@@ -65,7 +65,7 @@ sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1))
 
 # calculate average costs of patients deceased within each interval
 a <- subset(xf, delta == 1) %>% 
-  mutate(ints = cut(surv, breaks = c(sc$time))) %>% 
+  mutate(ints = cut(surv, breaks = c(sv$time))) %>% # Possibly change sv$time 
   group_by(ints) %>% 
   summarise(mean = mean(cost))
 
