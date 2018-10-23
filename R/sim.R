@@ -91,14 +91,15 @@ simCostData <- function(n = 100, dist = "unif", censor = "light", L = 10){
   stop  = unlist(sapply(upperTime, function(x) 1:x))
   t     = rep(X, times = upperTime)
   delta = rep(delta, times = upperTime)
+  stop  = pmin(stop, t)
   
   ## Calculate censored cost history in each interval / individual
   cost <- 0
   for(i in 1:length(id)){
-    cost[i] <- as.integer(start[i] == 0) * M0[id[i]] +   ## Initial cost if first interval
-      min(1, t[i] - stop[i] + 1) * b[id[i]] +            ## Fixed annual cost
-      min(1, t[i] - stop[i] + 1) * tau[stop[i], id[i]] + ## Random annual cost
-      as.integer(t[i] <= stop[i]) * delta[i] * d[id[i]]  ## Terminal cost if last interval and not censored
+    cost[i] <- as.integer(start[i] == 0) * M0[id[i]] +         ## Initial cost if first interval
+      min(1, t[i] - start[i]) * b[id[i]] +                     ## Fixed annual cost
+      min(1, t[i] - start[i]) * tau[ceiling(stop[i]), id[i]] + ## Random annual cost
+      as.integer(t[i] <= stop[i]) * delta[i] * d[id[i]]        ## Terminal cost if last interval and not censored
   }
   
   ## Build output
@@ -164,21 +165,12 @@ sim.patients <- function(n, censor=0.05, cost){
   sim <- xxx %>%
     group_by(id) %>%
     mutate(delta = max(delta),
-           surv = max(surv),
-           cost2 = ifelse(max(cost) == 0, NA, max(cost)))
+           surv = max(surv)) %>%
+    filter(state == 2) %>% 
+    select(c("id", "start", "stop", "cost", "surv", "delta"))
   
-  
-  
-  #sim <- subset(sim, sim$cost != 0 | (is.na(sim$cost2) & state == 1))
-  
-  # Calculate the cost per patient
-  cost <- 0
-  n.ids <- length(unique(sim$id))
-  simcost <- rep(0,n.ids)
-  for(i in 1:n.ids){
-    tmp <- sim[sim$id == i,]
-    simcost[i] <- sum(diff(tmp$times)*head(tmp$cost, -1))
-  }
+  sim$cost <- (sim$stop - sim$start) * sim$cost
+  simcost <- tapply(sim$cost, sim$id, sum)
   
   return(list("totalCost" = simcost, "censoredCostHistory" = sim))
   
