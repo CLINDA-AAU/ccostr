@@ -14,7 +14,7 @@ Suggests: knitr,
     rmarkdown,
 	parallel
 VignetteBuilder: knitr
-Imports:
+Depends:
 	dplyr,
 	msm,
 	survival
