@@ -160,7 +160,7 @@ sim.patients <- function(n, censor=0.05, cost){
   xxx$start <- xxx$times
   
   xxx$stop <- NA
-  xxx$stop <- ifelse(xxx$id == xxx$id[-1], xxx$times[-1],0)
+  xxx$stop[-nrow(xxx)] <- ifelse(xxx$id[-nrow(xxx)] == xxx$id[-1], xxx$times[-1],NA)
   
   sim <- xxx %>%
     group_by(id) %>%
