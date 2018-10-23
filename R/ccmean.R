@@ -40,7 +40,7 @@ row.names(x) <- 1:nrow(x)
 # Costs are summed and a mean are found
 available_sample <- mean(xf$cost)
 
-
+available_sample_full <- c(available_sample, NA, NA, NA, NA)
 
 #################################################################
 ##                          section 2:                         ##
@@ -50,7 +50,7 @@ available_sample <- mean(xf$cost)
 # Costs are summed up and calculated mean
 complete_case <- mean(xf$cost[xf$delta==1])
 
-
+complete_case_full <- c(complete_case, NA, NA, NA, NA)
 
 
 #################################################################
@@ -82,7 +82,7 @@ rm(dif)
 # calculating Lin's T estimate of total costs 
 LinT <- sum(d$dif*d$mean, na.rm=T) + (tail(d$sv.surv, n=1)*tail(d$mean, n=1))
 
-
+LinT_full <- c(LinT, NA, NA, NA, NA)
 
 
 #################################################################
@@ -123,13 +123,15 @@ for (i in 1:n) {
   t$ssss[i] <- sum(t$delta[i:n]*t$cost[i:n]^2*t$sc.surv[i:n])
 }
 
-t$GA <- t$sc.surv/(n - 1:n + t$sc.surv) * t$ssss
-t$GB <- t$sc.surv/(n - 1:n + t$sc.surv) * t$sss
+t$GA <- t$sc.surv/(n - 1:n + t$delta) * t$ssss
+t$GB <- t$sc.surv/(n - 1:n + t$delta) * t$sss
 
 BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean((1-t$delta)/t$sc.surv^2 * (t$GA - t$GB^2)))
 BT_sd <- sqrt(VARBT)
-BT_uci <- 
-BT_lci
+BT_uci <- BT + (1.96 * BT_sd)
+BT_lci <- BT - (1.96 * BT_sd)
+
+BT_full <- c(BT, BT_var, BT_sd, BT_uci, BT_lci)
 
 # END VAR BT --------------------------------------------------------------
 
@@ -199,7 +201,7 @@ ee <- e %>%
 ZT <- mean((ee$delta * (ee$cost / ee$sb.surv)) + ((1-ee$delta) * ((ee$cost-ee$mcostlsurv) / ee$sb.surv)), na.rm=T)
 ZT
 
-
+ZT_full <- c(ZT, NA, NA, NA, NA)
 
 
 
@@ -216,7 +218,14 @@ results <- list("These results should be checked before ...",
                            complete_case, 
                            LinT, 
                            BT,
-                           ZT))
+                           ZT),
+                data.frame(available_sample_full,
+                           complete_case_full,
+                           LinT_full,
+                           BT_full,
+                           ZT_full, 
+                           row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI"))
+                )
 
 return(results)
 
