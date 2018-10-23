@@ -58,32 +58,30 @@ complete_case_full <- c(complete_case, NA, NA, NA, NA)
 ##                     Lin's method (1997)                     ##
 #################################################################
 
-# a calculation of chance of survival for each interval (cummulative) (interval = censoring)
-sv <- summary(survfit(Surv(xf$surv, xf$delta == 1) ~ 1))
-sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1))   
-
-
+# Kaplan-meier for censoring distribution get censoring times to define intervals
+sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1))
+censBreaks <- c(0, sc$time, Inf)
+  
 # calculate average costs of patients deceased within each interval
 a <- subset(xf, delta == 1) %>% 
-  mutate(ints = cut(surv, breaks = c(sv$time))) %>% # Possibly change sv$time 
-  group_by(ints) %>% 
-  summarise(mean = mean(cost))
-
-
-# calculate chance of death within each interval
-dif <- c(diff(sv$surv, lag= 1), rep(NA,1))*-1
-
-
+    mutate(ints = cut(surv, breaks = censBreaks)) %>%
+    group_by(ints) %>% 
+    summarise(mean = mean(cost))
+  
+# Get survival times for intervals
+sc  <- survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
+intLow <- as.numeric(gsub("\\(", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[1]])))
+intHigh <- as.numeric(gsub("\\]", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[2]])))
+svLow <- summary(sc, times = intLow)$surv
+svHigh <- c(summary(sc, times = intHigh)$surv, 0) ## add zero for Inf
+  
 # Gathering the data in a new dataframe
-d <- data.frame(sv$time, sv$surv, dif, a)
-rm(dif)
-
-
+d <- data.frame(a, "survDif" = svLow-svHigh)
+  
+  
 # calculating Lin's T estimate of total costs 
-LinT <- sum(d$dif*d$mean, na.rm=T) + (tail(d$sv.surv, n=1)*tail(d$mean, n=1))
-
+LinT <- sum(d$survDif*d$mean, na.rm=T)
 LinT_full <- c(LinT, NA, NA, NA, NA)
-
 
 #################################################################
 ##                          section 5:                         ##
