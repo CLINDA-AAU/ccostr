@@ -10,7 +10,7 @@ R package to calculate estimates of total costs with censored data
 Overview
 --------
 
-The ccmean function returns 4 estimates, these are:
+The ccmean function returns 5 estimates, these are:
 
 -   Naive "Available Sample"
 -   Naive "Complete Case"
@@ -22,7 +22,7 @@ Installation
 ------------
 
 ``` r
-devtools::install_github("HaemAalborg/ccostr")
+devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
 
 Data format

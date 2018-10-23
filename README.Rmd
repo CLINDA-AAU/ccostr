@@ -21,7 +21,7 @@ R package to calculate estimates of total costs with censored data
 
 
 ## Overview
-The ccmean function returns 4 estimates, these are:
+The ccmean function returns 5 estimates, these are:
 
  - Naive "Available Sample"
  - Naive "Complete Case"
@@ -33,7 +33,7 @@ The ccmean function returns 4 estimates, these are:
 
 ## Installation
 ```{r, eval = FALSE}
-devtools::install_github("HaemAalborg/ccostr")
+devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
 
 
@@ -44,7 +44,7 @@ Cost data should look something like this
 ```{r echo=FALSE}
 id           <- c("A", "B" ,"C")
 
-tcost    <- c(2544,4245,590)
+tcost        <- c(2544,4245,590)
 delta        <- c(0,0,1)
 surv         <- c(343,903,445)
 

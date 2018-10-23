@@ -20,7 +20,7 @@
 ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv") {
 
 # Ordering the dataset
-x <- x[order(x$id, x$delta),]
+x <- x[order(x$surv, x$delta),]
 row.names(x) <- 1:nrow(x)
 
 
@@ -31,20 +31,14 @@ row.names(x) <- 1:nrow(x)
               delta = last(delta),
               surv = first(surv))
 
-  
+
 #################################################################
 ##                          section 1:                         ##
 ##                   Naive (Avaiable Sample)                   ##
 #################################################################
 
 # Costs are summed and a mean are found
-available_sample <- xf %>% 
-  group_by(id) %>% 
-  mutate(sumcost = sum(cost, na.rm=T)) %>% 
-  ungroup() %>% 
-  summarize(m = mean(sumcost, na.rm=T)) %>%
-  as.numeric()
-
+available_sample <- mean(xf$cost)
 
 
 
@@ -53,17 +47,8 @@ available_sample <- xf %>%
 ##                    Naive (complete case)                    ##
 #################################################################
 
-# Restricted to only full cases where the patient dies before 1461
-b <- subset(xf, xf$delta == 1)
-
-
 # Costs are summed up and calculated mean
-complete_case <- b %>% 
-  group_by(id) %>% 
-  mutate(sumcost = sum(cost, na.rm=T)) %>% 
-  ungroup() %>% 
-  summarize(m = mean(sumcost, na.rm=T)) %>%
-  as.numeric()
+complete_case <- mean(xf$cost[xf$delta==1])
 
 
 
@@ -75,11 +60,12 @@ complete_case <- b %>%
 
 # a calculation of chance of survival for each interval (cummulative) (interval = censoring)
 sv <- summary(survfit(Surv(xf$surv, xf$delta == 1) ~ 1))
+sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1))   
 
 
 # calculate average costs of patients deceased within each interval
 a <- subset(xf, delta == 1) %>% 
-  mutate(ints = cut(surv, breaks = c(sv$time))) %>% 
+  mutate(ints = cut(surv, breaks = c(sc$time))) %>% 
   group_by(ints) %>% 
   summarise(mean = mean(cost))
 
