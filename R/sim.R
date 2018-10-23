@@ -180,6 +180,7 @@ sim.patients <- function(n, censor=0.05, cost){
 exact.cost <- function(lam, mu, gamma, delta){
   # Function to calculate the exact cost in the illness-death model with recovery
   f <- function(x, lam, mu, gamma, delta){
+    # formula
     lam/(lam + mu)*(x + exp(-1*(lam+mu)*x)/(lam+mu) - 1/(lam+mu)) * (gamma*exp(-1*gamma*x)) * delta
     #lam/(lam + mu)*(1-exp(-1*(lam+mu)*x)) * (gamma*exp(-1*gamma*x)) * delta
   }
