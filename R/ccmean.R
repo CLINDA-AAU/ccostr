@@ -115,16 +115,12 @@ BT <- mean((t$cost*t$delta)/t$sc.surv)
 # START VAR BT ------------------------------------------------------------
 n <- length(t$cost)
 
-for (i in 1:n) {
-  t$sss[i] <- sum(t$delta[i:n]*t$cost[i:n]*t$sc.surv[i:n])
-  }
-
-for (i in 1:n) {
-  t$ssss[i] <- sum(t$delta[i:n]*t$cost[i:n]^2*t$sc.surv[i:n])
-}
-
+t$sss  <- rev(cumsum(rev(t$delta * t$cost * t$sc.surv)))
+t$ssss <- rev(cumsum(rev(t$delta * t$cost^2 * t$sc.surv)))
 t$GA <- t$sc.surv/(n - 1:n + t$delta) * t$ssss
 t$GB <- t$sc.surv/(n - 1:n + t$delta) * t$sss
+t$GA[is.na(t$GA)] <- 0
+t$GB[is.na(t$GB)] <- 0
 
 BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean((1-t$delta)/t$sc.surv^2 * (t$GA - t$GB^2)))
 BT_sd <- sqrt(BT_var)
