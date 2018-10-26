@@ -173,7 +173,7 @@ for(i in 1:n){
   tempSum2[i] <- sum((runCostMatrix[i:n,i] - t$mcostlsurv[i])^2)
 }
 
-ztVAR <- (-2/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv)) * tempSum1)
+ztVAR <- BT_var - (2/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv)) * tempSum1)
 + (1/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv^2)) * tempSum2)
 
 
