@@ -75,7 +75,7 @@ simCostData <- function(n = 100, dist = "unif", censor = "light", L = 10){
   M0  <- runif(n = n, min = 5000,  max = 15000) # Initial Cost
   b   <- runif(n = n, min = 1000,  max = 2600)  # Deterministic annual cost
   d   <- runif(n = n, min = 10000, max = 30000) # Terminal cost
-  tau <- matrix(data = runif(n = n*L, min = 0, max = 400), ncol = 100)   # Random annual cost
+  tau <- matrix(data = runif(n = n*L, min = 0, max = 400), ncol = n)   # Random annual cost
   
   ## Calculate total cost for individuals over L years
   M <- totalCost(T, M0, b, d, tau, L)

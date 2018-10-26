@@ -138,71 +138,50 @@ BT_full <- c(BT, BT_var, BT_sd, BT_uci, BT_lci)
 ##                Zhao and Tian's method (2001)                ##
 #################################################################
 
-# Opposite Kaplain Meier - chance of censoring - for each period (cummulative)
-sb <- summary(survfit(Surv(xf$surv, 
-                           xf$delta == 0) ~ 1),
-              times = (xf$surv))
-#times = t_data$surv[t_data$delta %in% c(0,1)])
-
-
-# new dataframe with values from the list and only unique so that we can merge them
-sbt <- data.frame(sb$time, sb$surv)
-
-# adjust for last proparbility = 0 (why we do this i'm not sure)
-sbt$sb.surv[sbt$sb.surv == 0] <- min(sbt$sb.surv[sbt$sb.surv != 0])
-
-# remove non unique to avoid errors when merging
-sbt <- unique(sbt)
-
-
-# Merge with the dataset by surv, as that tells which the chance of being censored in each death
-e <- merge(x,sbt,by.x="surv", by.y="sb.time", all.x=T)
-
-
-# Forward loop to calculate mean cost of patients with longer survival than patient i at patient i's surv
-e$mcostlsurv <- NA
-
-for(i in 1:nrow(e)){
-  # temp set for longer survival than i
-  t_data2 <- subset(x, start < e$surv[i])
-  # Calculating the cost running costs of split periods
-  t_data2$ncost <- ifelse(t_data2$stop> e$surv[i], (t_data2$cost/(t_data2$stop-t_data2$start))*(e$surv[i]-t_data2$start),0)
-  # Don't double include split costs
-  t_data2$cost <- ifelse(t_data2$stop > e$surv[i],0,t_data2$cost)
-  # Now added to the other costs
-  t_data2$cost <- t_data2$cost + t_data2$ncost
-  
-  # summarized  
-  t_data_total_temp <- t_data2 %>% 
-    group_by(id) %>% 
-    summarize(cost = sum(cost, na.rm=T),
-              surv= first(surv))
-  
-  # calculating the individual mean costs of everyone who lives longer 
-  e$mcostlsurv[i] <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= e$surv[i]])
-  
+## For each censored individual i calculate cost 
+## of longer surviving individuals up till time ti
+runCostMatrix <- matrix(0, nrow = nrow(t), ncol = nrow(t))
+t$mcostlsurv <- 0
+for(i in 1:nrow(t)){
+  if(t$delta[i] == 1){
+    next
+  } else{
+    t_data2 <- subset(x, start < t$surv[i])
+    t_data2$cost <- ifelse(t_data2$stop > t$surv[i], 
+                           (t_data2$cost/(t_data2$stop-t_data2$start))*(t$surv[i]-t_data2$start),
+                           t_data2$cost)
+    # summarized  
+    t_data_total_temp <- t_data2 %>% 
+      group_by(id) %>% 
+      summarize(cost = sum(cost, na.rm=T),
+                surv= first(surv))
+    
+    runCostMatrix[,i] <- t_data_total_temp$cost[order(t_data_total_temp$surv)]
+    t$mcostlsurv[i]   <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= t$surv[i]])
+  }
 }
-rm(i)
-# Summarizing the dataset
-ee <- e %>% 
-  group_by(id) %>% 
-  summarize(cost = sum(cost, na.rm=T),
-            delta = first(delta),
-            sb.surv= first(sb.surv),
-            surv= first(surv),
-            mcostlsurv = mean(mcostlsurv, na.rm=T))
+
+ZT <- mean((t$delta * (t$cost / t$sc.surv)) + ((1-t$delta) * ((t$cost-t$mcostlsurv) / t$sc.surv)), na.rm=T)
+
+## Estimate variance
+tempSum1 <- 0
+tempSum2 <- 0
+n <- nrow(t)
+for(i in 1:n){
+  tempSum1[i] <- sum((t$delta[i:n] / t$sc.surv[i:n]) * 
+                       (t$cost[i:n] - t$GB[i:n]) * (runCostMatrix[i:n,i] - t$mcostlsurv[i]))
+  tempSum2[i] <- sum((runCostMatrix[i:n,i] - t$mcostlsurv[i])^2)
+}
+
+ztVAR <- (-2/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv)) * tempSum1)
++ (1/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv^2)) * tempSum2)
 
 
-# The ZT estimator of mean costs
-ZT <- mean((ee$delta * (ee$cost / ee$sb.surv)) + ((1-ee$delta) * ((ee$cost-ee$mcostlsurv) / ee$sb.surv)), na.rm=T)
-ZT
-
-ZT_full <- c(ZT, NA, NA, NA, NA)
-
-
-
-
-
+ZT_full <- c(ZT,
+             ztVAR,
+             sqrt(ztVAR),
+             ZT + 1.96 * sqrt(ztVAR),
+             ZT - 1.96 * sqrt(ztVAR))
 
 #################################################################
 ##                          section 7:                         ##
