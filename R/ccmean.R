@@ -122,7 +122,7 @@ t$GB <- t$sc.surv/(n - 1:n + t$delta) * t$sss
 t$GA[is.na(t$GA)] <- 0
 t$GB[is.na(t$GB)] <- 0
 
-BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean((1-t$delta)/t$sc.surv^2 * (t$GA - t$GB^2)))
+BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean(((1-t$delta)/t$sc.surv^2 )* (t$GA - t$GB^2)))
 BT_sd <- sqrt(BT_var)
 BT_uci <- BT + (1.96 * BT_sd)
 BT_lci <- BT - (1.96 * BT_sd)
