@@ -18,13 +18,14 @@
 
 
 ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = 10) {
+# Subset to estimation period
+x$delta[x$surv > L] <- 1
+x <- subset(x, stop <= L)
 
 # Ordering the dataset
 x <- x[order(x$surv, x$delta),]
 row.names(x) <- 1:nrow(x)
 
-x <- subset(x, stop <= L)
-x$delta[x$surv > L] <- 1
 
 # Some calculations don't use cost history and therefore collapse by ID
   xf <- x %>% 
