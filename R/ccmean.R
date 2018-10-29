@@ -115,8 +115,8 @@ BT <- mean((t$cost*t$delta)/t$sc.surv)
 # START VAR BT ------------------------------------------------------------
 n <- length(t$cost)
 
-t$sss  <- rev(cumsum(rev(t$delta * t$cost * t$sc.surv)))
-t$ssss <- rev(cumsum(rev(t$delta * t$cost^2 * t$sc.surv)))
+t$sss  <- rev(cumsum(rev(t$delta * t$cost / t$sc.surv)))
+t$ssss <- rev(cumsum(rev(t$delta * t$cost^2 / t$sc.surv)))
 t$GA <- t$sc.surv/(n - 1:n + t$delta) * t$ssss
 t$GB <- t$sc.surv/(n - 1:n + t$delta) * t$sss
 t$GA[is.na(t$GA)] <- 0
