@@ -81,8 +81,8 @@ simCostData <- function(n = 100, dist = "unif", censor = "light", L = 10){
   M <- totalCost(T, M0, b, d, tau, L)
   
   ## Calculate follow-up and censoring indicator
-  X <- pmin(T, C, L)
-  delta <- as.integer(T < C & T < L)
+  X <- pmin(T, C)
+  delta <- as.integer(T < C)
   
   ## Columns for dataframe with censored cost history
   upperTime <- ceiling(X)
@@ -96,10 +96,10 @@ simCostData <- function(n = 100, dist = "unif", censor = "light", L = 10){
   ## Calculate censored cost history in each interval / individual
   cost <- 0
   for(i in 1:length(id)){
-    cost[i] <- as.integer(start[i] == 0) * M0[id[i]] +         ## Initial cost if first interval
-      min(1, t[i] - start[i]) * b[id[i]] +                     ## Fixed annual cost
-      min(1, t[i] - start[i]) * tau[ceiling(stop[i]), id[i]] + ## Random annual cost
-      as.integer(t[i] <= stop[i]) * delta[i] * d[id[i]]        ## Terminal cost if last interval and not censored
+    cost[i] <- as.integer(start[i] == 0) * M0[id[i]] +      ## Initial cost if first interval
+      (stop[i] - start[i]) * b[id[i]] +                     ## Fixed annual cost
+      (stop[i] - start[i]) * tau[ceiling(stop[i]), id[i]] + ## Random annual cost
+      as.integer(t[i] == stop[i]) * delta[i] * d[id[i]]     ## Terminal cost if last interval and not censored
   }
   
   ## Build output
