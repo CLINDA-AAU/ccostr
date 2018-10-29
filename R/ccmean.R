@@ -69,11 +69,11 @@ a <- subset(xf, delta == 1) %>%
     summarise(mean = mean(cost))
   
 # Get survival times for intervals
-sc  <- survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
+sd <- survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
 intLow <- as.numeric(gsub("\\(", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[1]])))
 intHigh <- as.numeric(gsub("\\]", "", sapply(strsplit(as.character(a$ints), ","), function(x) x[[2]])))
-svLow <- summary(sc, times = intLow)$surv
-svHigh <- c(summary(sc, times = intHigh)$surv)
+svLow <- summary(sd, times = intLow)$surv
+svHigh <- c(summary(sd, times = intHigh)$surv)
 if(length(svHigh) < length(svLow)){ ## Add zero if last value of intHigh is Inf
 	svHigh <- c(svHigh,0)
 }
