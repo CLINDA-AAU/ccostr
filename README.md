@@ -24,7 +24,9 @@ Installation
 ``` r
 devtools::install_github("HaemAalborg/ccostr")
 
-# Or including a vignette that demonstrates the bias and coverage of the estimators, this require library(parallel)
+# Or including a vignette that demonstrates the bias and coverage of 
+# the estimators, requires: library(parallel)
+
 devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
 
@@ -33,20 +35,22 @@ Data format
 
 Cost data should look something like this
 
-    #>  id tcost delta surv
-    #>   A  2544     0  343
-    #>   B  4245     0  903
-    #>   C   590     1  445
+| id  |  tcost|  delta|  surv|
+|:----|------:|------:|-----:|
+| A   |   2544|      0|   343|
+| B   |   4245|      0|   903|
+| C   |    590|      1|   445|
 
 It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discreet or contenious if so the data should look something like this:
 
-    #>  id start stop cost delta surv
-    #>   A     1    1  550     0  343
-    #>   A    30   82 1949     0  343
-    #>   A    88   88   45     0  343
-    #>   B    18  198 4245     0  903
-    #>   C     1    5   23     1  445
-    #>   C    67   88  567     1  445
+| id  |  start|  stop|  cost|  delta|  surv|
+|:----|------:|-----:|-----:|------:|-----:|
+| A   |      1|     1|   550|      0|   343|
+| A   |     30|    82|  1949|      0|   343|
+| A   |     88|    88|    45|      0|   343|
+| B   |     18|   198|  4245|      0|   903|
+| C   |      1|     5|    23|      1|   445|
+| C   |     67|    88|   567|      1|   445|
 
 Explanation of estimates
 ------------------------
@@ -78,66 +82,39 @@ Usage
 
 ``` r
 library(ccostr)
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-#> Loading required package: msm
-#> Loading required package: survival
-library(survival)
-library(dplyr)
 
-ccmean(df_1, L = max(df_1$surv))
-#> [[1]]
-#> [1] "These results should be checked before ..."
-#> 
-#> [[2]]
-#>   available_sample complete_case LinT  BT       ZT
-#> 1         2459.667           590  295 295 337.1667
-#> 
-#> [[3]]
-#>          available_sample_full complete_case_full LinT_full    BT_full
-#> Estimate              2459.667                590       295   295.0000
-#> Variance                    NA                 NA        NA 36260.4167
-#> SD                          NA                 NA        NA   190.4217
-#> 95UCI                       NA                 NA        NA   668.2265
-#> 95LCI                       NA                 NA        NA   -78.2265
-#>              ZT_full
-#> Estimate    337.1667
-#> Variance 128185.6944
-#> SD          358.0303
-#> 95UCI      1038.9061
-#> 95LCI      -364.5727
+df_1_res <- ccmean(df_1, L = max(df_1$surv))
+kable(df_1_res[[3]])
 ```
+
+|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|    BT\_full|     ZT\_full|
+|----------|------------------------:|---------------------:|-----------:|-----------:|------------:|
+| Estimate |                 2459.667|                   590|         295|    295.0000|     337.1667|
+| Variance |                       NA|                    NA|          NA|  36260.4167|  128185.6944|
+| SD       |                       NA|                    NA|          NA|    190.4217|     358.0303|
+| 95UCI    |                       NA|                    NA|          NA|    668.2265|    1038.9061|
+| 95LCI    |                       NA|                    NA|          NA|    -78.2265|    -364.5727|
 
 Data simulation function
 ------------------------
 
 ``` r
 # Simulate data with the simCostData function
-sim <- simCostData(n = 100, dist = "unif", censor = "light", L = 100)
+
+sim <- simCostData(n = 100, dist = "unif", censor = "heavy", L = 10)
 
 # Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
-result <- ccmean(sim[[2]], L = 10)
-result[[3]]
-#>          available_sample_full complete_case_full LinT_full     BT_full
-#> Estimate              33615.04           39927.51  41145.42   41145.419
-#> Variance                    NA                 NA        NA 1104763.013
-#> SD                          NA                 NA        NA    1051.077
-#> 95UCI                       NA                 NA        NA   43205.530
-#> 95LCI                       NA                 NA        NA   39085.308
-#>              ZT_full
-#> Estimate  41210.2784
-#> Variance 992449.3250
-#> SD          996.2175
-#> 95UCI     43162.8648
-#> 95LCI     39257.6921
+sim_res <- ccmean(sim[[2]], L = 10)
+kable(sim_res[[3]])
 ```
+
+|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|     BT\_full|     ZT\_full|
+|----------|------------------------:|---------------------:|-----------:|------------:|------------:|
+| Estimate |                 31170.84|               39035.6|    40975.95|    40975.954|    40729.684|
+| Variance |                       NA|                    NA|          NA|  1366962.322|  1195321.673|
+| SD       |                       NA|                    NA|          NA|     1169.172|     1093.308|
+| 95UCI    |                       NA|                    NA|          NA|    43267.531|    42872.567|
+| 95LCI    |                       NA|                    NA|          NA|    38684.378|    38586.801|
 
 References
 ----------
