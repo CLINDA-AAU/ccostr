@@ -16,12 +16,15 @@ The ccmean function returns 5 estimates, these are:
 -   Naive "Complete Case"
 -   Lin's method: *Lin et al. (1997)*
 -   Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
--   Zhao and Tian's method:
+-   Zhao and Tian's method: *Zhao and Tian (2001)*
 
 Installation
 ------------
 
 ``` r
+devtools::install_github("HaemAalborg/ccostr")
+
+# Or including a vignette that demonstrates the bias and coverage of the estimators, this require library(parallel)
 devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
 
@@ -75,8 +78,7 @@ Usage
 
 ``` r
 library(ccostr)
-library(survival)
-library(dplyr)
+#> Loading required package: dplyr
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -85,14 +87,56 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+#> Loading required package: msm
+#> Loading required package: survival
+library(survival)
+library(dplyr)
 
-ccmean(df_1)
+ccmean(df_1, L = max(df_1$surv))
 #> [[1]]
 #> [1] "These results should be checked before ..."
 #> 
 #> [[2]]
 #>   available_sample complete_case LinT  BT       ZT
 #> 1         2459.667           590  295 295 337.1667
+#> 
+#> [[3]]
+#>          available_sample_full complete_case_full LinT_full    BT_full
+#> Estimate              2459.667                590       295   295.0000
+#> Variance                    NA                 NA        NA 36260.4167
+#> SD                          NA                 NA        NA   190.4217
+#> 95UCI                       NA                 NA        NA   668.2265
+#> 95LCI                       NA                 NA        NA   -78.2265
+#>              ZT_full
+#> Estimate    337.1667
+#> Variance 128185.6944
+#> SD          358.0303
+#> 95UCI      1038.9061
+#> 95LCI      -364.5727
+```
+
+Data simulation function
+------------------------
+
+``` r
+# Simulate data with the simCostData function
+sim <- simCostData(n = 100, dist = "unif", censor = "light", L = 100)
+
+# Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
+result <- ccmean(sim[[2]], L = 10)
+result[[3]]
+#>          available_sample_full complete_case_full LinT_full     BT_full
+#> Estimate              33615.04           39927.51  41145.42   41145.419
+#> Variance                    NA                 NA        NA 1104763.013
+#> SD                          NA                 NA        NA    1051.077
+#> 95UCI                       NA                 NA        NA   43205.530
+#> 95LCI                       NA                 NA        NA   39085.308
+#>              ZT_full
+#> Estimate  41210.2784
+#> Variance 992449.3250
+#> SD          996.2175
+#> 95UCI     43162.8648
+#> 95LCI     39257.6921
 ```
 
 References

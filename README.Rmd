@@ -27,12 +27,15 @@ The ccmean function returns 5 estimates, these are:
  - Naive "Complete Case"
  - Lin's method: *Lin et al. (1997)*
  - Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
- - Zhao and Tian's method:
+ - Zhao and Tian's method: *Zhao and Tian (2001)*
 
 
 
 ## Installation
 ```{r, eval = FALSE}
+devtools::install_github("HaemAalborg/ccostr")
+
+# Or including a vignette that demonstrates the bias and coverage of the estimators, this require library(parallel)
 devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
 
@@ -50,6 +53,7 @@ surv         <- c(343,903,445)
 
 df_0 <- data.frame(id, tcost, delta, surv)
 print(df_0, row.names=FALSE)
+
 ```
 
 
@@ -113,8 +117,21 @@ library(ccostr)
 library(survival)
 library(dplyr)
 
-ccmean(df_1)
+ccmean(df_1, L = max(df_1$surv))
 ```
+
+## Data simulation function
+
+```{r}
+# Simulate data with the simCostData function
+sim <- simCostData(n = 100, dist = "unif", censor = "light", L = 100)
+
+# Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
+result <- ccmean(sim[[2]], L = 10)
+result[[3]]
+```
+
+
 
 ## References
 
