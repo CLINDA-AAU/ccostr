@@ -168,7 +168,7 @@ for(i in 1:nrow(t)){
     ids     <- t$id[idIndex]
     runCost <- t_data_total_temp$cost
     names(runCost) <- t_data_total_temp$id
-    runCostMatrix[idIndex,i] <- runCost[ids]
+    runCostMatrix[idIndex,i] <- runCost[as.character(ids)]
       
     # Get mean runCost for longer surviving ids
     t$mcostlsurv[i]   <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= t$surv[i]])
