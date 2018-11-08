@@ -21,6 +21,7 @@ ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="d
 # Subset to estimation period
 x$delta[x$surv > L] <- 1
 x <- subset(x, stop <= L)
+x$surv <- pmin(x$surv, L)
 
 # Ordering the dataset
 x <- x[order(x$surv, x$delta),]
@@ -117,15 +118,18 @@ BT <- mean((t$cost*t$delta)/t$sc.surv)
 
 # START VAR BT ------------------------------------------------------------
 n <- length(t$cost)
-
-t$sss  <- rev(cumsum(rev(t$delta * t$cost / t$sc.surv)))
-t$ssss <- rev(cumsum(rev(t$delta * t$cost^2 / t$sc.surv)))
-t$GA <- t$sc.surv/(n - 1:n + t$delta) * t$ssss
-t$GB <- t$sc.surv/(n - 1:n + t$delta) * t$sss
+t$GA <- rep(0, n)
+t$GB <- rep(0, n)
+for(i in 1:n){
+	t2 <- subset(t, surv >= t$surv[i])
+	t$GA[i] <- t$sc.surv[i] / (nrow(t2) -1 + t$delta[i]) * sum(t2$delta * t2$cost^2 / t2$sc.surv)
+    t$GB[i] <- t$sc.surv[i] / (nrow(t2) -1 + t$delta[i]) * sum(t2$delta * t2$cost / t2$sc.surv)
+}
 t$GA[is.na(t$GA)] <- 0
 t$GB[is.na(t$GB)] <- 0
-
-BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + mean(((1-t$delta)/t$sc.surv^2 )* (t$GA - t$GB^2)))
+  
+BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + 
+                 mean(((1-t$delta)/t$sc.surv^2 )* (t$GA - t$GB^2)))
 BT_sd <- sqrt(BT_var)
 BT_uci <- BT + (1.96 * BT_sd)
 BT_lci <- BT - (1.96 * BT_sd)
@@ -159,7 +163,14 @@ for(i in 1:nrow(t)){
       summarize(cost = sum(cost, na.rm=T),
                 surv= first(surv))
     
-    runCostMatrix[,i] <- t_data_total_temp$cost[order(t_data_total_temp$surv)]
+    # Store in runCostMatrix for kept ids
+    idIndex <- t$id %in% t_data_total_temp$id
+    ids     <- t$id[idIndex]
+    runCost <- t_data_total_temp$cost
+    names(runCost) <- t_data_total_temp$id
+    runCostMatrix[idIndex,i] <- runCost[ids]
+      
+    # Get mean runCost for longer surviving ids
     t$mcostlsurv[i]   <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= t$surv[i]])
   }
 }
