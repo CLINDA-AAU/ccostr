@@ -68,7 +68,7 @@ censBreaks <- c(0, sc$time, Inf)
   
 # calculate average costs of patients deceased within each interval
 a <- subset(xf, delta == 1) %>% 
-    mutate(ints = cut(surv, breaks = censBreaks)) %>%
+    mutate(ints = cut(surv, breaks = censBreaks, dig.lab = 5)) %>%
     group_by(ints) %>% 
     summarise(mean = mean(cost))
   
