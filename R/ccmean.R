@@ -175,7 +175,7 @@ for(i in 1:nrow(t)){
   }
 }
 
-ZT <- mean((t$delta * (t$cost / t$sc.surv)) + ((1-t$delta) * ((t$cost-t$mcostlsurv) / t$sc.surv)), na.rm=T)
+ZT <- mean((t$delta * (t$cost / t$sc.surv))) + mean(((1-t$delta) * ((t$cost-t$mcostlsurv) / t$sc.surv)), na.rm=T)
 
 ## Estimate variance
 tempSum1 <- 0
