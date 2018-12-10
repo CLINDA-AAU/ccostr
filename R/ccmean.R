@@ -20,8 +20,12 @@
 ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = 10) {
 # Subset to estimation period
 x$delta[x$surv > L] <- 1
-x <- subset(x, stop <= L)
 x$surv <- pmin(x$surv, L)
+x <- subset(x, start <= L)
+
+# Adjust overlapping costs
+x$cost <- ifelse(x$stop > x$surv, x$cost * ((x$surv-x$start)/(x$stop-x2$start)), x$cost)
+x$stop <- pmin(x$stop, L)
 
 # Ordering the dataset
 x <- x[order(x$surv, x$delta),]
