@@ -17,7 +17,10 @@
 #' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
 
 
-ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = 10) {
+ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = NA) {
+## Set estimation period if undefined
+if(is.na(L)) L <- max(surv)
+
 # Subset to estimation period
 x$delta[x$surv > L] <- 1
 x$surv <- pmin(x$surv, L)
