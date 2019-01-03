@@ -160,7 +160,7 @@ for(i in 1:nrow(t)){
   if(t$delta[i] == 1){
     next
   } else{
-    t_data2 <- subset(x, start < t$surv[i])
+    t_data2 <- subset(x, start <= t$surv[i])
     t_data2$cost <- ifelse(t_data2$stop > t$surv[i], 
                            (t_data2$cost/(t_data2$stop-t_data2$start))*(t$surv[i]-t_data2$start),
                            t_data2$cost)
