@@ -1,6 +1,6 @@
 #' Calculates estimates of mean valus given censored cost data 
 #'
-#' This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted Life Years. 
+#' This function calcutes the mean cost for right-censored cost data over a period of L time units (days, months, years,...)
 #' 
 #' 
 #' - Naive "Available Sample"
@@ -10,24 +10,24 @@
 #' - BT - Bang and Tsiatis's method 
 #' - ZT - Zhao and Tian's method
 #' 
-#' @param ccmean Caldulates the estimates of mean costs
-#' @return Different estimates
+#' @param ccmean Calculates the estimates of mean costs
+#' @return Mean, Variance, SD, and 95% CI for the different estimates
 #' @export
 #' @examples
-#' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
+#' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv", L = NA)
 
 
-ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = NA) {
+ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="delta", surv="surv", L = NA, addInterPol = 0) {
 ## Set estimation period if undefined
 if(is.na(L)) L <- max(x$surv)
-
+	
 # Subset to estimation period	
 x$delta[x$surv >= L] <- 1
 x$surv <- pmin(x$surv, L)
 x <- subset(x, start <= L)
 
 # Adjust overlapping costs
-x$cost <- ifelse(x$stop > x$surv, x$cost * ((x$surv-x$start)/(x$stop-x$start)), x$cost)
+x$cost <- ifelse(x$stop > x$surv, x$cost * ((x$surv-x$start + addInterPol)/(x$stop-x$start + addInterPol)), x$cost)
 x$stop <- pmin(x$stop, L)
 
 # Ordering the dataset
@@ -101,42 +101,39 @@ LinT_full <- c(LinT, NA, NA, NA, NA)
 ##               Bang and Tsiatis's method (2000)              ##
 #################################################################
 
-# Opposite Kaplain Meier - chance of censoring - for each period (cummulative)
+# Kaplan-Meier curve for censoring
 sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1), 
               times = xf$surv)
-
-# Save changes of censoring and time in seperate dataframe
 sct <- data.frame(sc$time, sc$surv)
-
-# adjust for last proparbility = 0 (why we do this i'm not sure)
 sct$sc.surv[sct$sc.surv == 0] <- min(sct$sc.surv[sct$sc.surv != 0])
-
-# remove non unique to avoid errors when merging
 sct <- unique(sct)
 
-# Merge with the dataset by surv, as that tells which the chance of being censored in each death
+## Kaplan-Meier curve for survival
+s <- summary(survfit(Surv(xf$surv, xf$delta) ~ 1), 
+             times = xf$surv)
+st <- data.frame(s$time, s$surv)
+st <- unique(st)
+
+# Merge probalities of censoring and survival to data
 t <- merge(xf,sct,by.x="surv", by.y="sc.time", all.x=T)
+t <- merge(t,st,by.x="surv", by.y="s.time", all.x=T)
 
-
-# Calculating Band and Tsiatis cost estimator
+# Calculate Bang and Tsiatis cost estimator
 BT <- mean((t$cost*t$delta)/t$sc.surv)
-
-
 
 # START VAR BT ------------------------------------------------------------
 n <- length(t$cost)
 t$GA <- rep(0, n)
 t$GB <- rep(0, n)
 for(i in 1:n){
-	t2 <- subset(t, surv >= t$surv[i])
-	t$GA[i] <- t$sc.surv[i] / (nrow(t2) -1 + t$delta[i]) * sum(t2$delta * t2$cost^2 / t2$sc.surv)
-    t$GB[i] <- t$sc.surv[i] / (nrow(t2) -1 + t$delta[i]) * sum(t2$delta * t2$cost / t2$sc.surv)
+  if(t$delta[i] == 1) next
+  t2 <- subset(t, surv >= t$surv[i])
+  t$GA[i] <- (1 / (n*t$s.surv[i])) * sum(t2$delta * t2$cost^2 / t2$sc.surv)
+  t$GB[i] <- (1 / (n*t$s.surv[i])) * sum(t2$delta * t2$cost / t2$sc.surv)
 }
-t$GA[is.na(t$GA)] <- 0
-t$GB[is.na(t$GB)] <- 0
-  
+
 BT_var <- 1/n * (mean(t$delta*(t$cost-BT)^2/t$sc.surv) + 
-                 mean(((1-t$delta)/t$sc.surv^2 )* (t$GA - t$GB^2)))
+                   mean(((1-t$delta)/t$sc.surv^2 )* (t$GA - t$GB^2)))
 BT_sd <- sqrt(BT_var)
 BT_uci <- BT + (1.96 * BT_sd)
 BT_lci <- BT - (1.96 * BT_sd)
@@ -156,14 +153,16 @@ BT_full <- c(BT, BT_var, BT_sd, BT_uci, BT_lci)
 ## of longer surviving individuals up till time ti
 runCostMatrix <- matrix(0, nrow = nrow(t), ncol = nrow(t))
 t$mcostlsurv <- 0
+t$mcostlsurvSq <- 0
 for(i in 1:nrow(t)){
   if(t$delta[i] == 1){
     next
   } else{
     t_data2 <- subset(x, start <= t$surv[i])
     t_data2$cost <- ifelse(t_data2$stop > t$surv[i], 
-                           (t_data2$cost/(t_data2$stop-t_data2$start))*(t$surv[i]-t_data2$start),
-                           t_data2$cost)
+                             (t_data2$cost/(t_data2$stop-t_data2$start + addInterPol))*
+                               (t$surv[i]-t_data2$start +addInterPol),
+                             t_data2$cost)
     # summarized  
     t_data_total_temp <- t_data2 %>% 
       group_by(id) %>% 
@@ -179,23 +178,24 @@ for(i in 1:nrow(t)){
       
     # Get mean runCost for longer surviving ids
     t$mcostlsurv[i]   <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= t$surv[i]])
+	t$mcostlsurvSq[i] <- mean(t_data_total_temp$cost[t_data_total_temp$surv >= t$surv[i]]^2)
   }
 }
 
 ZT <- mean((t$delta * (t$cost / t$sc.surv))) + mean(((1-t$delta) * ((t$cost-t$mcostlsurv) / t$sc.surv)), na.rm=T)
 
 ## Estimate variance
-tempSum1 <- 0
-tempSum2 <- 0
 n <- nrow(t)
+t$gm  <- rep(0,n)
+t$gmm <- rep(0,n)
 for(i in 1:n){
-  tempSum1[i] <- sum((t$delta[i:n] / t$sc.surv[i:n]) * 
-                       (t$cost[i:n] - t$GB[i:n]) * (runCostMatrix[i:n,i] - t$mcostlsurv[i]))
-  tempSum2[i] <- sum((runCostMatrix[i:n,i] - t$mcostlsurv[i])^2)
+   if(t$delta[i] == 1) next
+   t$gm[i]  <- (1/(n*t$s.surv[i])) * sum(as.numeric(t$surv >= t$surv[i]) * t$delta * runCostMatrix[,i] / t$sc.surv)
+   t$gmm[i] <- (1/(n*t$s.surv[i])) * sum(as.numeric(t$surv >= t$surv[i]) * t$delta * t$cost * runCostMatrix[,i] / t$sc.surv)
 }
-
-ztVAR <- BT_var - (2/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv)) * tempSum1)
-+ (1/n^2) * sum(((1-t$delta) / ((n + 1 - 1:n) * t$sc.surv^2)) * tempSum2)
+  
+ztVAR <- BT_var - (2/n^2) * sum(((1-t$delta) /  t$sc.surv^2) * (t$gmm - t$GB * t$gm)) + 
+  (1/n^2) * sum(((1-t$delta) /  t$sc.surv^2) * (t$mcostlsurvSq - t$mcostlsurv^2))
 
 
 ZT_full <- c(ZT,
