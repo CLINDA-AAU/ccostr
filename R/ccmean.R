@@ -22,7 +22,7 @@ ccmean <- function(x, id="id", cost="cost", start="start", stop="stop", delta="d
 if(is.na(L)) L <- max(x$surv)
 	
 # Subset to estimation period	
-x$delta[x$surv >= L] <- 1
+x$delta[x$surv > L] <- 1
 x$surv <- pmin(x$surv, L)
 x <- subset(x, start <= L)
 
