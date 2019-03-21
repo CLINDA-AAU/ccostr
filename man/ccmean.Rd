@@ -5,16 +5,16 @@
 \title{Calculates estimates of mean valus given censored cost data}
 \usage{
 ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
-  delta = "delta", surv = "surv")
+  delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
-\item{ccmean}{Caldulates the estimates of mean costs}
+\item{ccmean}{Calculates the estimates of mean costs}
 }
 \value{
-Different estimates
+Mean, Variance, SD, and 95% CI for the different estimates
 }
 \description{
-This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted Life Years.
+This function calcutes the mean cost for right-censored cost data over a period of L time units (days, months, years,...)
 }
 \details{
 - Naive "Available Sample"
@@ -25,5 +25,5 @@ This function converts scores from the EQ-5D-5L questionaire to Quality Adjusted
 - ZT - Zhao and Tian's method
 }
 \examples{
-ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv")
+ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv", L = NA)
 }

@@ -56,7 +56,6 @@ surv         <- c(343,903,445)
 
 df_0 <- data.frame(id, tcost, delta, surv)
 kable(df_0)
-
 ```
 
 
@@ -118,7 +117,7 @@ BTp
 ```{r message=FALSE}
 library(ccostr)
 
-df_1_res <- ccmean(df_1, L = max(df_1$surv))
+df_1_res <- ccmean(df_1)
 kable(df_1_res[[3]])
 ```
 
