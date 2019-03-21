@@ -57,7 +57,7 @@ Explanation of estimates
 
 The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
-<img src="img/AS.png" height="60"/>
+<img src="img/AS.png" height="55"/>
 
 The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
 
@@ -67,7 +67,9 @@ It is possible to come up with better estimates of the mean costs, there are two
 
 ### Estimates without cost history
 
-<img src="img/LinT.png" height="60"/> <img src="img/BT.png" height="60"/>
+<img src="img/LinT.png" height="60"/>
+
+<img src="img/BT.png" height="60"/>
 
 ### Estimates with cost history
 
@@ -83,13 +85,13 @@ df_1_res <- ccmean(df_1)
 kable(df_1_res[[3]])
 ```
 
-|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|    BT\_full|     ZT\_full|
-|----------|------------------------:|---------------------:|-----------:|-----------:|------------:|
-| Estimate |                 2459.667|                   590|         295|    295.0000|     337.1667|
-| Variance |                       NA|                    NA|          NA|  36260.4167|  550262.9722|
-| SD       |                       NA|                    NA|          NA|    190.4217|     741.7971|
-| 95UCI    |                       NA|                    NA|          NA|    668.2265|    1791.0890|
-| 95LCI    |                       NA|                    NA|          NA|    -78.2265|   -1116.7557|
+|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|  BT\_full|   ZT\_full|
+|----------|------------------------:|---------------------:|-----------:|---------:|----------:|
+| Estimate |                  2459.67|                   590|         295|    295.00|     337.17|
+| Variance |                       NA|                    NA|          NA|  36260.42|  550262.97|
+| SD       |                       NA|                    NA|          NA|    190.42|     741.80|
+| 95UCI    |                       NA|                    NA|          NA|    668.23|    1791.09|
+| 95LCI    |                       NA|                    NA|          NA|    -78.23|   -1116.76|
 
 Data simulation function
 ------------------------
@@ -97,20 +99,20 @@ Data simulation function
 ``` r
 # Simulate data with the simCostData function
 
-sim <- simCostData(n = 100, dist = "unif", censor = "heavy", L = 10)
+sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
 
 # Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
 sim_res <- ccmean(sim[[2]], L = 10)
 kable(sim_res[[3]])
 ```
 
-|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|     BT\_full|     ZT\_full|
-|----------|------------------------:|---------------------:|-----------:|------------:|------------:|
-| Estimate |                 29854.43|              37799.02|    40458.56|    40458.562|    39839.002|
-| Variance |                       NA|                    NA|          NA|  1617087.580|  1526320.811|
-| SD       |                       NA|                    NA|          NA|     1271.648|     1235.444|
-| 95UCI    |                       NA|                    NA|          NA|    42950.992|    42260.471|
-| 95LCI    |                       NA|                    NA|          NA|    37966.133|    37417.532|
+|          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|   BT\_full|   ZT\_full|
+|----------|------------------------:|---------------------:|-----------:|----------:|----------:|
+| Estimate |                 28492.01|              37140.82|    39838.53|   39838.53|   39239.55|
+| Variance |                       NA|                    NA|          NA|  183359.57|  193658.51|
+| SD       |                       NA|                    NA|          NA|     428.21|     440.07|
+| 95UCI    |                       NA|                    NA|          NA|   40677.81|   40102.08|
+| 95LCI    |                       NA|                    NA|          NA|   38999.25|   38377.02|
 
 References
 ----------

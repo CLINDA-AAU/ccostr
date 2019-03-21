@@ -81,7 +81,7 @@ kable(df_1)
 ## Explanation of estimates
 The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
-<img src="img/AS.png" height="60"/>
+<img src="img/AS.png" height="55"/>
 
 The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
 
@@ -120,7 +120,7 @@ kable(df_1_res[[3]])
 ```{r}
 # Simulate data with the simCostData function
 
-sim <- simCostData(n = 100, dist = "unif", censor = "heavy", L = 10)
+sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
 
 # Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
 sim_res <- ccmean(sim[[2]], L = 10)
