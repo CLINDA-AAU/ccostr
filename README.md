@@ -57,25 +57,21 @@ Explanation of estimates
 
 The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
-<img src="img/fullsample.png"/>
+<img src="img/AS.png" height="60"/>
 
 The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
 
-<img src="img/completecase.png"/>
+<img src="img/CC.png" height="60"/>
 
 It is possible to come up with better estimates of the mean costs, there are two fundamental different approaches. The first takes into account only total costs over the whole period, but it is possible to improve this type of estimates if cost history is present. If that is the case this additional information is used in
 
 ### Estimates without cost history
 
-<img src="img/LinT.png"/> <img src="img/LinTa.png"/>
-
-LinT BT
-
-<img src="img/BT.png"/>
+<img src="img/LinT.png" height="60"/> <img src="img/BT.png" height="60"/>
 
 ### Estimates with cost history
 
-LinA LinB ZT BTp
+<img src="img/ZT.png" height="60"/>
 
 Usage
 -----
@@ -83,17 +79,17 @@ Usage
 ``` r
 library(ccostr)
 
-df_1_res <- ccmean(df_1, L = max(df_1$surv))
+df_1_res <- ccmean(df_1)
 kable(df_1_res[[3]])
 ```
 
 |          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|    BT\_full|     ZT\_full|
 |----------|------------------------:|---------------------:|-----------:|-----------:|------------:|
 | Estimate |                 2459.667|                   590|         295|    295.0000|     337.1667|
-| Variance |                       NA|                    NA|          NA|  36260.4167|  128185.6944|
-| SD       |                       NA|                    NA|          NA|    190.4217|     358.0303|
-| 95UCI    |                       NA|                    NA|          NA|    668.2265|    1038.9061|
-| 95LCI    |                       NA|                    NA|          NA|    -78.2265|    -364.5727|
+| Variance |                       NA|                    NA|          NA|  36260.4167|  550262.9722|
+| SD       |                       NA|                    NA|          NA|    190.4217|     741.7971|
+| 95UCI    |                       NA|                    NA|          NA|    668.2265|    1791.0890|
+| 95LCI    |                       NA|                    NA|          NA|    -78.2265|   -1116.7557|
 
 Data simulation function
 ------------------------
@@ -110,11 +106,11 @@ kable(sim_res[[3]])
 
 |          |  available\_sample\_full|  complete\_case\_full|  LinT\_full|     BT\_full|     ZT\_full|
 |----------|------------------------:|---------------------:|-----------:|------------:|------------:|
-| Estimate |                 31170.84|               39035.6|    40975.95|    40975.954|    40729.684|
-| Variance |                       NA|                    NA|          NA|  1366962.322|  1195321.673|
-| SD       |                       NA|                    NA|          NA|     1169.172|     1093.308|
-| 95UCI    |                       NA|                    NA|          NA|    43267.531|    42872.567|
-| 95LCI    |                       NA|                    NA|          NA|    38684.378|    38586.801|
+| Estimate |                 29854.43|              37799.02|    40458.56|    40458.562|    39839.002|
+| Variance |                       NA|                    NA|          NA|  1617087.580|  1526320.811|
+| SD       |                       NA|                    NA|          NA|     1271.648|     1235.444|
+| 95UCI    |                       NA|                    NA|          NA|    42950.992|    42260.471|
+| 95LCI    |                       NA|                    NA|          NA|    37966.133|    37417.532|
 
 References
 ----------

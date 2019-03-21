@@ -210,22 +210,19 @@ ZT_full <- c(ZT,
 #################################################################
 
 results <- list("These results should be checked before ...",
-                data.frame(available_sample, 
+                round(data.frame(available_sample, 
                            complete_case, 
                            LinT, 
                            BT,
-                           ZT),
-                data.frame(available_sample_full,
+                           ZT),2),
+                round(data.frame(available_sample_full,
                            complete_case_full,
                            LinT_full,
                            BT_full,
                            ZT_full, 
-                           row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI"))
+                           row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2)
                 )
-
 return(results)
-
-
 }
 
 

@@ -81,35 +81,29 @@ kable(df_1)
 ## Explanation of estimates
 The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
 
-<img src="img/fullsample.png"/>
+<img src="img/AS.png" height="60"/>
 
 The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
 
-<img src="img/completecase.png"/>
+<img src="img/CC.png" height="60"/>
 
 
 It is possible to come up with better estimates of the mean costs, there are two fundamental different approaches. The first takes into account only total costs over the whole period, but it is possible to improve this type of estimates if cost history is present. If that is the case this additional information is used in 
 
 ### Estimates without cost history
 
-<img src="img/LinT.png"/>
-<img src="img/LinTa.png"/>
+<img src="img/LinT.png" height="60"/>
 
-
-LinT
-BT
-
-
-<img src="img/BT.png"/>
+<img src="img/BT.png" height="60"/>
 
 
 
 ### Estimates with cost history
 
-LinA
-LinB
-ZT
-BTp
+<img src="img/ZT.png" height="60"/>
+
+
+
 
 
 ## Usage
