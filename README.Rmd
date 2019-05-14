@@ -14,19 +14,17 @@ library(knitr)
 ```
 
 # ccostr
-**(warning estimates might be wrong)**
 
-R package to calculate estimates of total costs with censored data
+Standard statistical methods for survival data should NOT be used for medical cost data, ccostr is an R package to calculate estimates of total costs with censored data based two commonly accepted estimators.
 
 
 
 
 ## Overview
-The ccmean function returns 5 estimates, these are:
+The ccmean function returns 4 estimates, these are:
 
  - Naive "Available Sample"
  - Naive "Complete Case"
- - Lin's method: *Lin et al. (1997)*
  - Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
  - Zhao and Tian's method: *Zhao and Tian (2001)*
 
