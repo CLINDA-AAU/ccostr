@@ -63,15 +63,12 @@ kable(df_0)
 It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discreet or contenious
 if so the data should look something like this:
 ```{r echo=FALSE}
-id      <- c("A", "A", "A", "B" ,"C", "C")
-
-start   <- c(1,30,88,18,1,67)
-stop    <- c(1,82,88,198,5,88)
-cost    <- c(550,1949,45,4245,23,567)
-delta   <- c(0,0,0,0,1,1)
-surv    <- c(343,343,343,903,445,445)
-
-df_1 <- data.frame(id, start,stop,cost,delta,surv)
+df_1 <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C"),
+                   start = c(1,30,88,18,1,67),
+                   stop  = c(1,82,88,198,5,88),
+                   cost  = c(550,1949,45,4245,23,567),
+                   delta = c(0,0,0,0,1,1),
+                   surv  = c(343,343,343,903,445,445))
 kable(df_1)
 ```
 
