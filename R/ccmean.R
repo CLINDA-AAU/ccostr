@@ -20,19 +20,18 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
 
 # Set estimation period if undefined
 if(is.na(L)) L <- max(x$surv)
-	
+L2 <- max(x$surv)
 # Subset to estimation period	
 x$delta[x$surv > L] <- 1
 x$surv <- pmin(x$surv, L)
-x <- subset(x, start <= L)
+x <- subset(x, start < L)
 
 # Adjust overlapping costs
 x$cost <- ifelse(x$stop > x$surv, x$cost * ((x$surv-x$start + addInterPol)/(x$stop-x$start + addInterPol)), x$cost)
 x$stop <- pmin(x$stop, L)
 
 # Ordering the dataset
-x <- x[order(x$surv, x$delta),]
-row.names(x) <- 1:nrow(x)
+x <- x %>% arrange(surv, delta)
 
 # Some calculations don't use cost history and therefore collapse by ID
 xf <- x %>% 
@@ -50,7 +49,7 @@ xf <- x %>%
 # Costs are summed and a mean are found
 AS <- mean(xf$cost)
 
-AS_var <- var(xf$cost)
+AS_var <- var(xf$cost)/nrow(xf)
 
 AS_full <- c(AS,
              AS_var,
@@ -66,7 +65,7 @@ AS_full <- c(AS,
 # Costs are summed up and calculated mean
 CC <- mean(xf$cost[xf$delta==1])
 
-CC_var <- var(xf$cost[xf$delta==1])
+CC_var <- var(xf$cost[xf$delta==1])/sum(xf$delta)
 
 CC_full <- c(CC,
              CC_var,
@@ -225,27 +224,28 @@ ZT_full <- c(ZT,
 ##                           Results                           ##
 #################################################################
 
+svl1 <- survival::survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
+svl2 <- survival:::survmean(svl1, rmean = L)
+
+
 results <- list(Text  = c("CCOSTR - Estimation of censored costs"),
-                Data  = data.frame(observations = nrow(x), 
-                                   induviduals  = nrow(xf), 
-                                   events       = sum(xf$delta==1), 
-                                   row.names    = "n"),
+                Data  = data.frame(Observations = nrow(x), 
+                                   Induviduals  = nrow(xf), 
+                                   Events       = sum(xf$delta == 1),
+                                   Limits       = L,
+                                   TotalTime    = sum(xf$surv),
+                                   MaxSurv      = L2,
+                                   row.names    = "N"),
                 First = data.frame(AS, CC, BT, ZT),
                 Estimates = round(data.frame("AvailableSample" = AS_full,
                                              "CompleteCase"    = CC_full,
                                              "BT"              = BT_full,
                                              "ZT"              = ZT_full, 
-                                             row.names         = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2)
+                                             row.names         = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2),
+                Survival = svl2
                 )
+class(results) <- "ccobject"
 
-results[c(1,2,4)]
-
+results
 }
-
-
-ccmean(df_1)
-ccmean(df_2)
-
-
-
 
