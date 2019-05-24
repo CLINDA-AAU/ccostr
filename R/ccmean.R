@@ -1,30 +1,51 @@
 #' Calculates estimates of mean valus given censored cost data 
 #'
-#' This function calcutes the mean cost for right-censored cost data over a period of L time units (days, months, years,...)
-#' 
+#' @description This function calcutes the mean cost for right-censored cost 
+#' data over a period of L time units (days, months, years,...)
+#'
+#' @details The function returns 4 estimates, of which two are simple and biased 
+#' downwards and should not be used, the estimates are:
 #' 
 #' - Naive "Available Sample"
+#' 
 #' - Naive "Complete Case"
+#'
+#' - "Weighted Complete Case" BT - Bang and Tsiatis's method 
+#'
+#' - "Weighted Available Sample" ZT - Zhao and Tian's method
 #' 
-#' - BT - Bang and Tsiatis's method 
-#' - ZT - Zhao and Tian's method
+#' @param id The id seperating each individual
+#' @param cost The total cost, or if start and stop provided the specific cost
+#' @param start Start of cost
+#' @param stop End of cost, if one time cost then start = stop
+#' @param delta Event variable, 1 = event, 0 = no event
+#' @param surv Survival
+#' @param L Limit 
+#' @param addInterPol Interpolation variable for ZT estimate
 #' 
-#' @param ccmean Calculates the estimates of mean costs
-#' @return Mean, Variance, SD, and 95% CI for the different estimates
-#' @export
+#' @return An object of class "ccobject".
+#' 
 #' @examples
-#' ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv", L = NA)
+#' hcost
+#' ccmean(hcost, L = 1461, addInterPol = 1)
+#' 
+#' @references 
+#' \insertRef{Bang2000}{ccostr}
+#' \insertRef{Zhao2001}{ccostr}
+#' 
+#' @export
 
 
 ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = NA, addInterPol = 0) {
 
 # Set estimation period if undefined
 if(is.na(L)) L <- max(x$surv)
-L2 <- max(x$surv)
+L2             <- max(x$surv)
+
 # Subset to estimation period	
 x$delta[x$surv > L] <- 1
-x$surv <- pmin(x$surv, L)
-x <- subset(x, start < L)
+x$surv              <- pmin(x$surv, L)
+x                   <- subset(x, start < L)
 
 # Adjust overlapping costs
 x$cost <- ifelse(x$stop > x$surv, x$cost * ((x$surv-x$start + addInterPol)/(x$stop-x$start + addInterPol)), x$cost)
@@ -47,10 +68,8 @@ xf <- x %>%
 #################################################################
 
 # Costs are summed and a mean are found
-AS <- mean(xf$cost)
-
-AS_var <- var(xf$cost)/nrow(xf)
-
+AS      <- mean(xf$cost)
+AS_var  <- var(xf$cost)/nrow(xf)
 AS_full <- c(AS,
              AS_var,
              sqrt(AS_var),
@@ -63,10 +82,8 @@ AS_full <- c(AS,
 #################################################################
 
 # Costs are summed up and calculated mean
-CC <- mean(xf$cost[xf$delta==1])
-
-CC_var <- var(xf$cost[xf$delta==1])/sum(xf$delta)
-
+CC      <- mean(xf$cost[xf$delta==1])
+CC_var  <- var(xf$cost[xf$delta==1])/sum(xf$delta)
 CC_full <- c(CC,
              CC_var,
              sqrt(CC_var),
@@ -112,15 +129,13 @@ CC_full <- c(CC,
 #################################################################
 
 # Kaplan-Meier curve for censoring
-sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1), 
-              times = xf$surv)
+sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1), times = xf$surv)
 sct <- data.frame(sc$time, sc$surv)
 sct$sc.surv[sct$sc.surv == 0] <- min(sct$sc.surv[sct$sc.surv != 0])
 sct <- unique(sct)
 
 ## Kaplan-Meier curve for survival
-s <- summary(survfit(Surv(xf$surv, xf$delta) ~ 1), 
-             times = xf$surv)
+s <- summary(survfit(Surv(xf$surv, xf$delta) ~ 1), times = xf$surv)
 st <- data.frame(s$time, s$surv)
 st <- unique(st)
 
