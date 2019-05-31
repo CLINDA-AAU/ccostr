@@ -31,9 +31,12 @@
 #' 
 #' @references 
 #' \insertRef{Bang2000}{ccostr}
+#' 
 #' \insertRef{Zhao2001}{ccostr}
 #' 
 #' @export
+#' @importFrom Rdpack reprompt
+
 
 
 ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = NA, addInterPol = 0) {

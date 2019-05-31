@@ -1,9 +1,9 @@
 Package: ccostr
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Lars Nielsen
-Maintainer: The package maintainer <yourself@somewhere.net>
+Title: ccostr - Estimates for mean costs with censored data
+Version: 0.0.2
+Author: Lars Boerty Nielsen
+Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
@@ -12,9 +12,11 @@ LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown,
-	parallel
+    parallel
 VignetteBuilder: knitr
 Depends:
 	dplyr,
 	msm,
 	survival
+Imports: Rdpack
+RdMacros: Rdpack

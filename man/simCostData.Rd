@@ -2,19 +2,30 @@
 % Please edit documentation in R/sim.R
 \name{simCostData}
 \alias{simCostData}
-\title{Simulates data for control of estimates of censored costs - LIN}
+\title{Simulates censored cost data}
 \usage{
 simCostData(n = 100, dist = "unif", censor = "light", L = 10)
 }
 \arguments{
-\item{simCostData}{Simulates censored data}
+\item{n}{Number of individuals to simulate}
+
+\item{dist}{Survival distribution either "unif" = unif(0,10) o r "exp" = exp (1/6)}
+
+\item{censor}{Censoring "light" or "heavy" for unif(0,20) or unif(0,12.5)}
+
+\item{L}{Number of years to summarize over}
 }
 \value{
 Different simulations
 }
 \description{
-Simulates data for control of estimates of censored costs - LIN
+Simulates censored cost data
 }
 \examples{
+# The simulated data can be used to show how the estimators perform
+
 simCostData(n = 100, dist = "unif", censor = "light", L = 10)
+}
+\references{
+\insertRef{Lin1997}{ccostr}
 }
