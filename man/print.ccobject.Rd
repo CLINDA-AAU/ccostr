@@ -4,14 +4,16 @@
 \alias{print.ccobject}
 \title{Adding to the generic print function}
 \usage{
-\method{print}{ccobject}(obj)
+\method{print}{ccobject}(x, ...)
 }
 \arguments{
-\item{print.ccobject}{Returns a nicely formatted output}
+\item{x}{The ccobject}
+
+\item{...}{passthrough}
+}
+\value{
+a plot
 }
 \description{
 Adding to the generic print function
-}
-\examples{
-
 }

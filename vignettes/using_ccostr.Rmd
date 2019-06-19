@@ -19,12 +19,16 @@ knitr::opts_chunk$set(
 This vignettes shows how to use the functions of the ccostr package and how to verify the estimates in the ccmean function 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(knitr)
 library(survival)
-library(ccostr)
+library(data.table)
 library(parallel)
 library(msm)
-library(knitr)
+library(ccostr)
+library(tibble)
+library(forcats)
 ```
 
 # Replication of hcost estimates
@@ -63,9 +67,9 @@ plot(c2) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 We can now test the bias of the estimators and their coverage with the simulated data
 
 ```{r}
-nSim   <- 1000
+nSim   <- 100
 nYears <- 10
-indv   <- 500
+indv   <- 10
 
 ## true mean for unif is 40000 and exp is 35956
 
@@ -76,21 +80,22 @@ exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  ce
 ```
 
 ### Results
-```{r message=FALSE, warning=FALSE}
+```{r include=FALSE}
 ### Estimate from censored data
 nCores <- 1
 cl <- makeCluster(nCores)
 clusterExport(cl = cl, c("unif_light", "unif_heavy", "exp_light", "exp_heavy"))
-clusterEvalQ(cl = cl, {
-  library(dplyr)
-  library(ccostr)
-  library(survival)})
+clusterEvalQ(cl = cl, {library(dplyr)
+                       library(ccostr)
+                       library(survival)})
 est_unif_light <- parLapply(cl, unif_light, function(x) ccmean(x$censoredCostHistory, L = 10))
 est_unif_heavy <- parLapply(cl, unif_heavy, function(x) ccmean(x$censoredCostHistory, L = 10))
 est_exp_light  <- parLapply(cl, exp_light,  function(x) ccmean(x$censoredCostHistory, L = 10))
 est_exp_heavy  <- parLapply(cl, exp_heavy,  function(x) ccmean(x$censoredCostHistory, L = 10))
 stopCluster(cl)
+```
 
+```{r}
 ## Summarize
 results_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) x[[3]]))
 results_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) x[[3]]))

@@ -2,12 +2,14 @@
 % Please edit documentation in R/ccmean.R
 \name{ccmean}
 \alias{ccmean}
-\title{Calculates estimates of mean valus given censored cost data}
+\title{Calculates estimates of mean cost with censored data}
 \usage{
 ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
   delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
+\item{x}{A dataframe}
+
 \item{id}{The id seperating each individual}
 
 \item{cost}{The total cost, or if start and stop provided the specific cost}

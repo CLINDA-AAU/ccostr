@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="HAEM AALBORG" />
+
+<meta name="date" content="2019-05-31" />
+
+<title>Using ccostr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using ccostr</h1>
+<h4 class="author">HAEM AALBORG</h4>
+<h4 class="date">2019-05-31</h4>
+
+
+
+<p>This vignettes shows how to use the functions of the ccostr package and how to verify the estimates in the ccmean function</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(survival)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(ccostr)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(parallel)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(msm)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(knitr)</a></code></pre></div>
+<div id="replication-of-hcost-estimates" class="section level2">
+<h2>Replication of hcost estimates</h2>
+<p>In the ccostr package a dataset called hcost is included, we use the ccmean function with a limit of 4 years (1461 days)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">head</span>(hcost)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; # A tibble: 6 x 7</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;      id start  stop  cost   trt delta  surv</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 1     1     1     1  3694     0     0   575</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 2     1     1     9     1     0     0   575</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 3     1     1     9    12     0     0   575</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 4     1     1    34   106     0     0   575</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 5     1     1   237    68     0     0   575</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; 6     1     1   237    86     0     0   575</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="kw">ccmean</span>(hcost, <span class="dt">L =</span> <span class="dv">1461</span>)</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; Ccostr - censored cost estimation</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt;   Observations Induviduals Events Limits TotalTime MaxSurv</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; N         9704         160     61   1461    122401    2082</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt;          AvailableSample CompleteCase          BT          ZT</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; Estimate        63725.13     74778.36    86173.79    80151.39</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; Variance     19193316.11  37571373.55 51592142.32 23733141.65</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; SD               4381.02      6129.55     7182.77     4871.67</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; 95UCI           72311.93     86792.28   100252.02    89699.86</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; 95LCI           55138.34     62764.45    72095.57    70602.92</span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt; Median survival time: 1165.04 With SE: 41.94</span></a></code></pre></div>
+<p>We see how the BT and ZT estimators are higher than AS and CC, this is due to downward bias in AS and CC</p>
+</div>
+<div id="simulation-of-data" class="section level2">
+<h2>Simulation of data</h2>
+<p>The ccostr package includes a function to simulate data, the cost function takes the following form:</p>
+<p><span class="math display">\[M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(T_i\leq10)\]</span></p>
+<p>With a uniform distribution this is set to take the value of 40.000, we can now test the estimators:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">sim &lt;-<span class="st"> </span><span class="kw">simCostData</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">dist =</span> <span class="st">&quot;unif&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;light&quot;</span>, <span class="dt">L =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">c2 &lt;-<span class="st"> </span><span class="kw">ccmean</span>(sim<span class="op">$</span>censoredCostHistory)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">c2</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Ccostr - censored cost estimation</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   Observations Induviduals Events   Limits TotalTime  MaxSurv</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; N         4594        1000    750 9.999735  4080.538 9.999735</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;          AvailableSample CompleteCase        BT        ZT</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; Estimate        33717.84     39727.02  40661.35  40700.08</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; Variance       177700.31    109688.92 108828.25 110800.66</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; SD                421.55       331.19    329.89    332.87</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 95UCI           34544.07     40376.15  41307.93  41352.50</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; 95LCI           32891.61     39077.88  40014.76  40047.66</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; Median survival time: 4.97 With SE: 0.1</span></a></code></pre></div>
+<p>We can plot this</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot</span>(c2) <span class="op">+</span><span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">40000</span>, <span class="dt">linetype =</span> <span class="st">&quot;dotted&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="bias-and-coverage" class="section level2">
+<h2>bias and coverage</h2>
+<p>We can now test the bias of the estimators and their coverage with the simulated data</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">nSim   &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">nYears &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">indv   &lt;-<span class="st"> </span><span class="dv">300</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">## true mean for unif is 40000 and exp is 35956</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">unif_light &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">n =</span> indv, <span class="dt">dist =</span> <span class="st">&quot;unif&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;light&quot;</span>, <span class="dt">L =</span> nYears))</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">unif_heavy &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">n =</span> indv, <span class="dt">dist =</span> <span class="st">&quot;unif&quot;</span>, <span class="dt">censor =</span> <span class="st">&quot;heavy&quot;</span>, <span class="dt">L =</span> nYears))</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">exp_light  &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">n =</span> indv, <span class="dt">dist =</span> <span class="st">&quot;exp&quot;</span>,  <span class="dt">censor =</span> <span class="st">&quot;light&quot;</span>, <span class="dt">L =</span> nYears))</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">exp_heavy  &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span>nSim, <span class="cf">function</span>(x) <span class="kw">simCostData</span>(<span class="dt">n =</span> indv, <span class="dt">dist =</span> <span class="st">&quot;exp&quot;</span>,  <span class="dt">censor =</span> <span class="st">&quot;heavy&quot;</span>, <span class="dt">L =</span> nYears))</a></code></pre></div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">## Summarize</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">results_unif_light &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_light, <span class="cf">function</span>(x) x[[<span class="dv">3</span>]]))</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">results_unif_heavy &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_heavy, <span class="cf">function</span>(x) x[[<span class="dv">3</span>]]))</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">results_exp_light  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_light,  <span class="cf">function</span>(x) x[[<span class="dv">3</span>]]))</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">results_exp_heavy  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_heavy,  <span class="cf">function</span>(x) x[[<span class="dv">3</span>]]))</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">results_true &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span><span class="dv">40000</span>,</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span><span class="dv">40000</span>,</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span><span class="dv">35956</span>,</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span><span class="dv">35956</span>)</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">results_mean &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(unif_light, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(unif_heavy, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(exp_light, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))),</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span><span class="kw">mean</span>(<span class="kw">sapply</span>(exp_heavy, <span class="cf">function</span>(x) <span class="kw">mean</span>(x<span class="op">$</span>totalCost))))</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">results_bias &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(results_unif_light)),</a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">                           <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(results_unif_heavy)),</a>
+<a class="sourceLine" id="cb6-19" data-line-number="19">                           <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_exp_light)),</a>
+<a class="sourceLine" id="cb6-20" data-line-number="20">                           <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(results_exp_heavy)))</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22">results &lt;-<span class="st"> </span><span class="kw">rbind</span>(results_true, results_mean, results_bias)</a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="kw">row.names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;true_mean&quot;</span>, <span class="st">&quot;simulation_mean&quot;</span>, <span class="kw">colnames</span>(results_unif_light))</a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="kw">kable</span>(results)</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">unif_light</th>
+<th align="right">unif_heavy</th>
+<th align="right">exp_light</th>
+<th align="right">exp_heavy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>true_mean</td>
+<td align="right">40000.00</td>
+<td align="right">40000.00</td>
+<td align="right">35956.00</td>
+<td align="right">35956.00</td>
+</tr>
+<tr class="even">
+<td>simulation_mean</td>
+<td align="right">40004.22</td>
+<td align="right">39995.66</td>
+<td align="right">35949.65</td>
+<td align="right">35962.96</td>
+</tr>
+<tr class="odd">
+<td>AS</td>
+<td align="right">33077.39</td>
+<td align="right">29191.30</td>
+<td align="right">30934.05</td>
+<td align="right">27978.86</td>
+</tr>
+<tr class="even">
+<td>CC</td>
+<td align="right">38969.39</td>
+<td align="right">38183.67</td>
+<td align="right">35597.18</td>
+<td align="right">35291.76</td>
+</tr>
+<tr class="odd">
+<td>BT</td>
+<td align="right">40005.56</td>
+<td align="right">39992.92</td>
+<td align="right">35939.92</td>
+<td align="right">35957.87</td>
+</tr>
+<tr class="even">
+<td>ZT</td>
+<td align="right">39981.20</td>
+<td align="right">39969.66</td>
+<td align="right">35976.63</td>
+<td align="right">36027.75</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="bias" class="section level3">
+<h3>Bias</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">results_bias &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">round</span>(results[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)] <span class="op">-</span><span class="st"> </span><span class="dv">40000</span>,<span class="dv">2</span>), </a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">                      <span class="kw">round</span>(results[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>)] <span class="op">-</span><span class="st"> </span><span class="dv">35956</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">kable</span>(results_bias)</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">unif_light</th>
+<th align="right">unif_heavy</th>
+<th align="right">exp_light</th>
+<th align="right">exp_heavy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>true_mean</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td>simulation_mean</td>
+<td align="right">4.22</td>
+<td align="right">-4.34</td>
+<td align="right">-6.35</td>
+<td align="right">6.96</td>
+</tr>
+<tr class="odd">
+<td>AS</td>
+<td align="right">-6922.61</td>
+<td align="right">-10808.70</td>
+<td align="right">-5021.95</td>
+<td align="right">-7977.14</td>
+</tr>
+<tr class="even">
+<td>CC</td>
+<td align="right">-1030.61</td>
+<td align="right">-1816.33</td>
+<td align="right">-358.82</td>
+<td align="right">-664.24</td>
+</tr>
+<tr class="odd">
+<td>BT</td>
+<td align="right">5.56</td>
+<td align="right">-7.08</td>
+<td align="right">-16.08</td>
+<td align="right">1.87</td>
+</tr>
+<tr class="even">
+<td>ZT</td>
+<td align="right">-18.80</td>
+<td align="right">-30.34</td>
+<td align="right">20.63</td>
+<td align="right">71.75</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="coverage" class="section level3">
+<h3>Coverage</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">cov_unif_light &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_light, <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x[[<span class="dv">4</span>]][<span class="dv">4</span>,] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">40000</span> <span class="op">&amp;</span><span class="st"> </span>x[[<span class="dv">4</span>]][<span class="dv">5</span>,] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">40000</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">cov_unif_heavy &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_unif_heavy, <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x[[<span class="dv">4</span>]][<span class="dv">4</span>,] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">40000</span> <span class="op">&amp;</span><span class="st"> </span>x[[<span class="dv">4</span>]][<span class="dv">5</span>,] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">40000</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">cov_exp_light  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_light,  <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x[[<span class="dv">4</span>]][<span class="dv">4</span>,] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">35956</span> <span class="op">&amp;</span><span class="st"> </span>x[[<span class="dv">4</span>]][<span class="dv">5</span>,] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">35956</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">cov_exp_heavy  &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(est_exp_heavy,  <span class="cf">function</span>(x) <span class="kw">ifelse</span>(x[[<span class="dv">4</span>]][<span class="dv">4</span>,] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">35956</span> <span class="op">&amp;</span><span class="st"> </span>x[[<span class="dv">4</span>]][<span class="dv">5</span>,] <span class="op">&lt;=</span><span class="st"> </span><span class="dv">35956</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">results_coverage &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;unif_light&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(cov_unif_light, <span class="dt">na.rm =</span> T)),</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">                               <span class="st">&quot;unif_heavy&quot;</span> =<span class="st"> </span>(<span class="kw">colMeans</span>(cov_unif_heavy, <span class="dt">na.rm =</span> T)),</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">                               <span class="st">&quot;exp_light&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(cov_exp_light,  <span class="dt">na.rm =</span> T)),</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">                               <span class="st">&quot;exp_heavy&quot;</span>  =<span class="st"> </span>(<span class="kw">colMeans</span>(cov_exp_heavy,  <span class="dt">na.rm =</span> T)))</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="kw">kable</span>(results_coverage, <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">unif_light</th>
+<th align="right">unif_heavy</th>
+<th align="right">exp_light</th>
+<th align="right">exp_heavy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AvailableSample</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>CompleteCase</td>
+<td align="right">0.586</td>
+<td align="right">0.200</td>
+<td align="right">0.893</td>
+<td align="right">0.782</td>
+</tr>
+<tr class="odd">
+<td>BT</td>
+<td align="right">0.950</td>
+<td align="right">0.935</td>
+<td align="right">0.944</td>
+<td align="right">0.955</td>
+</tr>
+<tr class="even">
+<td>ZT</td>
+<td align="right">0.949</td>
+<td align="right">0.952</td>
+<td align="right">0.948</td>
+<td align="right">0.958</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

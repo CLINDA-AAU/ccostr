@@ -4,14 +4,16 @@
 \alias{plot.ccobject}
 \title{Adding to the generic plot function}
 \usage{
-\method{plot}{ccobject}(obj)
+\method{plot}{ccobject}(x, ...)
 }
 \arguments{
-\item{plot.ccobject}{Plots the results}
+\item{x}{The ccobject}
+
+\item{...}{passthrough}
+}
+\value{
+a plot
 }
 \description{
 Adding to the generic plot function
-}
-\examples{
-
 }

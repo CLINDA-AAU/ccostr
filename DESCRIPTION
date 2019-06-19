@@ -6,17 +6,21 @@ Author: Lars Boerty Nielsen
 Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: knitr,
-    rmarkdown,
-    parallel
+Suggests: rmarkdown,
+          parallel
 VignetteBuilder: knitr
-Depends:
-	dplyr,
+Imports:ggplot2,
+        dplyr,
+        tibble,
+        knitr,
 	msm,
-	survival
-Imports: Rdpack
+        forcats,
+        data.table,
+	survival,
+        Rdpack
+Depends:
 RdMacros: Rdpack

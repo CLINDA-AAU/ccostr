@@ -1,17 +1,17 @@
 #' Adding to the generic print function 
 #' 
-#' @param print.ccobject Returns a nicely formatted output
-#' @return 
+#' @param x The ccobject
+#' @param ... passthrough
+#' @return a plot
 #' @export
-#' @examples
 #' 
 
-print.ccobject <- function(obj) {
+print.ccobject <- function(x, ...) {
   cat("Ccostr - censored cost estimation\n\n")
-  print(obj$Data, row.names=TRUE)
+  print(x$Data, row.names=TRUE)
   cat("\n")
-  print(obj$Estimates)
-  cat("\nMedian survival time:", round(as.numeric(obj$Survival$matrix[5]),2), "With SE:", round(as.numeric(obj$Survival$matrix[6]),2))
+  print(x$Estimates)
+  cat("\nMedian survival time:", round(as.numeric(x$Survival[[7]]),2), "With SE:", round(as.numeric(x$Survival[[6]]),2))
 }
 
 
@@ -20,19 +20,19 @@ print.ccobject <- function(obj) {
 
 #' Adding to the generic plot function 
 #' 
-#' @param plot.ccobject Plots the results
-#' @return 
+#' @param x The ccobject
+#' @param ... passthrough
+#' @return a plot
+#' @import ggplot2 tibble forcats
 #' @export
-#' @examples
 #' 
 
-
-plot.ccobject <- function(obj) {
-  temp <- obj$Estimates %>%  t() %>% as.data.frame() %>% rownames_to_column(var="Estimator")
+plot.ccobject <- function(x, ...) {
+  temp <- x$Estimates %>%  t() %>% as.data.frame() %>% tibble::rownames_to_column(var="Estimator")
   temp$Estimator <- factor(temp$Estimator, labels = )
   
   temp %>% 
-    ggplot(aes(y = Estimate, x = fct_reorder(Estimator,Estimate), ymax = .$"95UCI", ymin = .$"95LCI")) + 
+    ggplot(aes(y = temp$Estimate, x = fct_reorder(temp$Estimator,temp$Estimate), ymax = temp$"95UCI", ymin = temp$"95LCI")) + 
     geom_point(shape=15, size=5) +  
     geom_errorbar(width = 0.2, size = 1.1) + 
     coord_flip() +
