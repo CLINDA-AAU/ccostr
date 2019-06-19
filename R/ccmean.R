@@ -37,7 +37,7 @@
 #' 
 #' @export
 #' @importFrom Rdpack reprompt
-#' @importFrom data.table as.data.table :=
+#' @importFrom data.table as.data.table := setDTthreads
 #' @import ggplot2 dplyr survival msm knitr tibble
 
 
@@ -196,7 +196,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   runCostMatrix  <- matrix(0, nrow = nrow(t), ncol = nrow(t))
   t$mcostlsurv   <- 0
   t$mcostlsurvSq <- 0
-  
+  setDTthreads(1)
   # For each censored individual the cost is calculate for longer 
   # surviving individuals up till time ti
   for(i in 1:nrow(t)){
