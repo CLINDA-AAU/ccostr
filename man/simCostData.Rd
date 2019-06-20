@@ -2,19 +2,40 @@
 % Please edit documentation in R/sim.R
 \name{simCostData}
 \alias{simCostData}
-\title{Simulates data for control of estimates of censored costs - LIN}
+\title{Simulates censored cost data}
 \usage{
-simCostData(n = 100, dist = "unif", censor = "light", L = 10)
+simCostData(n = 100, dist = "unif", censor = "light", exp = FALSE,
+  L = 10)
 }
 \arguments{
-\item{simCostData}{Simulates censored data}
+\item{n}{Number of individuals to simulate}
+
+\item{dist}{Survival distribution either "unif" = unif(0,10) o r "exp" = exp (1/6)}
+
+\item{censor}{Censoring "light" or "heavy" for rexp(rate = 1/16) or rexp(rate = 1/9)}
+
+\item{exp}{if TRUE the censoring is performed with exponential function otherwise uniform}
+
+\item{L}{Number of years to summarize over}
 }
 \value{
-Different simulations
+Simulation of censored cost
 }
 \description{
-Simulates data for control of estimates of censored costs - LIN
+This function can be used to demonstrate the bias and coverage 
+of the estimators in the ccmean function
+}
+\details{
+The function simulates survival times from either an uniform distribution 
+or an exponential distribution, and there are two options of censoring, heavy or
+light. The simulation is inspired by Lin (1997)
 }
 \examples{
+# The simulated data can be used to show how the estimators perform
+
 simCostData(n = 100, dist = "unif", censor = "light", L = 10)
+
+}
+\references{
+\insertRef{Lin1997}{ccostr}
 }

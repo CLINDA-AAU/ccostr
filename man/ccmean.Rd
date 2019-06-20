@@ -2,28 +2,56 @@
 % Please edit documentation in R/ccmean.R
 \name{ccmean}
 \alias{ccmean}
-\title{Calculates estimates of mean valus given censored cost data}
+\title{Calculates estimates of mean cost with censored data}
 \usage{
 ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
   delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
-\item{ccmean}{Calculates the estimates of mean costs}
+\item{x}{A dataframe}
+
+\item{id}{The id seperating each individual}
+
+\item{cost}{The total cost, or if start and stop provided the specific cost}
+
+\item{start}{Start of cost}
+
+\item{stop}{End of cost, if one time cost then start = stop}
+
+\item{delta}{Event variable, 1 = event, 0 = no event}
+
+\item{surv}{Survival}
+
+\item{L}{Limit}
+
+\item{addInterPol}{Interpolation variable for ZT estimate}
 }
 \value{
-Mean, Variance, SD, and 95% CI for the different estimates
+An object of class "ccobject".
 }
 \description{
-This function calcutes the mean cost for right-censored cost data over a period of L time units (days, months, years,...)
+This function calcutes the mean cost for right-censored cost 
+data over a period of L time units (days, months, years,...)
 }
 \details{
+The function returns 4 estimates, of which two are simple and biased 
+downwards and should not be used, the estimates are:
+
 - Naive "Available Sample"
+
 - Naive "Complete Case"
 
-- LinT - Lin's method
-- BT - Bang and Tsiatis's method 
-- ZT - Zhao and Tian's method
+- "Weighted Complete Case" BT - Bang and Tsiatis's method 
+
+- "Weighted Available Sample" ZT - Zhao and Tian's method
 }
 \examples{
-ccmean(df, id="id", tcost="tcost", delta="delta", surv="surv", L = NA)
+hcost
+ccmean(hcost, L = 1461, addInterPol = 1)
+
+}
+\references{
+\insertRef{Bang2000}{ccostr}
+
+\insertRef{Zhao2001}{ccostr}
 }
