@@ -1,7 +1,7 @@
 Package: ccostr
 Type: Package
 Title: ccostr - Estimates for mean costs with censored data
-Version: 0.0.2
+Version: 0.1.0
 Author: Lars Boerty Nielsen
 Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
 Description: More about what it does (maybe more than one line)

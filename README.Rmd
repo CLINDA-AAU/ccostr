@@ -14,14 +14,13 @@ library(knitr)
 ```
 
 # ccostr
-
 Standard statistical methods for survival data should NOT be used for medical cost data, ccostr is an R package to calculate estimates of total costs with censored data based two commonly accepted estimators.
 
 
 
 
 ## Overview
-The ccmean function returns 4 estimates, these are:
+The ccmean function implements 4 estimators, these are:
 
  - Naive "Available Sample"
  - Naive "Complete Case"
@@ -34,8 +33,7 @@ The ccmean function returns 4 estimates, these are:
 ```{r, eval = FALSE}
 devtools::install_github("HaemAalborg/ccostr")
 
-# Or including a vignette that demonstrates the bias and coverage of 
-# the estimators, requires: library(parallel)
+# Or including a vignette that demonstrates the bias and coverage
 
 devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 ```
@@ -44,54 +42,43 @@ devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
 
 
 ## Data format
-Cost data should look something like this
+Cost data should look something like this:
 ```{r echo=FALSE}
-id           <- c("A", "B" ,"C")
-
-tcost        <- c(2544,4245,590)
-delta        <- c(0,0,1)
-surv         <- c(343,903,445)
-
-df_0 <- data.frame(id, tcost, delta, surv)
+df_0 <- data.frame(id    = c("A", "B", "C"),
+                   cost  = c(2544, 4245, 590),
+                   delta = c(0, 0, 1),
+                   surv  = c(343, 903, 445))
 kable(df_0)
 ```
 
 
 
-It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discreet or contenious
-if so the data should look something like this:
+It is possible to get better estimates of the true mean if cost history is available. This cost data can be both discrete or continuous. If so the data should look something like this:
 ```{r echo=FALSE}
 df_1 <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C"),
-                   start = c(1,30,88,18,1,67),
-                   stop  = c(1,82,88,198,5,88),
-                   cost  = c(550,1949,45,4245,23,567),
-                   delta = c(0,0,0,0,1,1),
-                   surv  = c(343,343,343,903,445,445))
+                   start = c(1, 30, 88, 18, 1, 67),
+                   stop  = c(1, 82, 88, 198, 5, 88),
+                   cost  = c(550, 1949, 45, 4245, 23, 567),
+                   delta = c(0, 0, 0, 0, 1, 1),
+                   surv  = c(343, 343, 343, 903, 445, 445))
 kable(df_1)
 ```
 
 
-
-
 ## Explanation of estimates
-The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. If there is it is underestimating the real costs due to missing information.
+The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information.
 
 <img src="img/AS.png" height="55"/>
 
-The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed.
+The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed, and this would normally also give a downward bias.
 
 <img src="img/CC.png" height="60"/>
 
-
-It is possible to come up with better estimates of the mean costs, there are two fundamental different approaches. The first takes into account only total costs over the whole period, but it is possible to improve this type of estimates if cost history is present. If that is the case this additional information is used in 
-
-### Estimates without cost history
-
-<img src="img/LinT.png" height="60"/>
+It is possible to come up with better estimates of the mean costs. The first is the BT estimator which weights the complete case with the ...
 
 <img src="img/BT.png" height="60"/>
 
-
+But it is possible to improve this estimate if cost history is present. This additional information is used in the ZT estimator 
 
 ### Estimates with cost history
 
@@ -102,24 +89,24 @@ It is possible to come up with better estimates of the mean costs, there are two
 
 
 ## Usage
-
+First the function is used on the previous df
 ```{r message=FALSE}
 library(ccostr)
 
 df_1_res <- ccmean(df_1)
-kable(df_1_res[[3]])
+
+df_1_res
 ```
 
 ## Data simulation function
-
+Data is now simulated with the simCostData function:
 ```{r}
-# Simulate data with the simCostData function
-
+# With the uniform distribution the true mean is 40.000, see documentation for further details.
 sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
 
-# Apply ccmean and limit to 10 years (the true mean is 40.000 see documentation)
-sim_res <- ccmean(sim[[2]], L = 10)
-kable(sim_res[[3]])
+sim_res <- ccmean(sim$censoredCostHistory)
+
+print(sim_res)
 ```
 
 
@@ -132,24 +119,9 @@ kable(sim_res[[3]])
 3. Zhao, Hongwei, and Lili Tian. "On Estimating Medical Cost and Incremental Cost-Effectiveness Ratios with Censored Data." Biometrics 57, no. 4 (2001): 1002-008.
 
 
-
-
-
-
-
-
 ```{r eval=FALSE, include=FALSE}
 # BT = \frac{1}{n}\sum_{i=1}^n\frac{\Delta_iM_i}{\hat{K}(T_i)}
 # LinT = \sum_{k=1}^{K+1}A_k(S_k-S_{k+1})
 # \hat{A}_k=\frac{\sum_{i=1}^nY_{ki}C_i}{\sum_{i=1}^nY_{ki}}
 
 ```
-
-
-
-
-
-
-
-
-

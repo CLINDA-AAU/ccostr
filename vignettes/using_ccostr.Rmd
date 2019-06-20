@@ -19,14 +19,15 @@ knitr::opts_chunk$set(
 This vignettes shows how to use the functions of the ccostr package and how to verify the estimates in the ccmean function 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+#devtools::install_github("HaemAalborg/ccostr", ref = "Version-0.0.2")
 library(dplyr)
+library(ccostr)
 library(ggplot2)
 library(knitr)
 library(survival)
 library(data.table)
 library(parallel)
 library(msm)
-library(ccostr)
 library(tibble)
 library(forcats)
 ```
@@ -37,7 +38,7 @@ In the ccostr package a dataset called hcost is included, we use the ccmean func
 ```{r}
 head(hcost)
 
-ccmean(hcost, L = 1461)
+ccmean(hcost, L = 1461, addInterPol = 1)
 ```
 
 We see how the BT and ZT estimators are higher than AS and CC, this is due to downward bias in AS and CC
@@ -58,7 +59,7 @@ c2
 
 We can plot this
 
-```{r}
+```{r fig.height=3, fig.width=8}
 plot(c2) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 ```
 
@@ -67,27 +68,28 @@ plot(c2) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 We can now test the bias of the estimators and their coverage with the simulated data
 
 ```{r}
-nSim   <- 100
+nSim   <- 1000
 nYears <- 10
-indv   <- 10
+indv   <- 100 # increating individuals increases computing time exponential
 
 ## true mean for unif is 40000 and exp is 35956
 
-unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", L = nYears))
-unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", L = nYears))
-exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", L = nYears))
-exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", L = nYears))
+unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", exp = TRUE, L = nYears))
+unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", exp = TRUE, L = nYears))
+exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", exp = TRUE, L = nYears))
+exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", exp = TRUE, L = nYears))
 ```
 
 ### Results
-```{r include=FALSE}
+```{r}
 ### Estimate from censored data
-nCores <- 1
+nCores <- 2
 cl <- makeCluster(nCores)
 clusterExport(cl = cl, c("unif_light", "unif_heavy", "exp_light", "exp_heavy"))
-clusterEvalQ(cl = cl, {library(dplyr)
-                       library(ccostr)
-                       library(survival)})
+invisible(clusterEvalQ(cl = cl, {library(dplyr)
+                                 library(ccostr)
+                                 library(data.table)
+                                 library(survival)}))
 est_unif_light <- parLapply(cl, unif_light, function(x) ccmean(x$censoredCostHistory, L = 10))
 est_unif_heavy <- parLapply(cl, unif_heavy, function(x) ccmean(x$censoredCostHistory, L = 10))
 est_exp_light  <- parLapply(cl, exp_light,  function(x) ccmean(x$censoredCostHistory, L = 10))
