@@ -7,10 +7,11 @@
 #' 
 
 print.ccobject <- function(x, ...) {
-  cat("Ccostr - censored cost estimation\n\n")
+  cat(x$Text)
+  cat("\n\n")
   print(x$Data, row.names=TRUE)
   cat("\n")
-  print(x$Estimates)
+  print(t(x$Estimates))
   cat("\nMedian survival time:", round(as.numeric(x$Survival[[5]]),2), "With SE:", round(as.numeric(x$Survival[[6]]),2))
 }
 

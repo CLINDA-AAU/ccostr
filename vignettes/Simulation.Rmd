@@ -110,6 +110,7 @@ results_bias <- cbind(round(results[,c(1,2)] - 40000,2),
                       round(results[,c(3,4)] - 35956,2))
 kable(results_bias)
 ```
+
 It seems there is more bias in the ZT estimator, this might have to do with the implementation of the simulation
 
 ### Coverage
