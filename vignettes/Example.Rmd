@@ -1,0 +1,41 @@
+---
+title: "Example replicating st0399 results"
+author: "Lars Børty Nielsen"
+date: "`r format(Sys.time(), '%d-%m-%Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example replicating st0399 results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ccostr)
+```
+
+
+In the ccostr package a dataset called hcost is included. The dataset comes from the stata package of the same name (published in Stata Journal article st0399) and we can therefore use it both as an example, and to verify that the two packages reach similar estimates. First we look at the data:
+```{r}
+head(hcost)
+```
+
+
+Now we use the ccmean function with a limit of 4 years (1461 days), we also add the interpolation term which affects the ZT estimate. This is to replicate the results of the stata implementation.
+```{r hcost}
+est <- ccmean(hcost, L = 1461, addInterPol = 1)
+est
+```
+
+
+These estimates are similar to what is found with the hcost package. We can also plot these with the included gerneric plot function:
+```{r fig.height=3, fig.width=7}
+plot(est)
+```
+

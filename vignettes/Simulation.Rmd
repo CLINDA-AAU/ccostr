@@ -1,10 +1,10 @@
 ---
-title: "Using ccostr"
-author: "HAEM AALBORG"
+title: "Simulation of bias and coverage"
+author: "Lars Børty Nielsen"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Simulation of bias and coverage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,59 +16,38 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignettes shows how to use the functions of the ccostr package and how to verify the estimates in the ccmean function 
 
+The ccostr package includes a function to simulate data. We can use this to test the accaracy of the estimates and confidence intervals.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-#devtools::install_github("HaemAalborg/ccostr", ref = "Version-0.0.2")
-library(dplyr)
 library(ccostr)
 library(ggplot2)
 library(knitr)
-library(survival)
-library(data.table)
 library(parallel)
 library(msm)
-library(tibble)
-library(forcats)
 ```
 
-# Replication of hcost estimates
-In the ccostr package a dataset called hcost is included, we use the ccmean function with a limit of 4 years (1461 days)
 
-```{r}
-head(hcost)
-
-ccmean(hcost, L = 1461, addInterPol = 1)
-```
-
-We see how the BT and ZT estimators are higher than AS and CC, this is due to downward bias in AS and CC
-
-## Simulation of data
-The ccostr package includes a function to simulate data, the cost function takes the following form:
+In the simulated data the cost function takes the following form:
 
 $$M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(T_i\leq10)$$
 
-With a uniform distribution this is set to take the value of 40.000, we can now test the estimators:
-
-```{r fig.height=3, fig.width=6}
+With a uniform distribution of survival times this is set to take the value of 40.000, we can now test the estimators:
+```{r}
 sim <- simCostData(n = 1000, dist = "unif", censor = "light", L = 10)
 
-c2 <- ccmean(sim$censoredCostHistory)
-c2
+est <- ccmean(sim$censoredCostHistory)
+est
 ```
 
-We can plot this
-
-```{r fig.height=3, fig.width=8}
-plot(c2) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
+We can plot this with a line for the true value
+```{r fig.height=3, fig.width=7}
+plot(est) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 ```
 
 
-## bias and coverage
-We can now test the bias of the estimators and their coverage with the simulated data
-
-```{r}
-nSim   <- 1000
+We can now test the bias of the estimators and their coverage with the simulated data. We use parralization to speed up the process with a higher number of simulations/individuals, but it should be adjusted to fit the used computer. First the data is simulated:
+```{r }
+nSim   <- 10
 nYears <- 10
 indv   <- 100 # increating individuals increases computing time exponential
 
@@ -80,9 +59,8 @@ exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  ce
 exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", exp = TRUE, L = nYears))
 ```
 
-### Results
+Then the data is sent to the cluster and the estimates are calculated:
 ```{r}
-### Estimate from censored data
 nCores <- 2
 cl <- makeCluster(nCores)
 clusterExport(cl = cl, c("unif_light", "unif_heavy", "exp_light", "exp_heavy"))
@@ -97,8 +75,10 @@ est_exp_heavy  <- parLapply(cl, exp_heavy,  function(x) ccmean(x$censoredCostHis
 stopCluster(cl)
 ```
 
+
+### Results
+Now the results are pasted together to a table:
 ```{r}
-## Summarize
 results_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) x[[3]]))
 results_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) x[[3]]))
 results_exp_light  <- do.call(rbind, lapply(est_exp_light,  function(x) x[[3]]))
@@ -130,7 +110,7 @@ results_bias <- cbind(round(results[,c(1,2)] - 40000,2),
                       round(results[,c(3,4)] - 35956,2))
 kable(results_bias)
 ```
-
+It seems there is more bias in the ZT estimator, this might have to do with the implementation of the simulation
 
 ### Coverage
 ```{r}
@@ -146,6 +126,7 @@ results_coverage <- data.frame("unif_light" = (colMeans(cov_unif_light, na.rm = 
 kable(results_coverage, digits = 3)
 ```
 
+As can be seen the coverage ratios looks very close to the 95%
 
 
 
