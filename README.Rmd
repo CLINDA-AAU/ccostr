@@ -35,7 +35,7 @@ devtools::install_github("HaemAalborg/ccostr")
 
 # Or including a vignette that demonstrates the bias and coverage
 
-devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
+devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 
