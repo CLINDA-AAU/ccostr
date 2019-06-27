@@ -12,7 +12,7 @@ print.ccobject <- function(x, ...) {
   print(x$Data, row.names=TRUE)
   cat("\n")
   print(t(x$Estimates))
-  cat("\nMedian survival time:", round(as.numeric(x$Survival[[5]]),2), "With SE:", round(as.numeric(x$Survival[[6]]),2))
+  cat("\nMean survival time:", round(as.numeric(x$Survival[[5]]),2), "With SE:", round(as.numeric(x$Survival[[6]]),2))
 }
 
 

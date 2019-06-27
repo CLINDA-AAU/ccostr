@@ -23,7 +23,7 @@ devtools::install_github("HaemAalborg/ccostr")
 
 # Or including a vignette that demonstrates the bias and coverage
 
-devtools::install_github("HaemAalborg/ccostr", build_vignettes = TRUE)
+devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Data format
@@ -88,19 +88,18 @@ library(ccostr)
 df_1_res <- ccmean(df_1)
 
 df_1_res
-#> Ccostr - censored cost estimation
+#> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events Limits TotalTime MaxSurv
 #> N            6           3      1    903      1691     903
 #> 
-#>          AvailableSample CompleteCase       BT        ZT
-#> Estimate         2459.67          590   295.00    337.17
-#> Variance      1115030.11           NA 36260.42 550262.97
-#> SD               1055.95           NA   190.42    741.80
-#> 95UCI            4529.33           NA   668.23   1791.09
-#> 95LCI             390.00           NA   -78.23  -1116.76
+#>                 Estimate   Variance      SD   95UCI    95LCI
+#> AvailableSample  2459.67 1115030.11 1055.95 4529.33   390.00
+#> CompleteCase      590.00         NA      NA      NA       NA
+#> BT                295.00   36260.42  190.42  668.23   -78.23
+#> ZT                337.17  550262.97  741.80 1791.09 -1116.76
 #> 
-#> Median survival time: 445 With SE: 161.93
+#> Median survival time: 674 With SE: 161.93
 ```
 
 ## Data simulation function
@@ -115,19 +114,18 @@ sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
 sim_res <- ccmean(sim$censoredCostHistory)
 
 print(sim_res)
-#> Ccostr - censored cost estimation
+#> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events   Limits TotalTime  MaxSurv
-#> N         4179        1000    608 9.919895  3669.233 9.919895
+#> N         4159        1000    588 9.897746  3638.176 9.897746
 #> 
-#>          AvailableSample CompleteCase        BT        ZT
-#> Estimate        29248.72     37373.85  39333.29  39311.65
-#> Variance       160911.11    119958.38 146309.69 140268.67
-#> SD                401.14       346.35    382.50    374.52
-#> 95UCI           30034.95     38052.70  40083.00  40045.72
-#> 95LCI           28462.49     36695.00  38583.59  38577.58
+#>                 Estimate Variance     SD    95UCI    95LCI
+#> AvailableSample 29109.71 168799.7 410.85 29914.98 28304.44
+#> CompleteCase    37938.18 122495.9 349.99 38624.17 37252.19
+#> BT              40369.50 150720.4 388.23 41130.42 39608.57
+#> ZT              39734.20 157440.0 396.79 40511.90 38956.49
 #> 
-#> Median survival time: 4.87 With SE: 0.1
+#> Median survival time: 5.02 With SE: 0.11
 ```
 
 ## References
