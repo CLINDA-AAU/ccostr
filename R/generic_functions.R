@@ -36,6 +36,6 @@ plot.ccobject <- function(x, ...) {
     ggplot(aes(y = temp$Estimate, x = fct_reorder(temp$Estimator,temp$Estimate), ymax = temp$"95UCI", ymin = temp$"95LCI")) + 
     geom_point(shape=15, size=5) +  
     geom_errorbar(width = 0.2, size = 1.1) + 
-    coord_flip() +
-    labs(title="Estimators", x = "")
+    labs(title="Estimators", x = "", y = "Mean Cost") +
+    coord_flip() 
 }
