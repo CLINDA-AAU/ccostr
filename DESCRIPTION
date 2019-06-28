@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Lars Boerty Nielsen
 Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
 Description: This package implements various estimators for
-	inferring the mean censored cost data.	
+    inferring the mean censored cost data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -23,4 +23,4 @@ Imports:ggplot2,
 	survival,
         Rdpack
 Depends:
-RdMacros: Rdpack
+RdMacros: Rdpack

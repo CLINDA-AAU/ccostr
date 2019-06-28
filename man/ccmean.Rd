@@ -34,16 +34,16 @@ This function calcutes the mean cost for right-censored cost
 data over a period of L time units (days, months, years,...)
 }
 \details{
-The function returns 4 estimates, of which two are simple and biased 
-downwards and should not be used, the estimates are:
+The function returns 4 estimates, of which the first two are simple and biased 
+downwards. The estimates are:
 
-- Naive "Available Sample"
+- AS: "Available Sample" - The simple sample mean
 
-- Naive "Complete Case"
+- CC: "Complete Case" - The mean of fully observed cases
 
-- "Weighted Complete Case" BT - Bang and Tsiatis's method 
+- BT: "Weighted Complete Case" - Bang and Tsiatis's method 
 
-- "Weighted Available Sample" ZT - Zhao and Tian's method
+- ZT: "Weighted Available Sample" - Zhao and Tian's method
 }
 \examples{
 hcost
