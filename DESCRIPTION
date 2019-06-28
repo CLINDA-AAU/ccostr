@@ -1,11 +1,11 @@
 Package: ccostr
 Type: Package
-Title: ccostr - Estimates for mean costs with censored data
+Title: ccostr - Estimation of mean costs in censored data
 Version: 0.1.0
 Author: Lars Boerty Nielsen
 Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This package implements various estimators for
+	inferring the mean censored cost data.	
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
