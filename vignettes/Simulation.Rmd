@@ -1,8 +1,8 @@
 ---
 title: "Simulation of bias and coverage"
 author: "Lars Børty Nielsen"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Simulation of bias and coverage}
   %\VignetteEngine{knitr::rmarkdown}
@@ -27,11 +27,9 @@ library(msm)
 ```
 
 
-In the simulated data the cost function takes the following form:
+According to the method for simulation described in @Lin1997, the true mean cost for data simulated with a uniform survival distribution is 40000, while the mean cost for exponentially distributed survival is 35956. Using the simCostData function to simulate date from these distributions with either light (~25%) or heavy (~40%) censoring we test the performance of the estimators in the ccostr package.
 
-$$M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(T_i\leq10)$$
-
-With a uniform distribution of survival times this is set to take the value of 40.000, we can now test the estimators:
+For a single simulation with n=1000 from a uniform survival distribution with light censoring we obtain the following results:
 ```{r}
 sim <- simCostData(n = 1000, dist = "unif", censor = "light", L = 10)
 
@@ -44,24 +42,23 @@ We can plot this with a line for the true value
 plot(est) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 ```
 
-
-We can now test the bias of the estimators and their coverage with the simulated data. We use parralization to speed up the process with a higher number of simulations/individuals, but it should be adjusted to fit the used computer. First the data is simulated:
-```{r }
-nSim   <- 10
+We now test the bias and coverage of the estimators, by performing more extensive simulation. 
+```{r, eval = FALSE}
+set.seed(42)
+nSim   <- 1000
 nYears <- 10
-indv   <- 100 # increating individuals increases computing time exponential
+indv   <- 1000 # increating individuals increases computing time exponential
 
 ## true mean for unif is 40000 and exp is 35956
-
 unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", exp = TRUE, L = nYears))
 unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", exp = TRUE, L = nYears))
 exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", exp = TRUE, L = nYears))
 exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", exp = TRUE, L = nYears))
 ```
 
-Then the data is sent to the cluster and the estimates are calculated:
-```{r}
-nCores <- 2
+For the calculation of the estimates we use parralization to speed up the process. We make an implicit cluster and use it for computations. Be aware, this might still take quite some time.
+```{r, eval = FALSE}
+nCores <- parallel::detectCores() - 1
 cl <- makeCluster(nCores)
 clusterExport(cl = cl, c("unif_light", "unif_heavy", "exp_light", "exp_heavy"))
 invisible(clusterEvalQ(cl = cl, {library(dplyr)
@@ -76,8 +73,14 @@ stopCluster(cl)
 ```
 
 
+```{r, include = F}
+### Load precomputed results
+data(simData)
+```
+
+
 ### Results
-Now the results are pasted together to a table:
+The results are pasted together to for a presentable table:
 ```{r}
 results_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) x[[3]]))
 results_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) x[[3]]))
@@ -89,31 +92,26 @@ results_true <- data.frame("unif_light" = 40000,
                            "exp_light"  = 35956,
                            "exp_heavy"  = 35956)
 
-results_mean <- data.frame("unif_light" = mean(sapply(unif_light, function(x) mean(x$totalCost))),
-                           "unif_heavy" = mean(sapply(unif_heavy, function(x) mean(x$totalCost))),
-                           "exp_light"  = mean(sapply(exp_light, function(x) mean(x$totalCost))),
-                           "exp_heavy"  = mean(sapply(exp_heavy, function(x) mean(x$totalCost))))
-
 results_bias <- data.frame("unif_light" = (colMeans(results_unif_light)),
                            "unif_heavy" = (colMeans(results_unif_heavy)),
                            "exp_light"  = (colMeans(results_exp_light)),
                            "exp_heavy"  = (colMeans(results_exp_heavy)))
 
-results <- rbind(results_true, results_mean, results_bias)
-row.names(results) <- c("true_mean", "simulation_mean", colnames(results_unif_light))
+results <- rbind(results_true, results_bias)
+row.names(results) <- c("true_mean", colnames(results_unif_light))
 kable(results)
 ```
 
 ### Bias
+Subtracting the true mean from the estimates reveals the bias
 ```{r}
 results_bias <- cbind(round(results[,c(1,2)] - 40000,2), 
                       round(results[,c(3,4)] - 35956,2))
 kable(results_bias)
 ```
 
-It seems there is more bias in the ZT estimator, this might have to do with the implementation of the simulation
-
 ### Coverage
+Similarly the overlap of confidence intervals with the true mean gives the coverage of the estimators
 ```{r}
 cov_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
 cov_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
@@ -131,11 +129,7 @@ As can be seen the coverage ratios looks very close to the 95%
 
 
 
-
-
-
-
-
+### References
 
 
 

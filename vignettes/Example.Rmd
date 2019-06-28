@@ -1,8 +1,8 @@
 ---
 title: "Example replicating st0399 results"
 author: "Lars Børty Nielsen"
-date: "`r format(Sys.time(), '%d-%m-%Y')`"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{Example replicating st0399 results}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,7 +21,7 @@ library(ccostr)
 ```
 
 
-In the ccostr package a dataset called hcost is included. The dataset comes from the stata package of the same name (published in Stata Journal article st0399) and we can therefore use it both as an example, and to verify that the two packages reach similar estimates. First we look at the data:
+The ccostr package includes a dataset called "hcost". The dataset comes from the stata package of the same name [@Chen2015], and we can therefore use it both as an example, and to verify that the two packages reach similar estimates. First we look at the data:
 ```{r}
 head(hcost)
 ```
@@ -34,8 +34,9 @@ est
 ```
 
 
-These estimates are similar to what is found with the hcost package. We can also plot these with the included gerneric plot function:
+These estimates are similar to what is found with the hcost package. We can also plot these with the included generic plot function:
 ```{r fig.height=3, fig.width=7}
 plot(est)
 ```
 
+### References
