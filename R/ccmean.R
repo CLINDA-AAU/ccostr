@@ -3,16 +3,16 @@
 #' @description This function calcutes the mean cost for right-censored cost 
 #' data over a period of L time units (days, months, years,...)
 #'
-#' @details The function returns 4 estimates, of which two are simple and biased 
-#' downwards and should not be used, the estimates are:
+#' @details The function returns 4 estimates, of which the first two are simple and biased 
+#' downwards. The estimates are:
 #' 
-#' - Naive "Available Sample"
+#' - AS: "Available Sample" - The simple sample mean
 #' 
-#' - Naive "Complete Case"
+#' - CC: "Complete Case" - The mean of fully observed cases
 #'
-#' - "Weighted Complete Case" BT - Bang and Tsiatis's method 
+#' - BT: "Weighted Complete Case" - Bang and Tsiatis's method 
 #'
-#' - "Weighted Available Sample" ZT - Zhao and Tian's method
+#' - ZT: "Weighted Available Sample" - Zhao and Tian's method
 #' 
 #' @param x A dataframe
 #' @param id The id seperating each individual
@@ -265,11 +265,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                                      MaxSurv      = L2,
                                      row.names    = "N"),
                   First = data.frame(AS, CC, BT, ZT),
-                  Estimates = round(data.frame("AvailableSample" = AS_full,
-                                               "CompleteCase"    = CC_full,
-                                               "BT"              = BT_full,
-                                               "ZT"              = ZT_full, 
-                                               row.names         = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2),
+                  Estimates = round(data.frame("AS"  = AS_full,
+                                               "CC"  = CC_full,
+                                               "BT"  = BT_full,
+                                               "ZT"  = ZT_full, 
+                                               row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2),
                   Survival = svl2
   )
   
