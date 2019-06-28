@@ -75,7 +75,7 @@ stopCluster(cl)
 
 ```{r, include = F}
 ### Load precomputed results
-data(simData)
+load(system.file("extdata", "simData.Rdata", package = "ccostr"))
 ```
 
 
