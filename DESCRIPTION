@@ -24,3 +24,4 @@ Imports:ggplot2,
         Rdpack
 Depends:
 RdMacros: Rdpack
+    R (>= 3.5.0)
