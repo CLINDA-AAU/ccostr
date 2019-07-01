@@ -22,6 +22,5 @@ Imports:ggplot2,
         data.table,
 	survival,
         Rdpack
-Depends:
+Depends: R (>= 3.5.0)
 RdMacros: Rdpack
-    R (>= 3.5.0)
