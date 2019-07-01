@@ -126,9 +126,6 @@ results_coverage <- data.frame("unif_light" = (colMeans(cov_unif_light, na.rm = 
 kable(results_coverage, digits = 3)
 ```
 
-As can be seen the coverage ratios looks very close to the 95%
-
-
 
 ### References
 

@@ -3,8 +3,8 @@
 #' @description This function calcutes the mean cost for right-censored cost 
 #' data over a period of L time units (days, months, years,...)
 #'
-#' @details The function returns 4 estimates, of which the first two are simple and biased 
-#' downwards. The estimates are:
+#' @details The function returns 4 estimates. The first two are simple and biased
+#' downwards, and included for comparisson. The estimates are:
 #' 
 #' - AS: "Available Sample" - The simple sample mean
 #' 
@@ -14,15 +14,15 @@
 #'
 #' - ZT: "Weighted Available Sample" - Zhao and Tian's method
 #' 
-#' @param x A dataframe
-#' @param id The id seperating each individual
+#' @param x A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.
+#' @param id The id separating each individual
 #' @param cost The total cost, or if start and stop provided the specific cost
 #' @param start Start of cost
 #' @param stop End of cost, if one time cost then start = stop
 #' @param delta Event variable, 1 = event, 0 = no event
 #' @param surv Survival
-#' @param L Limit 
-#' @param addInterPol Interpolation variable for ZT estimate
+#' @param L Limit. Mean cost is calculated up until L.
+#' @param addInterPol This parameter affects the interpolation of cost between two observed times. Defaults to zero.
 #' 
 #' @return An object of class "ccobject".
 #' 
