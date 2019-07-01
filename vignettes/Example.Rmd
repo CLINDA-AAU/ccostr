@@ -1,6 +1,6 @@
 ---
 title: "Example replicating st0399 results"
-author: "Lars Børty Nielsen"
+author: "Lars Børty Nielsen, Rasmus Brøndum & Martin Bøgsted"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
 vignette: >
@@ -27,7 +27,7 @@ head(hcost)
 ```
 
 
-Now we use the ccmean function with a limit of 4 years (1461 days), we also add the interpolation term which affects the ZT estimate. This is to replicate the results of the stata implementation.
+Now we use the ccmean function with a limit of 4 years (1461 days), we also add the interpolation term which affects the ZT estimate. This is to replicate the results of the stata implementation, by default this parameter is set to zero.
 ```{r hcost}
 est <- ccmean(hcost, L = 1461, addInterPol = 1)
 est
