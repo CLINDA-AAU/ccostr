@@ -1,5 +1,5 @@
 ---
-title: "Simulation of bias and coverage"
+title: "Simulation study: Bias and coverage of the estimators"
 author: "Lars Børty Nielsen, Rasmus Brøndum & Martin Bøgsted"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib

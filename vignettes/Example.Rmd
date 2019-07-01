@@ -1,5 +1,5 @@
 ---
-title: "Example replicating st0399 results"
+title: "Example: Replicating st0399 results"
 author: "Lars Børty Nielsen, Rasmus Brøndum & Martin Bøgsted"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
