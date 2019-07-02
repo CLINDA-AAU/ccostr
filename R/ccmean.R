@@ -43,6 +43,10 @@
 
 ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = NA, addInterPol = 0) {
   
+  if( !("id" %in% names(x)) | !("cost" %in% names(x)) | !("delta" %in% names(x)) | !("surv" %in% names(x)) ) 
+    stop('Rename colums to: "id", "cost", "delta" and "surv"')
+  
+  
   #################################################################
   ##                          section 1:                         ##
   ##                      Basic adjustments                      ##
@@ -55,6 +59,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   # Subset to estimation period	
   x$delta[x$surv > L] <- 1
   x$surv              <- pmin(x$surv, L)
+  
+  if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) {
   x                   <- subset(x, start < L)
   
   # Adjust overlapping costs and arranging data
@@ -71,6 +77,10 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
     summarize(cost  = sum(cost, na.rm=T),
               delta = last(delta),
               surv  = first(surv))
+  } else {
+    message('No cost history found, should be given by: "start" and "stop"')
+    xf <- x
+  }
   
   
   #################################################################
@@ -192,6 +202,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ##                Zhao and Tian's method (2001)                ##
   #################################################################
   
+  if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) {
+  
   # Matrice and vectors to be filled with for loop
   runCostMatrix  <- matrix(0, nrow = nrow(t), ncol = nrow(t))
   t$mcostlsurv   <- 0
@@ -245,7 +257,10 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                ZT + 1.96 * sqrt(ZT_var),
                ZT - 1.96 * sqrt(ZT_var))
   
-  
+  } else {
+    ZT <- 0
+    ZT_full <- c(0,0,0,0,0)
+  }
   #################################################################
   ##                          section 7:                         ##
   ##                           Results                           ##

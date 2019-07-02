@@ -13,6 +13,7 @@ print.ccobject <- function(x, ...) {
   cat("\n")
   print(t(x$Estimates))
   cat("\nMean survival time:", round(as.numeric(x$Survival[[5]]),2), "With SE:", round(as.numeric(x$Survival[[6]]),2))
+  cat("\n")
 }
 
 
@@ -33,9 +34,9 @@ plot.ccobject <- function(x, ...) {
   temp$Estimator <- factor(temp$Estimator, labels = )
   
   temp %>% 
-    ggplot(aes(y = temp$Estimate, x = fct_reorder(temp$Estimator,temp$Estimate), ymax = temp$"95UCI", ymin = temp$"95LCI")) + 
+    ggplot(aes(y = temp$Estimate, x = fct_relevel(temp$Estimator,c("ZT","BT","CC","AS")), ymax = temp$"95UCI", ymin = temp$"95LCI")) + 
     geom_point(shape=15, size=5) +  
     geom_errorbar(width = 0.2, size = 1.1) + 
-    labs(title="Estimators", x = "", y = "Mean Cost") +
+    labs(title="Estimators", x = "", y = "Cost") +
     coord_flip() 
 }
