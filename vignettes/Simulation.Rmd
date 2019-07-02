@@ -1,0 +1,131 @@
+---
+title: "Simulation study: Bias and coverage of the estimators"
+author: "Lars Børty Nielsen, Rasmus Brøndum & Martin Bøgsted"
+output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
+vignette: >
+  %\VignetteIndexEntry{Simulation of bias and coverage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+The ccostr package includes a function to simulate data. We can use this to test the accaracy of the estimates and confidence intervals. First we load the necessary packages.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(ccostr)
+library(ggplot2)
+library(knitr)
+library(parallel)
+library(msm)
+```
+
+According to the method for simulation described in @Lin1997, the true mean cost over 10 years for data simulated with a uniform survival distribution is 40000, while the mean cost for exponentially distributed survival is 35956. Using the simCostData function to simulate data from these distributions, with either light (~25%) or heavy (~40%) censoring, we test the performance of the estimators in the ccostr package.
+
+## Single simulation
+For a single simulation with n=1000 individuals with a uniform survival distribution and light censoring we obtain the following results:
+```{r}
+set.seed(123)
+sim <- simCostData(n = 1000, dist = "unif", censor = "light", cdist = "exp", L = 10)
+est <- ccmean(sim$censoredCostHistory)
+est
+```
+
+As seen from both the results table above and the plot below, estimates are closer to the true value when using the BT and ZT estimators. Both the CC and AS estimators miss the true value, with especially large margin for the AS estimator.
+
+```{r fig.height=3, fig.width=7}
+plot(est) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
+```
+
+## Repeated simulations for bias and coverage
+We now test the bias and coverage of the estimator through more extensive simulation. We perform 1000 simulations with 1000 individuals, for four different scenarios: Uniform and exponential survival functions, with either light or heavy sensoring.
+```{r, eval = FALSE}
+set.seed(42)
+nSim   <- 1000
+nYears <- 10
+indv   <- 1000 # increating individuals increases computing time exponential
+## true mean for unif is 40000 and exp is 35956
+unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", cdist = "exp", L = nYears))
+unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", cdist = "exp", L = nYears))
+exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", cdist = "exp", L = nYears))
+exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", cdist = "exp", L = nYears))
+```
+
+For the calculation of the estimates we use parralization to speed up the process. We make an implicit cluster and use it for computations. Be aware, this might still take quite some time if run on a normal desktop or laptop computer.
+```{r, eval = FALSE}
+nCores <- parallel::detectCores() - 1
+cl <- makeCluster(nCores)
+clusterExport(cl = cl, c("unif_light", "unif_heavy", "exp_light", "exp_heavy"))
+invisible(clusterEvalQ(cl = cl, {library(dplyr)
+                                 library(ccostr)
+                                 library(data.table)
+                                 library(survival)}))
+est_unif_light <- parLapply(cl, unif_light, function(x) ccmean(x$censoredCostHistory, L = 10))
+est_unif_heavy <- parLapply(cl, unif_heavy, function(x) ccmean(x$censoredCostHistory, L = 10))
+est_exp_light  <- parLapply(cl, exp_light,  function(x) ccmean(x$censoredCostHistory, L = 10))
+est_exp_heavy  <- parLapply(cl, exp_heavy,  function(x) ccmean(x$censoredCostHistory, L = 10))
+stopCluster(cl)
+```
+
+
+```{r, include = F}
+### Load precomputed results
+load(system.file("extdata", "simData.Rdata", package = "ccostr"))
+```
+
+###  Results
+The results are pasted together to for a presentable table:
+```{r}
+results_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) x[[3]]))
+results_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) x[[3]]))
+results_exp_light  <- do.call(rbind, lapply(est_exp_light,  function(x) x[[3]]))
+results_exp_heavy  <- do.call(rbind, lapply(est_exp_heavy,  function(x) x[[3]]))
+results_true <- data.frame("unif_light" = 40000,
+                           "unif_heavy" = 40000,
+                           "exp_light"  = 35956,
+                           "exp_heavy"  = 35956)
+results_bias <- data.frame("unif_light" = (colMeans(results_unif_light)),
+                           "unif_heavy" = (colMeans(results_unif_heavy)),
+                           "exp_light"  = (colMeans(results_exp_light)),
+                           "exp_heavy"  = (colMeans(results_exp_heavy)))
+results <- rbind(results_true, results_bias)
+row.names(results) <- c("true_mean", colnames(results_unif_light))
+kable(results)
+```
+
+### Bias
+Subtracting the true mean from the estimates reveals the bias. As expected we see a smaller bias when using estimators that take the censoring into account. However, contrary to results from @Zhao2001 bias is slightly higher for the ZT estimator than the BT estimator.
+```{r}
+results_bias <- cbind(round(results[,c(1,2)] - 40000,2), 
+                      round(results[,c(3,4)] - 35956,2))
+kable(results_bias)
+```
+
+### Coverage
+Similarly the overlap of confidence intervals with the true mean gives the coverage of the estimators. For both the BT and ZT estimators we see coverages close to 95% for all scenariors indicating a good estimation of the confidence intervals.
+```{r}
+cov_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
+cov_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
+cov_exp_light  <- do.call(rbind, lapply(est_exp_light,  function(x) ifelse(x[[4]][4,] >= 35956 & x[[4]][5,] <= 35956, 1, 0)))
+cov_exp_heavy  <- do.call(rbind, lapply(est_exp_heavy,  function(x) ifelse(x[[4]][4,] >= 35956 & x[[4]][5,] <= 35956, 1, 0)))
+results_coverage <- data.frame("unif_light" = (colMeans(cov_unif_light, na.rm = T)),
+                               "unif_heavy" = (colMeans(cov_unif_heavy, na.rm = T)),
+                               "exp_light"  = (colMeans(cov_exp_light,  na.rm = T)),
+                               "exp_heavy"  = (colMeans(cov_exp_heavy,  na.rm = T)))
+kable(results_coverage, digits = 3)
+```
+
+
+### References
+
+
+
+
+
+

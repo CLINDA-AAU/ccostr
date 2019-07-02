@@ -27,8 +27,8 @@ of the estimators in the ccmean function
 }
 \details{
 The function simulates survival times from either an uniform distribution 
-or an exponential distribution, and there are two options of censoring, heavy or
-light. The simulation is inspired by Lin (1997)
+or an exponential distribution, and a cost history. There are two options for censoring, heavy (~40%) or
+light (~25%). The simulation is inspired by Lin (1997).
 }
 \examples{
 # The simulated data can be used to show how the estimators perform

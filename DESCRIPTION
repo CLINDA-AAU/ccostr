@@ -17,10 +17,10 @@ Imports:ggplot2,
         dplyr,
         tibble,
         knitr,
-	msm,
+        msm,
         forcats,
         data.table,
-	survival,
+        survival,
         Rdpack
 Depends: R (>= 3.5.0)
 RdMacros: Rdpack

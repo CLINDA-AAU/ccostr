@@ -8,9 +8,9 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
   delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
-\item{x}{A dataframe}
+\item{x}{A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.}
 
-\item{id}{The id seperating each individual}
+\item{id}{The id separating each individual}
 
 \item{cost}{The total cost, or if start and stop provided the specific cost}
 
@@ -22,9 +22,9 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
 
 \item{surv}{Survival}
 
-\item{L}{Limit}
+\item{L}{Limit. Mean cost is calculated up until L.}
 
-\item{addInterPol}{Interpolation variable for ZT estimate}
+\item{addInterPol}{This parameter affects the interpolation of cost between two observed times. Defaults to zero.}
 }
 \value{
 An object of class "ccobject".
@@ -34,8 +34,8 @@ This function calcutes the mean cost for right-censored cost
 data over a period of L time units (days, months, years,...)
 }
 \details{
-The function returns 4 estimates, of which the first two are simple and biased 
-downwards. The estimates are:
+The function returns 4 estimates. The first two are simple and biased
+downwards, and included for comparisson. The estimates are:
 
 - AS: "Available Sample" - The simple sample mean
 
