@@ -24,8 +24,8 @@ these are:
 
   - “Available Sample”
   - “Complete Case”
-  - Bang and Tsiatis’s method: *Bang and Tsiatis (2000)*
-  - Zhao and Tian’s method: *Zhao and Tian (2001)*
+  - Bang and Tsiatis’s method: *(Bang and Tsiatis, 2000)*
+  - Zhao and Tian’s method: *(Zhao and Tian, 2001)*
 
 ## Explanation of estimates
 
@@ -44,7 +44,7 @@ removed, and this would normally also give a downward bias.
 
 </p>
 
-The BT estimator *Bang and Tsiatis (2000)*, weights the cost for the
+The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the
 complete case with the probability of censoring at the event time.
 
 <p align="center">
@@ -54,7 +54,7 @@ complete case with the probability of censoring at the event time.
 </p>
 
 If cost history is present, the above estimate may be improved by using
-the ZT estimator *Zhao and Tian (2001)*.
+the ZT estimator *(Zhao and Tian, 2001)*.
 
 <p align="center">
 
@@ -128,15 +128,15 @@ sim_res
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events   Limits TotalTime  MaxSurv
-#> N         4133        1000    632 9.986118  3616.321 9.986118
+#> N         3976        1000    604 9.999405  3468.517 9.999405
 #> 
 #>    Estimate Variance     SD    95UCI    95LCI
-#> AS 29777.72 186794.1 432.20 30624.83 28930.61
-#> CC 38392.39 125298.6 353.98 39086.18 37698.60
-#> BT 39946.86 130154.1 360.77 40653.97 39239.75
-#> ZT 39820.29 133340.2 365.16 40536.00 39104.58
+#> AS 28868.51 191476.5 437.58 29726.17 28010.86
+#> CC 38096.54 141196.3 375.76 38833.03 37360.05
+#> BT 39905.67 151616.1 389.38 40668.85 39142.49
+#> ZT 39749.81 152582.1 390.62 40515.42 38984.20
 #> 
-#> Mean survival time: 4.95 With SE: 0.11
+#> Mean survival time: 4.92 With SE: 0.11
 ```
 
 ## References

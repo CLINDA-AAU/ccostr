@@ -40,13 +40,13 @@ The package calculates two conventional but wrong estimates of the mean cost. Th
   <img src="img/f1.png" height="55"/>
 </p>
 
-The BT estimator *Bang and Tsiatis (2000)*, weights the cost for the complete case with the probability of censoring at the event time.
+The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the complete case with the probability of censoring at the event time.
 
 <p align="center">
 <img src="img/f2.png" height="60"/>
 </p>
 
-If cost history is present, the above estimate may be improved by using the ZT estimator *Zhao and Tian (2001)*.
+If cost history is present, the above estimate may be improved by using the ZT estimator *(Zhao and Tian, 2001)*.
 
 <p align="center">
 <img src="img/f3.png" height="65"/>
