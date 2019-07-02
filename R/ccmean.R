@@ -77,8 +77,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
     summarize(cost  = sum(cost, na.rm=T),
               delta = last(delta),
               surv  = first(surv))
+  
+  } else if (length(x$id) > length(unique(x$id))) {
+    stop('No cost history but non-unique id tags')
   } else {
-    message('No cost history found, should be given by: "start" and "stop"')
+    message('No cost history found, can be set by: "start" and "stop"')
     xf <- x
   }
   
