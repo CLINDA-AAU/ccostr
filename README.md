@@ -21,8 +21,7 @@ The ccmean function implements 4 estimators, these are:
 ``` r
 devtools::install_github("HaemAalborg/ccostr")
 
-# Or including a vignette that demonstrates the bias and coverage
-
+# Or including a vignette that demonstrates the bias and coverage of the estimators
 devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
@@ -52,31 +51,39 @@ the data should look something like this:
 ## Explanation of estimates
 
 The package calculates two conventional but wrong estimates of the mean
-cost. The first is the full sample which divides total costs of all
-observations with the number of observations. This is correct if there
-is no censoring present. With censored data it is underestimating the
-real costs due to missing information.
+cost. The first is the available sample (AS) which divides total costs
+of all observations with the number of observations. This is correct if
+there is no censoring present. With censored data it is underestimating
+the real costs due to missing information. The second is the complete
+cases (CC), here all incomplete cases is filtered out. This creates a
+bias towards short cases as they have a greater chance of not being
+removed, and this would normally also give a downward bias.
 
-<img src="img/AS.png" height="55"/>
+<p align="center">
 
-The scecond is the complete cases, here all data but the complete is
-filtered out. This creates a bias towards short observations as they
-have a greater chance of not being removed, and this would normally also
-give a downward bias.
+<img src="img/f1.png" height="55"/>
 
-<img src="img/CC.png" height="60"/>
+</p>
 
 It is possible to come up with better estimates of the mean costs. The
-first is the BT estimator which weights the complete case with the …
+first is the estimator proposed by Bang and Tsiatis (BT) where complete
+cases are weighted with the probability of being censored at thier
+eventtime.
 
-<img src="img/BT.png" height="60"/>
+<p align="center">
 
-But it is possible to improve this estimate if cost history is present.
-This additional information is used in the ZT estimator
+<img src="img/f2.png" height="60"/>
 
-### Estimates with cost history
+</p>
 
-<img src="img/ZT.png" height="60"/>
+The BT estimator doesn’t take account of cost history. This additional
+information is used in the estimator proposed by Zhao and Tian (ZT)
+
+<p align="center">
+
+<img src="img/f3.png" height="65"/>
+
+</p>
 
 ## Usage
 
@@ -99,13 +106,12 @@ df_1_res
 #> BT                295.00   36260.42  190.42  668.23   -78.23
 #> ZT                337.17  550262.97  741.80 1791.09 -1116.76
 #> 
-#> Median survival time: 674 With SE: 161.93
+#> Mean survival time: 674 With SE: 161.93
 ```
 
 ## Data simulation function
 
-Data is now simulated with the simCostData
-function:
+Data is now simulated with the simCostData function:
 
 ``` r
 # With the uniform distribution the true mean is 40.000, see documentation for further details.
@@ -117,15 +123,15 @@ print(sim_res)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events   Limits TotalTime  MaxSurv
-#> N         4159        1000    588 9.897746  3638.176 9.897746
+#> N         3998        1000    582 9.975437  3482.195 9.975437
 #> 
 #>                 Estimate Variance     SD    95UCI    95LCI
-#> AvailableSample 29109.71 168799.7 410.85 29914.98 28304.44
-#> CompleteCase    37938.18 122495.9 349.99 38624.17 37252.19
-#> BT              40369.50 150720.4 388.23 41130.42 39608.57
-#> ZT              39734.20 157440.0 396.79 40511.90 38956.49
+#> AvailableSample 28625.74 181210.9 425.69 29460.09 27791.39
+#> CompleteCase    37775.93 150948.7 388.52 38537.43 37014.43
+#> BT              40044.41 164040.4 405.02 40838.25 39250.57
+#> ZT              40032.55 162171.9 402.71 40821.85 39243.24
 #> 
-#> Median survival time: 5.02 With SE: 0.11
+#> Mean survival time: 5.01 With SE: 0.11
 ```
 
 ## References

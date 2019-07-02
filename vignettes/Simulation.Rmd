@@ -33,7 +33,7 @@ $$M_i = M_i(0)+b_iT_i^L+\sum^{10}_{j=1}\tau_{ij}(min[\{T_i^L-(j-1)\}^+,1])+d_iI(
 
 With a uniform distribution of survival times this is set to take the value of 40.000, we can now test the estimators:
 ```{r}
-sim <- simCostData(n = 1000, dist = "unif", censor = "light", L = 10)
+sim <- simCostData(n = 1000, dist = "unif", censor = "light", cdist = "exp", L = 10)
 
 est <- ccmean(sim$censoredCostHistory)
 est
@@ -52,11 +52,11 @@ nYears <- 10
 indv   <- 100 # increating individuals increases computing time exponential
 
 ## true mean for unif is 40000 and exp is 35956
-
-unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", exp = TRUE, L = nYears))
-unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", exp = TRUE, L = nYears))
-exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", exp = TRUE, L = nYears))
-exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", exp = TRUE, L = nYears))
+cdist = "exp"
+unif_light <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "light", cdist = "exp", L = nYears))
+unif_heavy <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "unif", censor = "heavy", cdist = "exp", L = nYears))
+exp_light  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "light", cdist = "exp", L = nYears))
+exp_heavy  <- lapply(1:nSim, function(x) simCostData(n = indv, dist = "exp",  censor = "heavy", cdist = "exp", L = nYears))
 ```
 
 Then the data is sent to the cluster and the estimates are calculated:

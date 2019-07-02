@@ -4,17 +4,17 @@
 \alias{simCostData}
 \title{Simulates censored cost data}
 \usage{
-simCostData(n = 100, dist = "unif", censor = "light", exp = FALSE,
-  L = 10)
+simCostData(n = 100, dist = "unif", censor = "light",
+  cdist = "exp", L = 10)
 }
 \arguments{
 \item{n}{Number of individuals to simulate}
 
 \item{dist}{Survival distribution either "unif" = unif(0,10) o r "exp" = exp (1/6)}
 
-\item{censor}{Censoring "light" or "heavy" for rexp(rate = 1/16) or rexp(rate = 1/9)}
+\item{censor}{Censoring "light" ~ 25\% or "heavy" ~ 40\%, changes a bit depending on cdist}
 
-\item{exp}{if TRUE the censoring is performed with exponential function otherwise uniform}
+\item{cdist}{Distribution used to censor, "exp" exponential or "unif" uniform}
 
 \item{L}{Number of years to summarize over}
 }
@@ -33,7 +33,7 @@ light. The simulation is inspired by Lin (1997)
 \examples{
 # The simulated data can be used to show how the estimators perform
 
-simCostData(n = 100, dist = "unif", censor = "light", L = 10)
+simCostData(n = 100, dist = "unif", censor = "light", cdist = "exp", L = 10)
 
 }
 \references{

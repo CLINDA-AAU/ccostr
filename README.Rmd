@@ -33,8 +33,7 @@ The ccmean function implements 4 estimators, these are:
 ```{r, eval = FALSE}
 devtools::install_github("HaemAalborg/ccostr")
 
-# Or including a vignette that demonstrates the bias and coverage
-
+# Or including a vignette that demonstrates the bias and coverage of the estimators
 devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
@@ -66,23 +65,23 @@ kable(df_1)
 
 
 ## Explanation of estimates
-The package calculates two conventional but wrong estimates of the mean cost. The first is the full sample which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information.
+The package calculates two conventional but wrong estimates of the mean cost. The first is the available sample (AS) which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information. The second is the complete cases  (CC), here all incomplete cases is filtered out. This creates a bias towards short cases as they have a greater chance of not being removed, and this would normally also give a downward bias.
 
-<img src="img/AS.png" height="55"/>
+<p align="center">
+  <img src="img/f1.png" height="55"/>
+</p>
 
-The scecond is the complete cases, here all data but the complete is filtered out. This creates a bias towards short observations as they have a greater chance of not being removed, and this would normally also give a downward bias.
+It is possible to come up with better estimates of the mean costs. The first is the estimator proposed by Bang and Tsiatis (BT) where complete cases are weighted with the probability of being censored at thier eventtime.
 
-<img src="img/CC.png" height="60"/>
+<p align="center">
+<img src="img/f2.png" height="60"/>
+</p>
 
-It is possible to come up with better estimates of the mean costs. The first is the BT estimator which weights the complete case with the ...
+The BT estimator doesn't take account of cost history. This additional information is used in the estimator proposed by Zhao and Tian (ZT) 
 
-<img src="img/BT.png" height="60"/>
-
-But it is possible to improve this estimate if cost history is present. This additional information is used in the ZT estimator 
-
-### Estimates with cost history
-
-<img src="img/ZT.png" height="60"/>
+<p align="center">
+<img src="img/f3.png" height="65"/>
+</p>
 
 
 
@@ -117,11 +116,3 @@ print(sim_res)
 2. H Bang, AA Tsiatis; Estimating medical costs with censored data, Biometrika, Volume 87, Issue 2, 1 June 2000, Pages 329-343.
 
 3. Zhao, Hongwei, and Lili Tian. "On Estimating Medical Cost and Incremental Cost-Effectiveness Ratios with Censored Data." Biometrics 57, no. 4 (2001): 1002-008.
-
-
-```{r eval=FALSE, include=FALSE}
-# BT = \frac{1}{n}\sum_{i=1}^n\frac{\Delta_iM_i}{\hat{K}(T_i)}
-# LinT = \sum_{k=1}^{K+1}A_k(S_k-S_{k+1})
-# \hat{A}_k=\frac{\sum_{i=1}^nY_{ki}C_i}{\sum_{i=1}^nY_{ki}}
-
-```

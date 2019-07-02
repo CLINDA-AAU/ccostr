@@ -9,8 +9,8 @@
 #' 
 #' @param n Number of individuals to simulate
 #' @param dist Survival distribution either "unif" = unif(0,10) o r "exp" = exp (1/6)
-#' @param censor Censoring "light" or "heavy" for rexp(rate = 1/16) or rexp(rate = 1/9)
-#' @param exp if TRUE the censoring is performed with exponential function otherwise uniform
+#' @param censor Censoring "light" ~ 25\% or "heavy" ~ 40\%, changes a bit depending on cdist
+#' @param cdist Distribution used to censor, "exp" exponential or "unif" uniform
 #' @param L Number of years to summarize over
 #' 
 #' @return Simulation of censored cost
@@ -19,14 +19,14 @@
 #' @examples 
 #' # The simulated data can be used to show how the estimators perform
 #' 
-#' simCostData(n = 100, dist = "unif", censor = "light", L = 10)
+#' simCostData(n = 100, dist = "unif", censor = "light", cdist = "exp", L = 10)
 #' 
 #' @export
 #' 
 #' @importFrom stats var runif rexp
 #' @importFrom Rdpack reprompt
 
-simCostData <- function(n = 100, dist = "unif", censor = "light", exp = FALSE, L = 10){
+simCostData <- function(n = 100, dist = "unif", censor = "light", cdist = "exp", L = 10){
   
   annCost <- function(t, tau, L){
     cost <- 0
@@ -56,13 +56,13 @@ simCostData <- function(n = 100, dist = "unif", censor = "light", exp = FALSE, L
     }
   
   # Simulate censoring
-  if (censor == "light" & exp == TRUE) {
+  if (censor == "light" & cdist == "exp") {
     C <- rexp(n = n, rate = 1/16)  
-    } else if (censor == "heavy" & exp == TRUE) {
+    } else if (censor == "heavy" & cdist == "exp") {
     C <- rexp(n = n, rate = 1/9)   
-    } else if (censor == "light" & exp == FALSE) {
+    } else if (censor == "light" & cdist == "unif") {
     C <- runif(n = n, min = 0, max = 20)  
-    } else if (censor == "heavy" & exp == FALSE) {
+    } else if (censor == "heavy" & cdist == "unif") {
     C <- runif(n = n, min = 0, max = 12.5)      
     } else {
     stop('censor must be "light" or "heavy"')
