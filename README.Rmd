@@ -29,8 +29,8 @@ The main function of ccostr is ccmean(), which implements 4 estimators, these ar
 
  - "Available Sample"
  - "Complete Case"
- - Bang and Tsiatis's method: *Bang and Tsiatis (2000)*
- - Zhao and Tian's method: *Zhao and Tian (2001)*
+ - Bang and Tsiatis's method: *(Bang and Tsiatis, 2000)*
+ - Zhao and Tian's method: *(Zhao and Tian, 2001)*
 
 
 ## Explanation of estimates
@@ -57,12 +57,12 @@ For all formulas above $n$ is number of individuals, $M_i$ and $\Delta_i$ are th
 ## Data format
 The accepted data format for ccmean is a dataframe as shown below with observations in rows. Columns detail the id for the observation, start and stop time for a time interval, the cost for the interval, the overall survival for the individual and a censoring indicator (1 = fully observed, 0 = censored). The dataset may contain multiple rows for the same individual detailing a cost history. If cost history is available, including it may lead to better estimates.
 ```{r echo=FALSE}
-df_1 <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C"),
-                   start = c(1, 30, 88, 18, 1, 67),
-                   stop  = c(1, 82, 88, 198, 5, 88),
-                   cost  = c(550, 1949, 45, 4245, 23, 567),
-                   delta = c(0, 0, 0, 0, 1, 1),
-                   surv  = c(343, 343, 343, 903, 445, 445))
+df_1 <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C", "D"),
+                   start = c(1, 30, 88, 18, 1, 67, 43),
+                   stop  = c(1, 82, 88, 198, 5, 88, 44),
+                   cost  = c(550, 1949, 45, 4245, 23, 567, 300),
+                   delta = c(0, 0, 0, 0, 1, 1, 1),
+                   surv  = c(343, 343, 343, 903, 445, 445, 652))
 kable(df_1)
 ```
 
@@ -92,9 +92,3 @@ sim_res
 
 3. Zhao, Hongwei, and Lili Tian. "On Estimating Medical Cost and Incremental Cost-Effectiveness Ratios with Censored Data." Biometrics 57, no. 4 (2001): 1002-008.
 
-
-```{r eval=FALSE, include=FALSE}
-# BT = \frac{1}{n}\sum_{i=1}^n\frac{\Delta_iM_i}{\hat{K}(T_i)}
-# LinT = \sum_{k=1}^{K+1}A_k(S_k-S_{k+1})
-# \hat{A}_k=\frac{\sum_{i=1}^nY_{ki}C_i}{\sum_{i=1}^nY_{ki}}
-```

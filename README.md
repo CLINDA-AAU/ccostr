@@ -90,6 +90,7 @@ including it may lead to better estimates.
 | B  |    18 |  198 | 4245 |     0 |  903 |
 | C  |     1 |    5 |   23 |     1 |  445 |
 | C  |    67 |   88 |  567 |     1 |  445 |
+| D  |    43 |   44 |  300 |     1 |  652 |
 
 ## Estimating the mean cost
 
@@ -103,15 +104,15 @@ df_1_res
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events Limits TotalTime MaxSurv
-#> N            6           3      1    903      1691     903
+#> N            7           4      2    903      2343     903
 #> 
-#>                 Estimate   Variance      SD   95UCI    95LCI
-#> AvailableSample  2459.67 1115030.11 1055.95 4529.33   390.00
-#> CompleteCase      590.00         NA      NA      NA       NA
-#> BT                295.00   36260.42  190.42  668.23   -78.23
-#> ZT                337.17  550262.97  741.80 1791.09 -1116.76
+#>    Estimate  Variance     SD   95UCI   95LCI
+#> AS  1919.75 849025.06 921.43 3725.74  113.76
+#> CC   445.00  21025.00 145.00  729.20  160.80
+#> BT   296.67  13618.21 116.70  525.39   67.94
+#> ZT   504.75 283732.74 532.67 1548.77 -539.27
 #> 
-#> Mean survival time: 674 With SE: 161.93
+#> Mean survival time: 666.67 With SE: 108.12
 ```
 
 ## Simulation of data
@@ -127,15 +128,15 @@ sim_res
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals Events   Limits TotalTime  MaxSurv
-#> N         4200        1000    619 9.967883  3692.126 9.967883
+#> N         4133        1000    632 9.986118  3616.321 9.986118
 #> 
-#>                 Estimate Variance     SD    95UCI    95LCI
-#> AvailableSample 29469.13 177493.0 421.30 30294.88 28643.39
-#> CompleteCase    38139.90 115034.2 339.17 38804.66 37475.13
-#> BT              39609.41 112912.8 336.03 40268.01 38950.80
-#> ZT              39780.21 119139.6 345.17 40456.74 39103.69
+#>    Estimate Variance     SD    95UCI    95LCI
+#> AS 29777.72 186794.1 432.20 30624.83 28930.61
+#> CC 38392.39 125298.6 353.98 39086.18 37698.60
+#> BT 39946.86 130154.1 360.77 40653.97 39239.75
+#> ZT 39820.29 133340.2 365.16 40536.00 39104.58
 #> 
-#> Mean survival time: 5.1 With SE: 0.1
+#> Mean survival time: 4.95 With SE: 0.11
 ```
 
 ## References
