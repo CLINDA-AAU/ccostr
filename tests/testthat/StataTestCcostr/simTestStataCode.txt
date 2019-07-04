@@ -1,0 +1,60 @@
+
+. cd "C:\Users\larsn\Documents\GitHub\ccostr\tests\testthat\StataTestCcostr"
+
+. use ule
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(9.969014)
+. hcost id cost, start(start) stop(stop) l(9.969014) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use uhe
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(9.994942)
+. hcost id cost, start(start) stop(stop) l(9.994942) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use ele
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(24.53706)
+. hcost id cost, start(start) stop(stop) l(24.53706) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use ehe
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(31.93079)
+. hcost id cost, start(start) stop(stop) l(31.93079) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+
+. use ulu
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(9.964636)
+. hcost id cost, start(start) stop(stop) l(9.964636) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use uhu
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(9.992897)
+. hcost id cost, start(start) stop(stop) l(9.992897) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use elu
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(19.9812)
+. hcost id cost, start(start) stop(stop) l(19.9812) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+
+. use ehu
+. stset surv, failure(delta)
+. hcost id cost, start(start) stop(stop) l(12.48327)
+. hcost id cost, start(start) stop(stop) l(12.48327) method(0)
+. hcost id cost, start(start) stop(stop) l(6)
+. hcost id cost, start(start) stop(stop) l(6) method(0)
+

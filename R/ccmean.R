@@ -57,11 +57,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   L2             <- max(x$surv)
   
   # Subset to estimation period	
-  x$delta[x$surv > L] <- 1
+  x$delta[x$surv >= L] <- 1
   x$surv              <- pmin(x$surv, L)
   
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) {
-  x                   <- subset(x, start < L)
+  x                   <- subset(x, start <= L)
   
   # Adjust overlapping costs and arranging data
   x <- x %>% 
