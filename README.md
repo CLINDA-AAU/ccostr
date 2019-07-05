@@ -4,7 +4,7 @@
 # ccostr
 
 ccostr is an R package to calculate estimates of mean total cost with
-censored cost data, ie. in situations where data is not fully observed
+censored cost data, i.e. in situations where data are not fully observed
 within the study period.
 
 ## Installation
@@ -22,19 +22,19 @@ devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--n
 The main function of ccostr is ccmean(), which implements 4 estimators,
 these are:
 
-  - “Available Sample”
-  - “Complete Case”
-  - Bang and Tsiatis’s method: *(Bang and Tsiatis, 2000)*
-  - Zhao and Tian’s method: *(Zhao and Tian, 2001)*
+  - “Available Sample” estimator
+  - “Complete Case” estimator
+  - Bang and Tsiatis’s estimator: *(Bang and Tsiatis, 2000)*
+  - Zhao and Tian’s estimator: *(Zhao and Tian, 2001)*
 
-## Explanation of estimates
+## Explanation of the estimators
 
 The package calculates two conventional but wrong estimates of the mean
-cost. The first is the available sample (AS) which divides total costs
+cost. The first is the available sample (AS) estimaor which divides total costs
 of all observations with the number of observations. This is correct if
 there is no censoring present. With censored data it is underestimating
 the real costs due to missing information. The second is the complete
-cases (CC), here all incomplete cases is filtered out. This creates a
+cases (CC) estimator, here all incomplete cases is filtered out. This creates a
 bias towards short cases as they have a greater chance of not being
 removed, and this would normally also give a downward bias.
 
@@ -53,7 +53,7 @@ complete case with the probability of censoring at the event time.
 
 </p>
 
-If cost history is present, the above estimate may be improved by using
+If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
 <p align="center">
@@ -141,13 +141,12 @@ sim_res
 
 ## References
 
-1.  Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. “Estimating Medical
-    Costs from Incomplete Follow-Up Data.” Biometrics 53, no. 2 (1997):
-    419-34.
+1.  Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. (1997) “Estimating Medical
+    Costs from Incomplete Follow-Up Data”, Biometrics 53:2, 419-34.
 
-2.  H Bang, AA Tsiatis; Estimating medical costs with censored data,
-    Biometrika, Volume 87, Issue 2, 1 June 2000, Pages 329-343.
+2.  Bang, H., A.A. Tsiatis (2000) "Estimating medical costs with censored data"",
+    Biometrika 87:2, 329-43.
 
-3.  Zhao, Hongwei, and Lili Tian. “On Estimating Medical Cost and
-    Incremental Cost-Effectiveness Ratios with Censored Data.”
-    Biometrics 57, no. 4 (2001): 1002-008.
+3.  Zhao, H., and T. Lili. (2001) “On Estimating Medical Cost and
+    Incremental Cost-Effectiveness Ratios with Censored Data”,
+    Biometrics 57:4, 1002-8.
