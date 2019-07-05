@@ -8,7 +8,7 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
   delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
-\item{x}{A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.}
+\item{x}{A dataframe with columns: id, cost, start, stop, delta, and surv. If columns are named differently use the following parameters to specify them.}
 
 \item{id}{The id separating each individual}
 
@@ -34,16 +34,15 @@ This function calcutes the mean cost for right-censored cost
 data over a period of L time units (days, months, years,...)
 }
 \details{
-The function returns 4 estimates. The first two are simple and biased
-downwards, and included for comparisson. The estimates are:
+The function returns 4 estimates. The first two are simple estimators and biased downwards, and included for comparison. The estimators are:
 
 - AS: "Available Sample" - The simple sample mean
 
 - CC: "Complete Case" - The mean of fully observed cases
 
-- BT: "Weighted Complete Case" - Bang and Tsiatis's method 
+- BT: "Weighted Complete Case" - Bang and Tsiatis's estimator 
 
-- ZT: "Weighted Available Sample" - Zhao and Tian's method
+- ZT: "Weighted Available Sample" - Zhao and Tian's estimator
 }
 \examples{
 hcost
