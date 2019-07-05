@@ -3,7 +3,7 @@
 
 # ccostr
 
-ccostr is an R package to calculate estimates of mean total cost in
+ccostr is an R package to calculate estimates of mean total cost with
 censored cost data, ie. in situations where data is not fully observed
 within the study period.
 
