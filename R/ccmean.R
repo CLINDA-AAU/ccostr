@@ -56,33 +56,39 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   if(is.na(L)) L <- max(x$surv)
   L2             <- max(x$surv)
   
-  # Subset to estimation period	
-  x$delta[x$surv >= L] <- 1
-  x$surv              <- pmin(x$surv, L)
-  
-  if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) {
-  x                   <- subset(x, start <= L)
-  
-  # Adjust overlapping costs and arranging data
-  x <- x %>% 
-    mutate(cost = ifelse(stop > surv, 
-                         cost * ((surv-start + addInterPol)/(stop-start + addInterPol)), 
-                         cost),
-           stop = pmin(stop, L)) %>% 
-    arrange(surv, delta)
-  
-  # Some calculations don't use cost history so is collapse by ID
-  xf <- x %>% 
-    group_by(id) %>% 
-    summarize(cost  = sum(cost, na.rm=T),
-              delta = last(delta),
-              surv  = first(surv))
-  
+  ## Adjust cost and survival times for data with/without cost history
+  if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) { #With Cost history
+    # Subset to estimation period	
+    x$delta[x$surv >= L] <- 1
+    x$surv              <- pmin(x$surv, L)
+    x                   <- subset(x, start <= L)
+    
+    # Adjust overlapping costs and arranging data
+    x <- x %>% 
+      mutate(cost = ifelse(stop > surv, 
+                           cost * ((surv-start + addInterPol)/(stop-start + addInterPol)), 
+                           cost),
+             stop = pmin(stop, L)) %>% 
+      arrange(surv, delta)
+    
+    # Some calculations don't use cost history so is collapse by ID
+    xf <- x %>% 
+      group_by(id) %>% 
+      summarize(cost  = sum(cost, na.rm=T),
+                delta = last(delta),
+                surv  = first(surv))
+    
   } else if (length(x$id) > length(unique(x$id))) {
     stop('No cost history but non-unique id tags')
-  } else {
+  } else { # Without cost history
     message('No cost history found, can be set by: "start" and "stop"')
-    xf <- x
+    xf <- x %>% 
+      mutate(cost = ifelse(surv > L, 
+                           cost * ((L + addInterPol)/(surv + addInterPol)), 
+                           cost),
+             delta = as.numeric(surv >= L | delta == 1),
+             surv  = pmin(surv, L)) %>% 
+      arrange(surv, delta)
   }
   
   
@@ -261,8 +267,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                ZT - 1.96 * sqrt(ZT_var))
   
   } else {
-    ZT <- 0
-    ZT_full <- c(0,0,0,0,0)
+    ZT <- NA
+    ZT_full <- rep(NA,5)
   }
   #################################################################
   ##                          section 7:                         ##
@@ -283,11 +289,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                                      MaxSurv      = L2,
                                      row.names    = "N"),
                   First = data.frame(AS, CC, BT, ZT),
-                  Estimates = round(data.frame("AS"  = AS_full,
+                  Estimates = data.frame("AS"  = AS_full,
                                                "CC"  = CC_full,
                                                "BT"  = BT_full,
                                                "ZT"  = ZT_full, 
-                                               row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),2),
+                                               row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),
                   Survival = svl2
   )
   
