@@ -1,5 +1,5 @@
 
-setwd("C:/Users/larsn/Documents/GitHub/ccostr")
+setwd("~/GitHub/ccostr")
 load(file = "tests/testthat/StataDataTest.Rdata")
 
 # Comparison values are hardcoded from runs in Stata with the Hcost package
