@@ -1,6 +1,6 @@
 ---
 title: "Example: Replicating st0399 results"
-author: "Lars Børty Nielsen, Rasmus Brøndum & Martin Bøgsted"
+author: "Lars Børty Nielsen, Martin Bøgsted, and Rasmus Brøndum"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
 vignette: >
