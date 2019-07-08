@@ -26,7 +26,7 @@ The ccostr package includes a dataset called "hcost". The dataset comes from the
 head(hcost)
 ```
 
-Now we use the ccmean function with a limit of 4 years (1461 days), we also add the interpolation term which affects the ZT estimate. By default this parameter is set to zero, but to replicate the results of the Stata implementation we set it to 1.
+Now we use the ccmean function with a limit of 4 years (1461 days), we also add the interpolation term which affects the interpolation of cost between two observed time points. By default this parameter is set to zero, but to replicate the results of the Stata implementation we set it to 1.
 
 ```{r hcost}
 est <- ccmean(hcost, L = 1461, addInterPol = 1)
