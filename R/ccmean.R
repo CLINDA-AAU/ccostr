@@ -1,18 +1,18 @@
-#' Calculates estimates of mean cost with censored data
+#' Calculates estimates of the mean cost with censored data
 #'
-#' @description This function calcutes the mean cost for right-censored cost 
+#' @description This function calculates the mean cost for right-censored cost 
 #' data over a period of L time units (days, months, years,...)
 #'
-#' @details The function returns 4 estimates. The first two are simple and biased
-#' downwards, and included for comparisson. The estimates are:
+#' @details The function returns four estimates. The first two are simple and biased
+#' downwards, and included for comparison. The estimates are:
 #' 
-#' - AS: "Available Sample" - The simple sample mean
+#' - AS: "Available Sample estimator" - The simple sample mean
 #' 
-#' - CC: "Complete Case" - The mean of fully observed cases
+#' - CC: "Complete Case estimator" - The mean of fully observed cases
 #'
-#' - BT: "Weighted Complete Case" - Bang and Tsiatis's method 
+#' - BT: "Weighted Complete Case estimator" - Bang and Tsiatis's estimator
 #'
-#' - ZT: "Weighted Available Sample" - Zhao and Tian's method
+#' - ZT: "Weighted Available estimator" - Zhao and Tian's estimator
 #' 
 #' @param x A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.
 #' @param id The id separating each individual
@@ -21,7 +21,7 @@
 #' @param stop End of cost, if one time cost then start = stop
 #' @param delta Event variable, 1 = event, 0 = no event
 #' @param surv Survival
-#' @param L Limit. Mean cost is calculated up until L.
+#' @param L Limit. Mean cost is calculated up till L.
 #' @param addInterPol This parameter affects the interpolation of cost between two observed times. Defaults to zero.
 #' 
 #' @return An object of class "ccobject".
@@ -71,7 +71,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
              stop = pmin(stop, L)) %>% 
       arrange(surv, delta)
     
-    # Some calculations don't use cost history so is collapse by ID
+    # Some calculations do not use cost history, so collapsed by ID
     xf <- x %>% 
       group_by(id) %>% 
       summarize(cost  = sum(cost, na.rm=T),
@@ -94,10 +94,10 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   #################################################################
   ##                          section 2:                         ##
-  ##                   Naive (Avaiable Sample)                   ##
+  ##                   Naive (Avaiable Sample estimator)         ##
   #################################################################
   
-  # Basic naive estimate from mean of the complete sample
+  # Basic naive estimate from mean of the complete samples
   AS      <- mean(xf$cost)
   AS_var  <- var(xf$cost) / nrow(xf)
   
@@ -111,10 +111,10 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   #################################################################
   ##                          section 3:                         ##
-  ##                    Naive (complete case)                    ##
+  ##                    Naive (Complete Case estimator)          ##
   #################################################################
   
-  # Basic naive estimate from mean of the complete observed cases
+  # Basic naive estimate from mean of the complete cases
   CC      <- mean(xf$cost[xf$delta == 1])
   CC_var  <-  var(xf$cost[xf$delta == 1]) / sum(xf$delta)
   
@@ -128,12 +128,12 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   #################################################################
   ##                          section 4:                         ##
-  ##                     Lin's method (1997)                     ##
+  ##                     Lin's estimator (1997)                     ##
   #################################################################
    
   # WORKING ESTIMATOR, BUT DUE TO SIMILARITY WITH BT IT IS NOT ACTIVE
   #
-  # # Kaplan-meier for censoring distribution get censoring times to define intervals
+  # # Kaplan-meier estimate for censoring distribution get censoring times to define intervals
   # sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1))
   # censBreaks <- c(0, sc$time, Inf)
   #   
@@ -156,34 +156,34 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   # # Gathering the data in a new dataframe
   # d <- data.frame(a, "survDif" = svLow-svHigh)
   #     
-  # # calculating Lin's T estimate of total costs 
+  # # calculating Lin's T estimator of total costs 
   # LinT <- sum(d$survDif*d$mean, na.rm=T)
   
   
   #################################################################
   ##                          section 5:                         ##
-  ##               Bang and Tsiatis's method (2000)              ##
+  ##               Bang and Tsiatis's estimator (2000)           ##
   #################################################################
   
-  # Kaplan-Meier curve for censoring
+  # Kaplan-Meier estimate for the censoring distribution
   sc <- summary(survfit(Surv(xf$surv, xf$delta == 0) ~ 1), times = xf$surv)
   sct <- data.frame(sc$time, sc$surv)
   sct$sc.surv[sct$sc.surv == 0] <- min(sct$sc.surv[sct$sc.surv != 0])
   sct <- unique(sct)
   
-  # Kaplan-Meier curve for survival
+  # Kaplan-Meier estimate for the survival distribution
   s <- summary(survfit(Surv(xf$surv, xf$delta) ~ 1), times = xf$surv)
   st <- data.frame(s$time, s$surv)
   st <- unique(st)
   
-  # Merge probalities of censoring and survival to data
+  # Merge probabilities of censoring and survival to date
   t <- merge(xf, sct, by.x = "surv", by.y = "sc.time", all.x = T)
   t <- merge(t,  st,  by.x = "surv", by.y = "s.time",  all.x = T)
   
-  # Calculation of BT estimator
+  # Calculation of the BT estimator
   BT <- mean((t$cost * t$delta) / t$sc.surv)
   
-  # Variance of BT
+  # Variance of the BT estimator
   n <- length(t$cost)
   t$GA <- rep(0, n)
   t$GB <- rep(0, n)
@@ -198,7 +198,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   BT_var <- 1 / n * (mean(t$delta * (t$cost-BT)^2 / t$sc.surv) + 
                        mean(((1 - t$delta) / t$sc.surv^2 ) * (t$GA - t$GB^2)))
   
-  # Results of BT
+  # Results of the BT estimator
   BT_full <- c(BT,
                BT_var,
                sqrt(BT_var),
@@ -208,17 +208,17 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   #################################################################
   ##                          section 6:                         ##
-  ##                Zhao and Tian's method (2001)                ##
+  ##                Zhao and Tian's estimator (2001)             ##
   #################################################################
   
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) {
   
-  # Matrice and vectors to be filled with for loop
+  # Matrice and vectors to be filled with the for loop
   runCostMatrix  <- matrix(0, nrow = nrow(t), ncol = nrow(t))
   t$mcostlsurv   <- 0
   t$mcostlsurvSq <- 0
   setDTthreads(1)
-  # For each censored individual the cost is calculate for longer 
+  # For each censored individual the cost is calculated for longer 
   # surviving individuals up till time ti
   for(i in 1:nrow(t)){
     if(t$delta[i] == 1){
@@ -242,10 +242,10 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
     }
   }
   
-  # Calculation of ZT estimator
+  # Calculation of the ZT estimator
   ZT <- BT + mean(((1 - t$delta) * ((t$cost - t$mcostlsurv) / t$sc.surv)), na.rm = TRUE)
   
-  # Variance of ZT
+  # Variance of the ZT estimator
   n     <- nrow(t)
   t$gm  <- rep(0,n)
   t$gmm <- rep(0,n)
@@ -259,7 +259,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ZT_var <- BT_var - (2 / n^2) * sum(((1 - t$delta) / t$sc.surv^2) * (t$gmm - t$GB * t$gm)) + 
     (1 / n^2) * sum(((1 - t$delta) / t$sc.surv^2) * (t$mcostlsurvSq - t$mcostlsurv^2))
   
-  # Results of ZT
+  # Results of the ZT estimator
   ZT_full <- c(ZT,
                ZT_var,
                sqrt(ZT_var),
@@ -275,11 +275,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ##                           Results                           ##
   #################################################################
   
-  # Calculation of median survival
+  # Calculation of median survival time
   svl1 <- survival::survfit(Surv(xf$surv, xf$delta == 1) ~ 1)
   svl2 <- summary(svl1)[["table"]]
   
-  # Results of all estimators
+  # Results of all estimators are compiled
   results <- list(Text  = c("ccostr - Estimates of mean cost with censored data"),
                   Data  = data.frame(Observations = nrow(x), 
                                      Induviduals  = nrow(xf), 
@@ -297,7 +297,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                   Survival = svl2
   )
   
-  # The output is given an S3 class
+  # The output is given as an S3 class
   class(results) <- "ccobject"
   
   results
