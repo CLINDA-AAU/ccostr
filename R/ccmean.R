@@ -51,7 +51,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ##                          section 1:                         ##
   ##                      Basic adjustments                      ##
   #################################################################
-  maxsurv <- max(x$surv)
+  maxsurv <- max(x$surv) # if L is not set this is equal to limit
   
   ## Adjust cost and survival times for data with/without cost history
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) { #With Cost history
@@ -63,7 +63,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
     # Adjust overlapping costs and arranging data
     x <- x %>% 
       mutate(cost = ifelse(stop > surv, 
-                           cost * ((surv-start + addInterPol)/(stop-start + addInterPol)), 
+                           cost * ((surv - start + addInterPol)/(stop - start + addInterPol)), 
                            cost),
              stop = pmin(stop, L)) %>% 
       arrange(surv, delta)
