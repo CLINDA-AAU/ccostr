@@ -94,10 +94,10 @@ row.names(results) <- c("true_mean", colnames(results_unif_light))
 results_bias <- cbind(round(results[,c(1,2)] - 40000,2), 
                       round(results[,c(3,4)] - 35956,2))
 
-cov_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
-cov_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) ifelse(x[[4]][4,] >= 40000 & x[[4]][5,] <= 40000, 1, 0)))
-cov_exp_light  <- do.call(rbind, lapply(est_exp_light,  function(x) ifelse(x[[4]][4,] >= 35956 & x[[4]][5,] <= 35956, 1, 0)))
-cov_exp_heavy  <- do.call(rbind, lapply(est_exp_heavy,  function(x) ifelse(x[[4]][4,] >= 35956 & x[[4]][5,] <= 35956, 1, 0)))
+cov_unif_light <- do.call(rbind, lapply(est_unif_light, function(x) ifelse(x[[4]][5,] >= 40000 & x[[4]][4,] <= 40000, 1, 0)))
+cov_unif_heavy <- do.call(rbind, lapply(est_unif_heavy, function(x) ifelse(x[[4]][5,] >= 40000 & x[[4]][4,] <= 40000, 1, 0)))
+cov_exp_light  <- do.call(rbind, lapply(est_exp_light,  function(x) ifelse(x[[4]][5,] >= 35956 & x[[4]][4,] <= 35956, 1, 0)))
+cov_exp_heavy  <- do.call(rbind, lapply(est_exp_heavy,  function(x) ifelse(x[[4]][5,] >= 35956 & x[[4]][4,] <= 35956, 1, 0)))
 results_coverage <- data.frame("unif_light" = (colMeans(cov_unif_light, na.rm = T)),
                                "unif_heavy" = (colMeans(cov_unif_heavy, na.rm = T)),
                                "exp_light"  = (colMeans(cov_exp_light,  na.rm = T)),
