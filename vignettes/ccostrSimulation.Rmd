@@ -47,7 +47,7 @@ plot(est) + geom_hline(yintercept = 40000, linetype = "dotted", size = 1)
 We now test the bias and coverage of the estimator through more extensive simulations. We perform 1000 simulations with 1000 individuals, for four different scenarios: Uniform and exponential survival functions, with either light or heavy sensoring.
 ```{r, eval = FALSE}
 
-nSim   <- 10000
+nSim   <- 1000
 nYears <- 10
 indv   <- 1000 # increating individuals increases computing time exponential
 ## true mean for unif is 40000 and exp is 35956
