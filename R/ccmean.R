@@ -21,7 +21,7 @@
 #' @param stop End of cost, if one time cost then start = stop
 #' @param delta Event variable, 1 = event, 0 = no event
 #' @param surv Survival
-#' @param L Limit. Mean cost is calculated up till L.
+#' @param L Limit. Mean cost is calculated up till L, if not specified L = max(surv)
 #' @param addInterPol This parameter affects the interpolation of cost between two observed times. Defaults to zero.
 #' 
 #' @return An object of class "ccobject".
@@ -41,7 +41,7 @@
 #' @import ggplot2 dplyr survival msm knitr tibble
 
 
-ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = NA, addInterPol = 0) {
+ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = max(x$surv), addInterPol = 0) {
   
   if( !("id" %in% names(x)) | !("cost" %in% names(x)) | !("delta" %in% names(x)) | !("surv" %in% names(x)) ) 
     stop('Rename colums to: "id", "cost", "delta" and "surv"')
@@ -51,10 +51,6 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ##                          section 1:                         ##
   ##                      Basic adjustments                      ##
   #################################################################
-  
-  # Set estimation period if undefined
-  if(is.na(L)) L <- max(x$surv)
-  L2             <- max(x$surv)
   
   ## Adjust cost and survival times for data with/without cost history
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) { #With Cost history
@@ -105,8 +101,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   AS_full <- c(AS,
                AS_var,
                sqrt(AS_var),
-               AS + 1.96 * sqrt(AS_var),
-               AS - 1.96 * sqrt(AS_var))
+               AS - 1.96 * sqrt(AS_var),
+               AS + 1.96 * sqrt(AS_var))
   
   
   #################################################################
@@ -122,8 +118,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   CC_full <- c(CC,
                CC_var,
                sqrt(CC_var),
-               CC + 1.96 * sqrt(CC_var),
-               CC - 1.96 * sqrt(CC_var))
+               CC - 1.96 * sqrt(CC_var),
+               CC + 1.96 * sqrt(CC_var))
   
   
   #################################################################
@@ -202,8 +198,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   BT_full <- c(BT,
                BT_var,
                sqrt(BT_var),
-               BT + 1.96 * sqrt(BT_var),
-               BT - 1.96 * sqrt(BT_var))
+               BT - 1.96 * sqrt(BT_var),
+               BT + 1.96 * sqrt(BT_var))
   
   
   #################################################################
@@ -263,8 +259,8 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ZT_full <- c(ZT,
                ZT_var,
                sqrt(ZT_var),
-               ZT + 1.96 * sqrt(ZT_var),
-               ZT - 1.96 * sqrt(ZT_var))
+               ZT - 1.96 * sqrt(ZT_var),
+               ZT + 1.96 * sqrt(ZT_var))
   
   } else {
     ZT <- NA
@@ -280,21 +276,21 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   svl2 <- summary(svl1)[["table"]]
   
   # Results of all estimators are compiled
-  results <- list(Text  = c("ccostr - Estimates of mean cost with censored data"),
-                  Data  = data.frame(Observations = nrow(x), 
-                                     Induviduals  = nrow(xf), 
-                                     Events       = sum(xf$delta == 1),
-                                     Limits       = L,
-                                     TotalTime    = sum(xf$surv),
-                                     MaxSurv      = L2,
-                                     row.names    = "N"),
-                  First = data.frame(AS, CC, BT, ZT),
+  results <- list(Text      = c("ccostr - Estimates of mean cost with censored data"),
+                  Data      = data.frame("Observations" = nrow(x), 
+                                         "Induviduals"  = nrow(xf), 
+                                         "Events"       = sum(xf$delta == 1),
+                                         "Limits"       = L,
+                                         "TotalTime"    = sum(xf$surv),
+                                         "MaxSurv"      = max(x$surv),
+                                         row.names    = "N"),
+                  First     = data.frame(AS, CC, BT, ZT),
                   Estimates = data.frame("AS"  = AS_full,
-                                               "CC"  = CC_full,
-                                               "BT"  = BT_full,
-                                               "ZT"  = ZT_full, 
-                                               row.names = c("Estimate", "Variance", "SE", "95UCI", "95LCI")),
-                  Survival = svl2
+                                         "CC"  = CC_full,
+                                         "BT"  = BT_full,
+                                         "ZT"  = ZT_full, 
+                                         row.names = c("Estimate", "Variance", "SE", "0.95LCL", "0.95UCL")),
+                  Survival  = svl2
   )
   
   # The output is given as an S3 class
