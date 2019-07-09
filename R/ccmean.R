@@ -14,7 +14,7 @@
 #'
 #' - ZT: "Weighted Available estimator" - Zhao and Tian's estimator
 #' 
-#' @param x A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.
+#' @param x A dataframe with columns: id, cost, delta and surv. If Cost history is available it can be specified by: start and stop,
 #' @param id The id separating each individual
 #' @param cost The total cost, or if start and stop provided the specific cost
 #' @param start Start of cost
@@ -51,6 +51,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   ##                          section 1:                         ##
   ##                      Basic adjustments                      ##
   #################################################################
+  maxsurv <- max(x$surv)
   
   ## Adjust cost and survival times for data with/without cost history
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) { #With Cost history
@@ -277,18 +278,18 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   # Results of all estimators are compiled
   results <- list(Text      = c("ccostr - Estimates of mean cost with censored data"),
-                  Data      = data.frame("Observations" = nrow(x), 
-                                         "Induviduals"  = nrow(xf), 
-                                         "Events"       = sum(xf$delta == 1),
-                                         "Limits"       = L,
-                                         "TotalTime"    = sum(xf$surv),
-                                         "MaxSurv"      = max(x$surv),
-                                         row.names    = "N"),
+                  Data      = data.frame("Observations"   = nrow(x), 
+                                         "Induviduals"    = nrow(xf), 
+                                         "FullyObserved"  = sum(xf$delta == 1),
+                                         "Limits"         = L,
+                                         "TotalTime"      = sum(xf$surv),
+                                         "MaxSurvival"    = maxsurv,
+                                         row.names        = "N"),
                   First     = data.frame(AS, CC, BT, ZT),
-                  Estimates = data.frame("AS"  = AS_full,
-                                         "CC"  = CC_full,
-                                         "BT"  = BT_full,
-                                         "ZT"  = ZT_full, 
+                  Estimates = data.frame("AS"      = AS_full,
+                                         "CC"      = CC_full,
+                                         "BT"      = BT_full,
+                                         "ZT"      = ZT_full, 
                                          row.names = c("Estimate", "Variance", "SE", "0.95LCL", "0.95UCL")),
                   Survival  = svl2
   )

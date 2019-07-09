@@ -5,10 +5,10 @@
 \title{Calculates estimates of the mean cost with censored data}
 \usage{
 ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
-  delta = "delta", surv = "surv", L = NA, addInterPol = 0)
+  delta = "delta", surv = "surv", L = max(x$surv), addInterPol = 0)
 }
 \arguments{
-\item{x}{A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.}
+\item{x}{A dataframe with columns: id, cost, delta and surv. If Cost history is available it can be specified by: start and stop,}
 
 \item{id}{The id separating each individual}
 
@@ -22,7 +22,7 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
 
 \item{surv}{Survival}
 
-\item{L}{Limit. Mean cost is calculated up till L.}
+\item{L}{Limit. Mean cost is calculated up till L, if not specified L = max(surv)}
 
 \item{addInterPol}{This parameter affects the interpolation of cost between two observed times. Defaults to zero.}
 }

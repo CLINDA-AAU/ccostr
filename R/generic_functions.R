@@ -34,7 +34,7 @@ plot.ccobject <- function(x, ...) {
   temp$Estimator <- factor(temp$Estimator, labels = )
   
   temp %>% 
-    ggplot(aes(y = temp$Estimate, x = fct_relevel(temp$Estimator,c("ZT","BT","CC","AS")), ymax = temp$"95UCI", ymin = temp$"95LCI")) + 
+    ggplot(aes(y = temp$Estimate, x = fct_relevel(temp$Estimator,c("ZT","BT","CC","AS")), ymax = temp$"0.95UCL", ymin = temp$"0.95LCL")) + 
     geom_point(shape=15, size=5) +  
     geom_errorbar(width = 0.2, size = 1.1) + 
     labs(title="Estimators", x = "", y = "Cost") +
