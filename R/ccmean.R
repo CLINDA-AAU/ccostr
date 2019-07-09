@@ -128,7 +128,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   
   #################################################################
   ##                          section 4:                         ##
-  ##                     Lin's estimator (1997)                     ##
+  ##                     Lin's estimator (1997)                  ##
   #################################################################
    
   # WORKING ESTIMATOR, BUT DUE TO SIMILARITY WITH BT IT IS NOT ACTIVE
@@ -293,7 +293,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
                                                "CC"  = CC_full,
                                                "BT"  = BT_full,
                                                "ZT"  = ZT_full, 
-                                               row.names = c("Estimate", "Variance", "SD", "95UCI", "95LCI")),
+                                               row.names = c("Estimate", "Variance", "SE", "95UCI", "95LCI")),
                   Survival = svl2
   )
   

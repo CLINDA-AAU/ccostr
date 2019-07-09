@@ -10,13 +10,13 @@ simCostData(n = 100, dist = "unif", censor = "light",
 \arguments{
 \item{n}{Number of individuals to simulate}
 
-\item{dist}{Survival distribution either "unif" = unif(0,10) or "exp" = exp (1/6)}
+\item{dist}{Survival distribution either "unif" = unif(0,10) o r "exp" = exp (1/6)}
 
-\item{censor}{Censoring can be either "light" ~ 25\% or "heavy" ~ 40\%, changes a bit depending on cdist}
+\item{censor}{Censoring "light" ~ 25\% or "heavy" ~ 40\%, changes a bit depending on cdist}
 
-\item{cdist}{Distribution of the censoring mechanism, "exp" exponential or "unif" uniform}
+\item{cdist}{Distribution used to censor, "exp" exponential or "unif" uniform}
 
-\item{L}{Number of years to summarize}
+\item{L}{Number of years to summarize over}
 }
 \value{
 Simulation of censored cost

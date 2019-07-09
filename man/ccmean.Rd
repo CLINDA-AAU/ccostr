@@ -2,13 +2,13 @@
 % Please edit documentation in R/ccmean.R
 \name{ccmean}
 \alias{ccmean}
-\title{Calculates estimates of mean cost with censored data}
+\title{Calculates estimates of the mean cost with censored data}
 \usage{
 ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
   delta = "delta", surv = "surv", L = NA, addInterPol = 0)
 }
 \arguments{
-\item{x}{A dataframe with columns: id, cost, start, stop, delta, and surv. If columns are named differently use the following parameters to specify them.}
+\item{x}{A dataframe with columns id, cost, start, stop, delta, surv. If columns are named differently use following parameters to specify them.}
 
 \item{id}{The id separating each individual}
 
@@ -22,7 +22,7 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
 
 \item{surv}{Survival}
 
-\item{L}{Limit. Mean cost is calculated up until L.}
+\item{L}{Limit. Mean cost is calculated up till L.}
 
 \item{addInterPol}{This parameter affects the interpolation of cost between two observed times. Defaults to zero.}
 }
@@ -30,19 +30,20 @@ ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
 An object of class "ccobject".
 }
 \description{
-This function calcutes the mean cost for right-censored cost 
+This function calculates the mean cost for right-censored cost 
 data over a period of L time units (days, months, years,...)
 }
 \details{
-The function returns 4 estimates. The first two are simple estimators and biased downwards, and included for comparison. The estimators are:
+The function returns four estimates. The first two are simple and biased
+downwards, and included for comparison. The estimates are:
 
-- AS: "Available Sample" - The simple sample mean
+- AS: "Available Sample estimator" - The simple sample mean
 
-- CC: "Complete Case" - The mean of fully observed cases
+- CC: "Complete Case estimator" - The mean of fully observed cases
 
-- BT: "Weighted Complete Case" - Bang and Tsiatis's estimator 
+- BT: "Weighted Complete Case estimator" - Bang and Tsiatis's estimator
 
-- ZT: "Weighted Available Sample" - Zhao and Tian's estimator
+- ZT: "Weighted Available estimator" - Zhao and Tian's estimator
 }
 \examples{
 hcost

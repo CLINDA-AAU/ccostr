@@ -12,7 +12,7 @@
 \item{...}{passthrough}
 }
 \value{
-A plot
+a plot
 }
 \description{
 Adding to the generic plot function
