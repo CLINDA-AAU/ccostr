@@ -70,7 +70,7 @@ kable(df_1)
 The estimated average cost for the dataset shown above, is now calculated using ccmean.
 ```{r message=FALSE}
 library(ccostr)
-df_1_res <- ccmean(df_1)
+df_1_res <- ccmean(df_1, L = 1000)
 df_1_res
 ```
 
