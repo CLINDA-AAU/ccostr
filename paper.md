@@ -2,13 +2,13 @@
 title: 'ccostr: An R package for estimating mean costs with censored data'
 authors:
 - affiliation: 1
-  name: Lars B�rty
+  name: Lars Børty
   orcid: 0000-0002-3715-8528
-- affiliation: 1, 2
-  name: Rasmus Br�ndum
+- affiliation: "1, 2"
+  name: Rasmus Brøndum
   orcid: 0000-0001-5537-6767
-- affiliation: 1, 2, 3
-  name: Martin B�gsted
+- affiliation: "1, 2, 3"
+  name: Martin Bøgsted
   orcid: 0000-0001-9192-1814
 bibliography: ccostrRef.bib
 output:
@@ -39,11 +39,11 @@ Previous implementations of these estimators into statistical software have been
 
 
 # Estimators
-The R package ccostr includes four different estimators of the mean cost. The average sample, $AS$, estimator simply averages the total cost per individual, disregarding censoring, giving a downwards biased estimate since costs after censoring are not accounted for. The complete case, $CC$, estimator averages the cost of only fully observed cases, biasing the estimate towards the average cost for individuals with shorter survival, typically downwards biased. These two naïve estimators are included as reference for the estimators accounting for censoring. For dealing with censored data we implement the $BT$ and $ZT$ estimators for handling situations with or without cost histories. 
+The R package ccostr includes four different estimators of the mean cost. The average sample, $AS$, estimator simply averages the total cost per individual, disregarding censoring, giving a downwards biased estimate since costs after censoring are not accounted for. The complete case, $CC$, estimator averages the cost of only fully observed cases, biasing the estimate towards the average cost for individuals with shorter survival, typically downwards biased. These two naÃ¯ve estimators are included as reference for the estimators accounting for censoring. For dealing with censored data we implement the $BT$ and $ZT$ estimators for handling situations with or without cost histories. 
 
 Assume we observe $\left\{(T_i, \Delta_i, [M_i(u), 0 \leq u\leq T_i]), i=1,...,n\right\}$, where $n$ is the number of individuals, $T_i$ is the observation time, $M_i(u)$ the cost until time $u$, and $\Delta_i$ is event indicator for individual $i$, with $\Delta_i = 1$ or $\Delta_i = 0$ for fully observed and censored cases, respectively. Then the estimates are given by:
 
-**Naïve "Available Sample estimator" and "Complete Case estimator":**
+**NaÃ¯ve "Available Sample estimator" and "Complete Case estimator":**
 $$\hat{\mu}_{AS} = \frac{\sum_{i=1}^nM_i}{n} \qquad \qquad \hat{\mu}_{CC} = \frac{\sum_{i=1}^n\Delta_iM_i}{\sum_{i=1}^n\Delta_i}.$$
 where $M_i = M_i (T_i)$ denotes the total cost.
 
