@@ -10,7 +10,6 @@ authors:
 - affiliation: "1, 2, 3"
   name: Martin Bøgsted
   orcid: 0000-0001-9192-1814
-bibliography: ccostrRef.bib
 output:
   html_document: default
   pdf_document: default
@@ -24,6 +23,8 @@ affiliations:
   name: Clinical Cancer Research Center, Aalborg University Hospital, Denmark
 - index: 3
   name: Department of Clinical Medicine, Aalborg University, Aalborg, Denmark
+date: 21 July 2019
+bibliography: ccostrRef.bib
 ---
 
 # Summary
@@ -35,7 +36,7 @@ Later @Bang2000 proposed another method based on inverse probability weighting, 
 
 In @Zhao2007 they demonstrated the similarity of the different estimators when using the distinct censoring times for defining intervals. They conclude that the following equalities hold for the estimates of mean cost: $\hat{\mu}_{BT} = \hat{\mu}_{LinT}$ and $\hat{\mu}_{LinA} = \hat{\mu}_{LinB} = \hat{\mu}_{BTp} = \hat{\mu}_{ZT}$. The estimators can be split into two classes: those that use and do not use cost history. As cost history contributes additional information these estimators are in general more efficient, and should be chosen if cost history is available.
 
-Previous implementations of these estimators into statistical software have been done in Stata, first by @Kim2011 who implemented the method from @Lin1997, and later by @Chen2015 who implemented the $BT$ and $ZT$ estimators, and in SAS by @Zhao2010. To our knowledge none of the methods have previously been implemented in an R package.
+Previous implementations of these estimators into statistical software have been done in Stata, first by @Kim2011 who implemented the method from @Lin1997, and later by @Chen2015 who implemented the $BT$ and $ZT$ estimators, and in {SAS} by @Zhao2010. To our knowledge none of the methods have previously been implemented in an R package.
 
 
 # Estimators
@@ -43,7 +44,7 @@ The R package ccostr includes four different estimators of the mean cost. The av
 
 Assume we observe $\left\{(T_i, \Delta_i, [M_i(u), 0 \leq u\leq T_i]), i=1,...,n\right\}$, where $n$ is the number of individuals, $T_i$ is the observation time, $M_i(u)$ the cost until time $u$, and $\Delta_i$ is event indicator for individual $i$, with $\Delta_i = 1$ or $\Delta_i = 0$ for fully observed and censored cases, respectively. Then the estimates are given by:
 
-**NaÃ¯ve "Available Sample estimator" and "Complete Case estimator":**
+**Naive "Available Sample estimator" and "Complete Case estimator":**
 $$\hat{\mu}_{AS} = \frac{\sum_{i=1}^nM_i}{n} \qquad \qquad \hat{\mu}_{CC} = \frac{\sum_{i=1}^n\Delta_iM_i}{\sum_{i=1}^n\Delta_i}.$$
 where $M_i = M_i (T_i)$ denotes the total cost.
 
