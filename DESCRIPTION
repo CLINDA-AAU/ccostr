@@ -4,7 +4,7 @@ Title: ccostr - Estimation of mean costs in censored data
 Version: 0.1.0
 Authors@R: c(
     person("Lars", "Boerty", email = "lars.borty@gmail.com", role = c("aut", "cre")),
-    person("Rasmus", "Broendum", role = "aut"))
+    person("Rasmus", "Broendum", role = "aut"),
     person("Martin", "Boegsted", role = "aut"))
 Description: This package implements various estimators for
     inferring the mean censored cost data.

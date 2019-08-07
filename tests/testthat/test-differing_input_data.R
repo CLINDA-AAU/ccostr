@@ -1,4 +1,7 @@
 
+context("Wrong input test of messages and warnings")
+library(ccostr)
+
 # data - history
 df_1 <- data.frame(id    = c("A", "B" ,"C"),
                    cost  = c(2544,4245,590),

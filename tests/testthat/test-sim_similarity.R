@@ -1,6 +1,8 @@
 
-setwd("~/GitHub/ccostr")
-load(file = "tests/testthat/StataDataTest.Rdata")
+context("Data simulated with ccostr copmared between ccostr and hcost")
+library(ccostr)
+
+load(system.file("extdata/StataDataTest.Rdata", package="ccostr"))
 
 # Comparison values are hardcoded from runs in Stata with the Hcost package
 # It is run with 8 files that represent differert simulation settings of 

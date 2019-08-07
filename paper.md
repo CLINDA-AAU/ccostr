@@ -36,7 +36,7 @@ Later @Bang2000 proposed another method based on inverse probability weighting, 
 
 In @Zhao2007 they demonstrated the similarity of the different estimators when using the distinct censoring times for defining intervals. They conclude that the following equalities hold for the estimates of mean cost: $\hat{\mu}_{BT} = \hat{\mu}_{LinT}$ and $\hat{\mu}_{LinA} = \hat{\mu}_{LinB} = \hat{\mu}_{BTp} = \hat{\mu}_{ZT}$. The estimators can be split into two classes: those that use and do not use cost history. As cost history contributes additional information these estimators are in general more efficient, and should be chosen if cost history is available.
 
-Previous implementations of these estimators into statistical software have been done in Stata, first by @Kim2011 who implemented the method from @Lin1997, and later by @Chen2015 who implemented the $BT$ and $ZT$ estimators, and in {SAS} by @Zhao2010. To our knowledge none of the methods have previously been implemented in an R package.
+Previous implementations of these estimators into statistical software have been done in Stata, first by @Kim2011 who implemented the method from @Lin1997, and later by @Chen2015 who implemented the $BT$ and $ZT$ estimators, and in SAS by @Zhao2010. To our knowledge none of the methods have previously been implemented in an R package.
 
 
 # Estimators

@@ -1,4 +1,7 @@
 
+context("Data from hcost copmared between ccostr and hcost")
+library(ccostr)
+
 # Comparison values are hardcoded from runs in Stata with the Hcost package
 # using their build-in dataset called example
 
