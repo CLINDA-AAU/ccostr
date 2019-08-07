@@ -2,8 +2,10 @@ Package: ccostr
 Type: Package
 Title: ccostr - Estimation of mean costs in censored data
 Version: 0.1.0
-Author: Lars Boerty Nielsen
-Maintainer: Lars Boerty Nielsen <lars.borty@gmail.com>
+Authors@R: c(
+    person("Lars", "Boerty", email = "lars.borty@gmail.com", role = c("aut", "cre")),
+    person("Rasmus", "Broendum", role = "aut"))
+    person("Martin", "Boegsted", role = "aut"))
 Description: This package implements various estimators for
     inferring the mean censored cost data.
 License: MIT + file LICENSE
