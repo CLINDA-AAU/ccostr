@@ -14,6 +14,8 @@ library(knitr)
 ```
 
 # ccostr
+[![status](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
+
 ccostr is an R package to calculate estimates of mean total cost in censored cost data, i.e. in situations where data are not fully observed within the study period.
 
 ## Installation
