@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README.Rmd$
+^paper.md$
+^ccostrRef.bib$
+^CODE_OF_CONDUCT.md$
+^fig
+^img

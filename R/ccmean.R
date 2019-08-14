@@ -14,13 +14,21 @@
 #'
 #' - ZT: "Weighted Available estimator" - Zhao and Tian's estimator
 #' 
+#' The function needs the following in a dataframe:
+#' 
+#' - id: The id separating each individual
+#' 
+#' - cost: The total cost, or if start and stop provided the specific cost
+#' 
+#' - start: Start of cost
+#' 
+#' - stop: End of cost, if one time cost then start = stop
+#' 
+#' - delta: Event variable, 1 = event, 0 = no event
+#' 
+#' - surv: Survival
+#' 
 #' @param x A dataframe with columns: id, cost, delta and surv. If Cost history is available it can be specified by: start and stop,
-#' @param id The id separating each individual
-#' @param cost The total cost, or if start and stop provided the specific cost
-#' @param start Start of cost
-#' @param stop End of cost, if one time cost then start = stop
-#' @param delta Event variable, 1 = event, 0 = no event
-#' @param surv Survival
 #' @param L Limit. Mean cost is calculated up till L, if not specified L = max(surv)
 #' @param addInterPol This parameter affects the interpolation of cost between two observed times. Defaults to zero.
 #' 
@@ -37,11 +45,12 @@
 #' 
 #' @export
 #' @importFrom Rdpack reprompt
+#' @importFrom rlang .data
 #' @importFrom data.table as.data.table := setDTthreads
 #' @import ggplot2 dplyr survival msm knitr tibble
 
 
-ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", delta = "delta", surv = "surv", L = max(x$surv), addInterPol = 0) {
+ccmean <- function(x, L = max(x$surv), addInterPol = 0) {
   
   if( !("id" %in% names(x)) | !("cost" %in% names(x)) | !("delta" %in% names(x)) | !("surv" %in% names(x)) ) 
     stop('Rename colums to: "id", "cost", "delta" and "surv"')
@@ -57,35 +66,35 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   if( ("start" %in% names(x)) & ("stop" %in% names(x)) ) { #With Cost history
     # Subset to estimation period	
     x$delta[x$surv >= L] <- 1
-    x$surv              <- pmin(x$surv, L)
-    x                   <- subset(x, start <= L)
+    x$surv               <- pmin(x$surv, L)
+    x                    <- subset(x, x$start <= L)
     
     # Adjust overlapping costs and arranging data
     x <- x %>% 
-      mutate(cost = ifelse(stop > surv, 
-                           cost * ((surv - start + addInterPol)/(stop - start + addInterPol)), 
-                           cost),
-             stop = pmin(stop, L)) %>% 
-      arrange(surv, delta)
+      mutate(cost = ifelse(.data$stop > .data$surv, 
+                           .data$cost * ((.data$surv - .data$start + addInterPol)/(.data$stop - .data$start + addInterPol)), 
+                           .data$cost),
+             stop = pmin(.data$stop, L)) %>% 
+      arrange(.data$surv, .data$delta)
     
     # Some calculations do not use cost history, so collapsed by ID
     xf <- x %>% 
-      group_by(id) %>% 
-      summarize(cost  = sum(cost, na.rm=T),
-                delta = last(delta),
-                surv  = first(surv))
+      group_by(.data$id) %>% 
+      summarize(cost  = sum(.data$cost, na.rm = TRUE),
+                delta = last(.data$delta),
+                surv  = first(.data$surv))
     
   } else if (length(x$id) > length(unique(x$id))) {
     stop('No cost history but non-unique id tags')
   } else { # Without cost history
     message('No cost history found, can be set by: "start" and "stop"')
     xf <- x %>% 
-      mutate(cost = ifelse(surv > L, 
-                           cost * ((L + addInterPol)/(surv + addInterPol)), 
-                           cost),
-             delta = as.numeric(surv >= L | delta == 1),
-             surv  = pmin(surv, L)) %>% 
-      arrange(surv, delta)
+      mutate(cost = ifelse(.data$surv > L, 
+                           .data$cost * ((L + addInterPol)/(.data$surv + addInterPol)), 
+                           .data$cost),
+             delta = as.numeric(.data$surv >= L | .data$delta == 1),
+             surv  = pmin(.data$surv, L)) %>% 
+      arrange(.data$surv, .data$delta)
   }
   
   
@@ -215,6 +224,11 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   t$mcostlsurv   <- 0
   t$mcostlsurvSq <- 0
   setDTthreads(1)
+  
+  surv <- NULL
+  start <- NULL # Hack to avoid NSE error in data.table
+  cost <- NULL
+  
   # For each censored individual the cost is calculated for longer 
   # surviving individuals up till time ti
   for(i in 1:nrow(t)){
@@ -279,7 +293,7 @@ ccmean <- function(x, id = "id", cost = "cost", start = "start", stop = "stop", 
   # Results of all estimators are compiled
   results <- list(Text      = c("ccostr - Estimates of mean cost with censored data"),
                   Data      = data.frame("Observations"   = nrow(x), 
-                                         "Induviduals"    = nrow(xf), 
+                                         "Individuals"    = nrow(xf), 
                                          "FullyObserved"  = sum(xf$delta == 1),
                                          "Limits"         = L,
                                          "TotalTime"      = sum(xf$surv),

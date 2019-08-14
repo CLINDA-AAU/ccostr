@@ -23,6 +23,7 @@ Imports: ggplot2,
         knitr,
         msm,
         forcats,
+        rlang,
         data.table,
         survival,
         Rdpack

@@ -10,6 +10,19 @@ load(system.file("extdata/StataDataTest.Rdata", package="ccostr"))
 # distribution, this gives 2^3 = 8 combinations:
 
 
+# Simulated files similarity ----------------------------------------------
+test_that("simCostData matches stored data", {
+  set.seed(03072019)
+  expect_equal(ule, simCostData(n = 1000, dist = "unif", censor = "light", cdist = "exp")$censoredCostHistory)
+  expect_equal(uhe, simCostData(n = 1000, dist = "unif", censor = "heavy", cdist = "exp")$censoredCostHistory)
+  expect_equal(ele, simCostData(n = 1000, dist = "exp",  censor = "light", cdist = "exp")$censoredCostHistory)
+  expect_equal(ehe, simCostData(n = 1000, dist = "exp",  censor = "heavy", cdist = "exp")$censoredCostHistory)
+  expect_equal(ulu, simCostData(n = 1000, dist = "unif", censor = "light", cdist = "unif")$censoredCostHistory)
+  expect_equal(uhu, simCostData(n = 1000, dist = "unif", censor = "heavy", cdist = "unif")$censoredCostHistory)
+  expect_equal(elu, simCostData(n = 1000, dist = "exp",  censor = "light", cdist = "unif")$censoredCostHistory)
+  expect_equal(ehu, simCostData(n = 1000, dist = "exp",  censor = "heavy", cdist = "unif")$censoredCostHistory)
+})
+
 # ULE ---------------------------------------------------------------------
 est.ule1 <- ccmean(ule, L = 9.969014, addInterPol = 1)
 est.ule2 <- ccmean(ule, L = 6,        addInterPol = 1)

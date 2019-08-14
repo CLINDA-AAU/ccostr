@@ -4,23 +4,10 @@
 \alias{ccmean}
 \title{Calculates estimates of the mean cost with censored data}
 \usage{
-ccmean(x, id = "id", cost = "cost", start = "start", stop = "stop",
-  delta = "delta", surv = "surv", L = max(x$surv), addInterPol = 0)
+ccmean(x, L = max(x$surv), addInterPol = 0)
 }
 \arguments{
 \item{x}{A dataframe with columns: id, cost, delta and surv. If Cost history is available it can be specified by: start and stop,}
-
-\item{id}{The id separating each individual}
-
-\item{cost}{The total cost, or if start and stop provided the specific cost}
-
-\item{start}{Start of cost}
-
-\item{stop}{End of cost, if one time cost then start = stop}
-
-\item{delta}{Event variable, 1 = event, 0 = no event}
-
-\item{surv}{Survival}
 
 \item{L}{Limit. Mean cost is calculated up till L, if not specified L = max(surv)}
 
@@ -44,6 +31,20 @@ downwards, and included for comparison. The estimates are:
 - BT: "Weighted Complete Case estimator" - Bang and Tsiatis's estimator
 
 - ZT: "Weighted Available estimator" - Zhao and Tian's estimator
+
+The function needs the following in a dataframe:
+
+- id: The id separating each individual
+
+- cost: The total cost, or if start and stop provided the specific cost
+
+- start: Start of cost
+
+- stop: End of cost, if one time cost then start = stop
+
+- delta: Event variable, 1 = event, 0 = no event
+
+- surv: Survival
 }
 \examples{
 hcost
