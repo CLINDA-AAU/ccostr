@@ -4,6 +4,7 @@ library(ccostr)
 
 load(system.file("extdata/StataDataTest.Rdata", package="ccostr"))
 
+
 # Comparison values are hardcoded from runs in Stata with the Hcost package
 # It is run with 8 files that represent differert simulation settings of 
 # heavy or light censoring and uniform og exponential survival and censoring
