@@ -73,7 +73,7 @@ head(hcost)
 ```
 
 
-The data shown above are simulated data from the Stata hcost package [@Chen2015]. Applying ccmean() on the data with a time limit of L = 1461, gives similar results as hcost. The option addInterpol adds a small value to the numerator and denominator of the fraction used for interpolation of cost at unobserved times, and is only used here to mimic the implementation in hcost, by default it is set to zero.
+The data shown above are simulated data from the Stata hcost package [@Chen2015]. Applying ccmean() on the data with a time limit of L = 1461, gives results identical to hcost in @Chen2015. The option addInterpol adds a small value to the numerator and denominator of the fraction used for interpolation of cost at unobserved times, and is only used here to mimic the implementation in hcost, by default it is set to zero.
 
 ```R
 c1 <- ccmean(hcost, L = 1461, addInterPol = 1)

@@ -9,8 +9,25 @@ Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://t
 [![codecov](https://codecov.io/gh/LarsHernandez/ccostr/branch/master/graph/badge.svg)](https://codecov.io/gh/LarsHernandez/ccostr)
 
 ccostr is an R package to calculate estimates of mean total cost in
-censored cost data, i.e. in situations where data are not fully observed
-within the study period.
+censored cost data. Censoring is a frequent obstacle when working with
+time to event data, as e.g. not all patients in a medical study can be
+observed until death. For estimating the distribution of time to event
+the Kaplan-Meier estimator is useful, but when estimating mean costs it
+is not, since costs, opposed to time, do typically not accumulate at a
+constant rate. Often costs accumulate a at a higher rate at the
+beginning (e.g. at diagnosis) and end (e.g. death).
+
+Several methods for estimating mean costs when working with censored
+data have been developed. Of note is the work by *(Lin et al, 1997)*,
+who proposed three different estimators. Later *(Bang and Tsiatis,
+2000)* proposed another method based on inverse probability weighting,
+where complete (fully observed) cases are weighted with the probability
+of being censored at their event time. *(Zhao and Tian, 2001)* proposed
+an extension of the \(BT\) estimator, \(ZT\), which includes cost
+history from both censored and fully observed cases.
+
+The primary function of ccostr is the implementation of the BT and ZT
+estimator
 
 ## Installation
 
@@ -34,15 +51,14 @@ these are:
 
 ## Explanation of the estimators
 
-The package calculates two conventional but wrong estimates of the mean
-cost. The first is the available sample (AS) estimator which divides
-total costs of all observations with the number of observations. This is
-correct if there is no censoring present. With censored data it is
-underestimating the real costs due to missing information. The second is
-the complete cases (CC) estimator, here all incomplete cases is filtered
-out. This creates a bias towards short cases as they have a greater
-chance of not being removed, and this would normally also give a
-downward bias.
+The package calculates two naive estimates of the mean cost. The first
+is the available sample (AS) estimator which divides total costs of all
+observations with the number of observations. This is correct if there
+is no censoring present. With censored data it is underestimating the
+real costs due to missing information. The second is the complete cases
+(CC) estimator, here all incomplete cases is filtered out. This creates
+a bias towards short cases as they have a greater chance of not being
+removed, and this would normally also give a downward bias.
 
 <p align="center">
 
@@ -124,7 +140,7 @@ df_1_res
 ## Simulation of data
 
 ccostr also includes a function for simulating data in the correct
-format based on the method from Lin et al. (1997).
+format based on the method from *(Lin et al, 1997)*.
 
 ``` r
 # With the uniform distribution the true mean is 40.000, see documentation for further details.
@@ -133,16 +149,16 @@ sim_res <- ccmean(sim$censoredCostHistory)
 sim_res
 #> ccostr - Estimates of mean cost with censored data
 #> 
-#>   Observations Induviduals FullyObserved  Limits TotalTime MaxSurvival
-#> N         4046        1000           631 9.97307   3527.43     9.97307
+#>   Observations Induviduals FullyObserved   Limits TotalTime MaxSurvival
+#> N         4178        1000           625 9.998808  3657.062    9.998808
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29685.15 187769.2 433.3234 28835.84 30534.46
-#> CC 38162.50 137279.3 370.5122 37436.30 38888.71
-#> BT 39816.81 141033.5 375.5442 39080.75 40552.88
-#> ZT 39841.52 141924.1 376.7281 39103.14 40579.91
+#> AS 29834.23 186494.6 431.8502 28987.81 30680.66
+#> CC 38655.39 119176.1 345.2189 37978.76 39332.02
+#> BT 40192.23 120704.8 347.4260 39511.28 40873.19
+#> ZT 40129.99 125233.0 353.8828 39436.38 40823.60
 #> 
-#> Mean survival time: 4.85 With SE: 0.1
+#> Mean survival time: 5.03 With SE: 0.1
 ```
 
 ## References

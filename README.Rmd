@@ -18,7 +18,11 @@ library(knitr)
 [![Build Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://travis-ci.org/LarsHernandez/ccostr)
 [![codecov](https://codecov.io/gh/LarsHernandez/ccostr/branch/master/graph/badge.svg)](https://codecov.io/gh/LarsHernandez/ccostr)
 
-ccostr is an R package to calculate estimates of mean total cost in censored cost data, i.e. in situations where data are not fully observed within the study period.
+ccostr is an R package to calculate estimates of mean total cost in censored cost data. Censoring is a frequent obstacle when working with time to event data, as e.g. not all patients in a medical study can be observed until death. For estimating the distribution of time to event the Kaplan-Meier estimator is useful, but when estimating mean costs it is not, since costs, opposed to time, do typically not accumulate at a constant rate. Often costs accumulate a at a higher rate at the beginning (e.g. at diagnosis) and end (e.g. death).
+
+Several methods for estimating mean costs when working with censored data have been developed. Of note is the work by *(Lin et al, 1997)*, who proposed three different estimators. Later *(Bang and Tsiatis, 2000)* proposed another method based on inverse probability weighting, where complete (fully observed) cases are weighted with the probability of being censored at their event time. *(Zhao and Tian, 2001)* proposed an extension of the $BT$ estimator, $ZT$, which includes cost history from both censored and fully observed cases.
+
+The primary function of ccostr is the implementation of the BT and ZT estimator
 
 ## Installation
 ccostr may be installed using the following command
@@ -38,7 +42,7 @@ The main function of ccostr is ccmean(), which implements 4 estimators, these ar
 
 
 ## Explanation of the estimators
-The package calculates two conventional but wrong estimates of the mean cost. The first is the available sample (AS) estimator which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information. The second is the complete cases  (CC) estimator, here all incomplete cases is filtered out. This creates a bias towards short cases as they have a greater chance of not being removed, and this would normally also give a downward bias.
+The package calculates two naive estimates of the mean cost. The first is the available sample (AS) estimator which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information. The second is the complete cases  (CC) estimator, here all incomplete cases is filtered out. This creates a bias towards short cases as they have a greater chance of not being removed, and this would normally also give a downward bias.
 
 <p align="center">
   <img src="img/f1.png" height="55"/>
@@ -79,7 +83,7 @@ df_1_res
 ```
 
 ## Simulation of data
-ccostr also includes a function for simulating data in the correct format based on the method from Lin et al. (1997).
+ccostr also includes a function for simulating data in the correct format based on the method from *(Lin et al, 1997)*.
 ```{r}
 # With the uniform distribution the true mean is 40.000, see documentation for further details.
 sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
