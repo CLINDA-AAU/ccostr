@@ -195,3 +195,9 @@ test_that("variance estimates sim ehu2", {
   expect_equal(round(est.ehu2$Estimates$BT[3],2), 354.33)
   expect_equal(round(est.ehu2$Estimates$ZT[3],2), 342.57)
 })
+
+
+
+
+
+
