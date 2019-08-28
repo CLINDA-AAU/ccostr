@@ -4,7 +4,16 @@
 #'
 #' @usage data(hcost)
 #'
-#' @format An object of Rdata
+#' @format A data frame with 9882 rows and 7 variables:
+#' \describe{
+#'   \item{id}{id seperating individuals}
+#'   \item{start}{start of specified cost}
+#'   \item{stop}{end of specified cost}
+#'   \item{cost}{cost in given period}
+#'   \item{trt}{treatment variable}
+#'   \item{delta}{event variable, 0 = censored}
+#'   \item{surv}{survival period}
+#' }
 #'
 #' @keywords datasets
 #'
