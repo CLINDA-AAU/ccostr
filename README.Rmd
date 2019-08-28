@@ -64,22 +64,21 @@ For all formulas above $n$ is number of individuals, $M_i$ and $\Delta_i$ are th
 
 ## Data format
 The accepted data format for ccmean is a dataframe as shown below with observations in rows. Columns detail the id for the observation, start and stop time for a time interval, the cost for the interval, the overall survival for the individual and a censoring indicator (1 = fully observed, 0 = censored). The dataset may contain multiple rows for the same individual detailing a cost history. If cost history is available, including it may lead to better estimates.
-```{r echo=FALSE}
-df_1 <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C", "D"),
-                   start = c(1, 30, 88, 18, 1, 67, 43),
-                   stop  = c(1, 82, 88, 198, 5, 88, 44),
-                   cost  = c(550, 1949, 45, 4245, 23, 567, 300),
-                   delta = c(0, 0, 0, 0, 1, 1, 1),
-                   surv  = c(343, 343, 343, 903, 445, 445, 652))
-kable(df_1)
+```{r echo=TRUE}
+df <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C", "D"),
+                 start = c(1, 30, 88, 18, 1, 67, 43),
+                 stop  = c(1, 82, 88, 198, 5, 88, 44),
+                 cost  = c(550, 1949, 45, 4245, 23, 567, 300),
+                 delta = c(0, 0, 0, 0, 1, 1, 1),
+                 surv  = c(343, 343, 343, 903, 445, 445, 652))
+kable(df)
 ```
 
 ## Estimating the mean cost
 The estimated average cost for the dataset shown above, is now calculated using ccmean.
 ```{r message=FALSE}
 library(ccostr)
-df_1_res <- ccmean(df_1, L = 1000)
-df_1_res
+ccmean(df, L = 1000)
 ```
 
 ## Simulation of data
@@ -87,8 +86,7 @@ ccostr also includes a function for simulating data in the correct format based 
 ```{r}
 # With the uniform distribution the true mean is 40.000, see documentation for further details.
 sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
-sim_res <- ccmean(sim$censoredCostHistory)
-sim_res
+ccmean(sim$censoredCostHistory)
 ```
 
 

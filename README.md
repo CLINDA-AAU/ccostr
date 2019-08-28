@@ -104,6 +104,16 @@ observed, 0 = censored). The dataset may contain multiple rows for the
 same individual detailing a cost history. If cost history is available,
 including it may lead to better estimates.
 
+``` r
+df <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C", "D"),
+                 start = c(1, 30, 88, 18, 1, 67, 43),
+                 stop  = c(1, 82, 88, 198, 5, 88, 44),
+                 cost  = c(550, 1949, 45, 4245, 23, 567, 300),
+                 delta = c(0, 0, 0, 0, 1, 1, 1),
+                 surv  = c(343, 343, 343, 903, 445, 445, 652))
+kable(df)
+```
+
 | id | start | stop | cost | delta | surv |
 | :- | ----: | ---: | ---: | ----: | ---: |
 | A  |     1 |    1 |  550 |     0 |  343 |
@@ -121,8 +131,7 @@ calculated using ccmean.
 
 ``` r
 library(ccostr)
-df_1_res <- ccmean(df_1, L = 1000)
-df_1_res
+ccmean(df, L = 1000)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals FullyObserved Limits TotalTime MaxSurvival
@@ -145,20 +154,19 @@ format based on the method from *(Lin et al, 1997)*.
 ``` r
 # With the uniform distribution the true mean is 40.000, see documentation for further details.
 sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
-sim_res <- ccmean(sim$censoredCostHistory)
-sim_res
+ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Induviduals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4178        1000           625 9.998808  3657.062    9.998808
+#> N         4164        1000           592 9.995016  3656.722    9.995016
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29834.23 186494.6 431.8502 28987.81 30680.66
-#> CC 38655.39 119176.1 345.2189 37978.76 39332.02
-#> BT 40192.23 120704.8 347.4260 39511.28 40873.19
-#> ZT 40129.99 125233.0 353.8828 39436.38 40823.60
+#> AS 29438.20 191796.3 437.9455 28579.82 30296.57
+#> CC 38980.98 135293.6 367.8228 38260.05 39701.91
+#> BT 40914.39 136711.2 369.7447 40189.69 41639.09
+#> ZT 40925.29 140572.4 374.9299 40190.42 41660.15
 #> 
-#> Mean survival time: 5.03 With SE: 0.1
+#> Mean survival time: 5.2 With SE: 0.11
 ```
 
 ## References
