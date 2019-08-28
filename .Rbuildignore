@@ -7,3 +7,4 @@
 ^fig
 ^img
 ^data-raw$
+^\.travis\.yml$
