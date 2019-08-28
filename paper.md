@@ -60,6 +60,7 @@ where  $\overline{M(C_i)}$ is the average of cost until time $C_i$ among individ
 We have implemented the functions above in an R package, ccostr, and made it available at [https://github.com/HaemAalborg/ccostR](https://github.com/HaemAalborg/ccostR). The package includes two main functions, the first is ccmean() which calculates the mean cost until a time limit, specified with the parameter "L= ", and takes as input a dataframe in the following format:
 
 ```R
+library(ccostr)
 head(hcost)
 ```
 ```
@@ -76,8 +77,7 @@ head(hcost)
 The data shown above are simulated data from the Stata hcost package [@Chen2015]. Applying ccmean() on the data with a time limit of L = 1461, gives results identical to hcost in @Chen2015. The option addInterpol adds a small value to the numerator and denominator of the fraction used for interpolation of cost at unobserved times, and is only used here to mimic the implementation in hcost, by default it is set to zero.
 
 ```R
-c1 <- ccmean(hcost, L = 1461, addInterPol = 1)
-c1
+ccmean(hcost, L = 1461, addInterPol = 1)
 ```
 ```
 ## ccostr - Estimates of mean cost with censored data
@@ -115,6 +115,7 @@ head(sim$censoredCostHistory)
 The true mean cost of the simulated dataset is 40,000 [@Lin1997]. Applying the ccmean function to the simulated data yields the result below. We here present the result graphically using the built in plotting function for an object with class ccobject.
 
 ```R
+library(ggplot2)
 simMean <- ccmean(sim$censoredCostHistory)
 plot(simMean) + 
   geom_hline(yintercept = 40000, linetype = "dotted", size = 1) +
