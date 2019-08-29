@@ -52,46 +52,94 @@ test_that("simCostData matches stored data", {
 
 
 
+# Unif survival with unif censoring ---------------------------------------
+
 est.uu1 <- ccmean(uu, L = max(uu$surv), addInterPol = 1)
 est.uu2 <- ccmean(uu, L = 6,            addInterPol = 1)
 
 test_that("mean estimates sim uu1", {
-  expect_equal(round(est.uu1$First[,3],2),     42066.47)
-  expect_equal(round(est.uu1$First[,4],2),     40902.73)
+  expect_equal(round(est.uu1$First[,3],2),     38317.85)
+  expect_equal(round(est.uu1$First[,4],2),     37294.01)
 })
-#test_that("variance estimates sim uu1", {
-#  expect_equal(round(est.uu1$Estimates$BT[3],2), 983.72)
-#  expect_equal(round(est.uu1$Estimates$ZT[3],2), 1126.94)
-#})
+test_that("variance estimates sim uu1", {
+  expect_equal(round(est.uu1$Estimates$BT[3],2), 2036.03)
+  expect_equal(round(est.uu1$Estimates$ZT[3],2), 2314.78)
+})
 test_that("mean estimates sim uu2", {
-  expect_equal(round(est.uu2$First[,3],2),     32788.89)
-  expect_equal(round(est.uu2$First[,4],2),     32530.46)
+  expect_equal(round(est.uu2$First[,3],2),     32793.79)
+  expect_equal(round(est.uu2$First[,4],2),     32394.49)
 })
-#test_that("variance estimates sim uu2", {
-#  expect_equal(round(est.uu2$Estimates$BT[3],2), 667.77)
-#  expect_equal(round(est.uu2$Estimates$ZT[3],2), 672.36)
-#})
+test_that("variance estimates sim uu2", {
+  expect_equal(round(est.uu2$Estimates$BT[3],2), 1438.65)
+  expect_equal(round(est.uu2$Estimates$ZT[3],2), 1464.40)
+})
 
 
+# Exp survival with exp censoring -----------------------------------------
 
 est.ee1 <- ccmean(ee, L = max(ee$surv), addInterPol = 1)
 est.ee2 <- ccmean(ee, L = 6,            addInterPol = 1)
 
 test_that("mean estimates sim ee1", {
-  expect_equal(round(est.ee1$First[,3],2),     53564.21)
-  expect_equal(round(est.ee1$First[,4],2),     52200.17)
+  expect_equal(round(est.ee1$First[,3],2),     44623.56)
+  expect_equal(round(est.ee1$First[,4],2),     43612.05)
 })
-#test_that("variance estimates sim ee1", {
-#  expect_equal(round(est.ee1$Estimates$BT[3],2), 1498.71)
-#  expect_equal(round(est.ee1$Estimates$ZT[3],2), 1475.57)
-#})
+test_that("variance estimates sim ee1", {
+  expect_equal(round(est.ee1$Estimates$BT[3],2), 3443.89)
+  expect_equal(round(est.ee1$Estimates$ZT[3],2), 3386.95)
+})
 test_that("mean estimates sim ee2", {
-  expect_equal(round(est.ee2$First[,3],2),     30143.84)
-  expect_equal(round(est.ee2$First[,4],2),     29738.70)
+  expect_equal(round(est.ee2$First[,3],2),     31661.38)
+  expect_equal(round(est.ee2$First[,4],2),     31277.18)
 })
-#test_that("variance estimates sim ee2", {
-#  expect_equal(round(est.ee2$Estimates$BT[3],2), 643.49)
-#  expect_equal(round(est.ee2$Estimates$ZT[3],2), 628.31)
-#})
+test_that("variance estimates sim ee2", {
+  expect_equal(round(est.ee2$Estimates$BT[3],2), 1801.40)
+  expect_equal(round(est.ee2$Estimates$ZT[3],2), 1747.04)
+})
 
 
+
+# Exp survival with unif censoring ----------------------------------------
+
+est.eu1 <- ccmean(eu, L = max(eu$surv), addInterPol = 1)
+est.eu2 <- ccmean(eu, L = 6,            addInterPol = 1)
+
+test_that("mean estimates sim eu1", {
+  expect_equal(round(est.eu1$First[,3],2),     36438.81)
+  expect_equal(round(est.eu1$First[,4],2),     35521.02)
+})
+test_that("variance estimates sim eu1", {
+  expect_equal(round(est.eu1$Estimates$BT[3],2), 1895.46)
+  expect_equal(round(est.eu1$Estimates$ZT[3],2), 1955.29)
+})
+test_that("mean estimates sim eu2", {
+  expect_equal(round(est.eu2$First[,3],2),     32129.22)
+  expect_equal(round(est.eu2$First[,4],2),     31492.89)
+})
+test_that("variance estimates sim eu2", {
+  expect_equal(round(est.eu2$Estimates$BT[3],2), 1808.54)
+  expect_equal(round(est.eu2$Estimates$ZT[3],2), 1734.09)
+})
+
+
+# Unif survival with exp censoring ----------------------------------------
+
+est.ue1 <- ccmean(ue, L = max(ue$surv), addInterPol = 1)
+est.ue2 <- ccmean(ue, L = 6,            addInterPol = 1)
+
+test_that("mean estimates sim ue1", {
+  expect_equal(round(est.ue1$First[,3],2),     39911.42)
+  expect_equal(round(est.ue1$First[,4],2),     39264.93)
+})
+test_that("variance estimates sim ue1", {
+  expect_equal(round(est.ue1$Estimates$BT[3],2), 1619.20)
+  expect_equal(round(est.ue1$Estimates$ZT[3],2), 1748.23)
+})
+test_that("mean estimates sim ue2", {
+  expect_equal(round(est.ue2$First[,3],2),     31539.04)
+  expect_equal(round(est.ue2$First[,4],2),     31199.79)
+})
+test_that("variance estimates sim ue2", {
+  expect_equal(round(est.ue2$Estimates$BT[3],2), 1520.39)
+  expect_equal(round(est.ue2$Estimates$ZT[3],2), 1511.76)
+})
