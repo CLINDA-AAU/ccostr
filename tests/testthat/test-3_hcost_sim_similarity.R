@@ -2,7 +2,7 @@
 context("Data simulated with ccostr copmared between ccostr and hcost")
 library(ccostr)
 
-load(system.file("extdata/StataDataTest.Rdata", package="ccostr"))
+load(system.file("extdata/StataDataTest.Rdata", package = "ccostr"))
 
 
 # Comparison values are hardcoded from runs in Stata with the Hcost package
