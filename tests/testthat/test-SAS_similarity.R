@@ -10,6 +10,35 @@ load(system.file("extdata/SASDataTest.Rdata", package = "ccostr"))
 # heavy or light censoring and uniform og exponential survival and censoring
 # distribution, this gives 2^3 = 8 combinations:
 
+# Code to generate SAS files
+
+#uu.surv <- select(uu, id, delta, surv) %>% group_by(id) %>% summarize(delta = first(delta), surv = first(surv))
+#uu.cost <- select(uu, id, start, stop, cost) %>% rename(cid = id)
+#
+#ue.surv <- select(ue, id, delta, surv) %>% group_by(id) %>% summarize(delta = first(delta), surv = first(surv))
+#ue.cost <- select(ue, id, start, stop, cost) %>% rename(cid = id)
+#
+#eu.surv <- select(eu, id, delta, surv) %>% group_by(id) %>% summarize(delta = first(delta), surv = first(surv))
+#eu.cost <- select(eu, id, start, stop, cost) %>% rename(cid = id)
+#
+#ee.surv <- select(ee, id, delta, surv) %>% group_by(id) %>% summarize(delta = first(delta), surv = first(surv))
+#ee.cost <- select(ee, id, start, stop, cost) %>% rename(cid = id)
+#
+#
+## write out text datafile and
+## an SAS program to read it
+#library(foreign)
+#write.foreign(uu.surv, "inst/extdata/SAS/uusurv.txt", "inst/extdata/SAS/uusurv.sas",   package = "SAS")
+#write.foreign(uu.cost, "inst/extdata/SAS/uucost.txt", "inst/extdata/SAS/uucost.sas",   package = "SAS")
+#
+#write.foreign(ue.surv, "inst/extdata/SAS/uesurv.txt", "inst/extdata/SAS/uesurv.sas",   package = "SAS")
+#write.foreign(ue.cost, "inst/extdata/SAS/uecost.txt", "inst/extdata/SAS/uecost.sas",   package = "SAS")
+#
+#write.foreign(eu.surv, "inst/extdata/SAS/eusurv.txt", "inst/extdata/SAS/eusurv.sas",   package = "SAS")
+#write.foreign(eu.cost, "inst/extdata/SAS/eucost.txt", "inst/extdata/SAS/eucost.sas",   package = "SAS")
+#
+#write.foreign(ee.surv, "inst/extdata/SAS/eesurv.txt", "inst/extdata/SAS/eesurv.sas",   package = "SAS")
+#write.foreign(ee.cost, "inst/extdata/SAS/eecost.txt", "inst/extdata/SAS/eecost.sas",   package = "SAS")
 
 # Simulated files similarity ----------------------------------------------
 
