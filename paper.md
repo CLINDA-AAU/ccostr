@@ -28,13 +28,13 @@ bibliography: ccostrRef.bib
 ---
 
 # Summary
-Censoring is a frequent obstacle when working with time to event data, as e.g. not all patients in a medical study can be observed until death. For estimating the distribution of time to event the Kaplan-Meier estimator is useful, but when estimating mean costs it is not, since costs, opposed to time, do typically not accumulate at a constant rate. Often costs accumulate a at a higher rate at the beginning (e.g. at diagnosis) and end (e.g. death) of the study.
+Censoring is a frequent obstacle when working with time to event data, as e.g. not all patients in a medical study can be observed until death. For estimating the distribution of time to event the Kaplan-Meier estimator is useful, but when estimating mean costs it is not, since costs, as opposed to time, typically don't accumulate at a constant rate. Often costs accumulate at a higher rate at the beginning (e.g. at diagnosis) and end (e.g. death) of the study.
 
 Several methods for estimating mean costs when working with censored data have been developed. Of note is the work by @Lin1997, who proposed three different estimators. The first, $LinT$, partitions the time period into small intervals and then estimates the mean costs by weighting the mean total cost of fully observed individuals in the interval with the probability of dying in the interval. The two others, $LinA$ and $LinB$, weight the mean total cost within each interval with the probability of being alive at respectively the start or end of the interval.
 
 Later @Bang2000 proposed another method based on inverse probability weighting, where complete (fully observed) cases are weighted with the probability of being censored at their event time. Two estimators were presented: the simple weighted estimator, $BT$, using total costs for fully observed cases, and the partitioned estimator, $BTp$, utilizing cost history. @Zhao2001 proposed an extension of the $BT$ estimator, $ZT$, which includes cost history from both censored and fully observed cases. The $ZT$ estimator was later simplified by @Pfeifer2005.
 
-In @Zhao2007 they demonstrated the similarity of the different estimators when using the distinct censoring times for defining intervals. They conclude that the following equalities hold for the estimates of mean cost: $\hat{\mu}_{BT} = \hat{\mu}_{LinT}$ and $\hat{\mu}_{LinA} = \hat{\mu}_{LinB} = \hat{\mu}_{BTp} = \hat{\mu}_{ZT}$. The estimators can be split into two classes: those that use and do not use cost history. As cost history contributes additional information these estimators are in general more efficient, and should be chosen if cost history is available.
+In @Zhao2007 they demonstrated the similarity of the different estimators when using the distinct censoring times for defining intervals. They concluded that the following equalities hold for the estimates of mean cost: $\hat{\mu}_{BT} = \hat{\mu}_{LinT}$ and $\hat{\mu}_{LinA} = \hat{\mu}_{LinB} = \hat{\mu}_{BTp} = \hat{\mu}_{ZT}$. The estimators can be split into two classes: those that use and those that do not use cost history. As cost history contributes additional information these estimators are in general more efficient, and should be chosen if cost history is available.
 
 Previous implementations of these estimators into statistical software have been done in Stata, first by @Kim2011 who implemented the method from @Lin1997, and later by @Chen2015 who implemented the $BT$ and $ZT$ estimators, and in SAS by @Zhao2010. To our knowledge none of the methods have previously been implemented in an R package.
 
@@ -57,7 +57,7 @@ $$\hat{\mu}_{ZT} =\frac{1}{n}\sum_{i=1}^n\Bigg[\Delta_i\frac{M_i}{\hat{K}(T_i)} 
 where  $\overline{M(C_i)}$ is the average of cost until time $C_i$ among individuals with event time later than $C_i$, and $\hat{K}(C_i)$ is the Kaplan-Meier estimator of the censoring probability at the time $T_i$.
 
 # Application
-We have implemented the functions above in an R package, ccostr, and made it available at [https://github.com/HaemAalborg/ccostR](https://github.com/HaemAalborg/ccostR). The package includes two main functions, the first is ccmean() which calculates the mean cost until a time limit, specified with the parameter "L= ", and takes as input a dataframe in the following format:
+We have implemented the functions above in an R package, ccostr. The package includes two main functions, the first is ccmean() which calculates the mean cost until a time limit, specified with the parameter "L= ", and takes as input a data frame in the following format:
 
 ```R
 library(ccostr)
@@ -112,7 +112,7 @@ head(sim$censoredCostHistory)
 ```
 
 
-The true mean cost of the simulated dataset is 40,000 [@Lin1997]. Applying the ccmean function to the simulated data yields the result below. We here present the result graphically using the built in plotting function for an object with class ccobject.
+The true mean cost of the simulated dataset is 40,000 [@Lin1997]. Applying the ccmean function to the simulated data yields the result below. We here present the result graphically using the built-in plotting function for an object of the ccobject class.
 
 ```R
 library(ggplot2)
