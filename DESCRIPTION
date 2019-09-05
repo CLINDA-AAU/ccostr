@@ -1,13 +1,15 @@
 Package: ccostr
 Type: Package
-Title: ccostr - Estimation of mean costs in censored data
+Title: Estimation of Mean Costs in Censored Data
 Version: 0.1.0
 Authors@R: c(
-    person("Lars", "Boerty", email = "lars.borty@gmail.com", role = c("aut", "cre")),
-    person("Rasmus", "Broendum", role = "aut"),
-    person("Martin", "Boegsted", role = "aut"))
-Description: This package implements various estimators for
-    inferring the mean censored cost data.
+    person("Lars", "Boerty", email = "lars.borty@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3715-8528")),
+    person("Rasmus", "Broendum", role = "aut", comment = c(ORCID = "0000-0001-5537-6767")),
+    person("Martin", "Boegsted", role = "aut", comment = c(ORCID = "0000-0001-9192-1814")))
+Description: Implementation of estimators for inferring 
+    the mean of censored cost data. including 
+    ZT from Bang and Tsiatis (2000) <doi:10.1093/biomet/87.2.329> and 
+    BT from Zhao and Tian (2001) < doi:10.1111/j.0006-341X.2001.01002.x>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
