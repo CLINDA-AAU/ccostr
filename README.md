@@ -6,7 +6,7 @@
 [![status](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
 [![Build
 Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://travis-ci.org/LarsHernandez/ccostr)
-[![codecov](https://codecov.io/gh/LarsHernandez/ccostr/branch/master/graph/badge.svg)](https://codecov.io/gh/LarsHernandez/ccostr)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
 
 ccostr is an R package to calculate estimates of mean total cost in
 censored cost data. Censoring is a frequent obstacle when working with
@@ -131,10 +131,12 @@ calculated using ccmean.
 
 ``` r
 library(ccostr)
+#> Warning: replacing previous import 'dplyr::first' by 'data.table::first'
+#> when loading 'ccostr'
 ccmean(df, L = 1000)
 #> ccostr - Estimates of mean cost with censored data
 #> 
-#>   Observations Induviduals FullyObserved Limits TotalTime MaxSurvival
+#>   Observations Individuals FullyObserved Limits TotalTime MaxSurvival
 #> N            7           4             2   1000      2343         903
 #> 
 #>     Estimate  Variance       SE    0.95LCL  0.95UCL
@@ -157,16 +159,16 @@ sim <- simCostData(n = 1000, dist = "unif", censor = "heavy", L = 10)
 ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
-#>   Observations Induviduals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4164        1000           592 9.995016  3656.722    9.995016
+#>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
+#> N         4109        1000           593 9.970939  3591.758    9.970939
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29438.20 191796.3 437.9455 28579.82 30296.57
-#> CC 38980.98 135293.6 367.8228 38260.05 39701.91
-#> BT 40914.39 136711.2 369.7447 40189.69 41639.09
-#> ZT 40925.29 140572.4 374.9299 40190.42 41660.15
+#> AS 29324.66 187561.2 433.0833 28475.82 30173.51
+#> CC 38682.71 132458.2 363.9480 37969.37 39396.04
+#> BT 40458.67 139632.8 373.6747 39726.27 41191.08
+#> ZT 40504.96 141481.2 376.1398 39767.73 41242.20
 #> 
-#> Mean survival time: 5.2 With SE: 0.11
+#> Mean survival time: 5.1 With SE: 0.11
 ```
 
 ## References
