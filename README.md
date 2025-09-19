@@ -70,9 +70,9 @@ $$\hat{\mu}_{BT} = \frac{1}{n} \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}$$
 If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
-$$\hat{\mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[ 
-\Delta_i \frac{M_i}{\hat{K}(T_i)} 
-+ (1 - \Delta_i) \frac{\{ M_i - \overline{M(C_i)} \}}{\hat{K}(C_i)} 
+$$\hat{ \mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[ 
+\Delta_i \frac{M_i}{ \hat{K}(T_i)} 
++ (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}}{ \hat{K}(C_i)} 
 \right]$$
 
 For all formulas above $n$ is number of individuals, $M_i$ and
@@ -150,15 +150,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4240        1000           590 9.969404  3737.974    9.969404
+#> N         3992        1000           627 9.938743  3488.231    9.938743
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29410.15 188193.2 433.8124 28559.88 30260.42
-#> CC 39083.76 123879.0 351.9645 38393.91 39773.61
-#> BT 40704.19 128670.1 358.7061 40001.12 41407.25
-#> ZT 40475.94 133238.8 365.0189 39760.50 41191.37
+#> AS 29613.66 173264.1 416.2501 28797.81 30429.51
+#> CC 37831.24 121576.8 348.6787 37147.83 38514.65
+#> BT 39552.04 129963.0 360.5038 38845.45 40258.63
+#> ZT 39479.50 132129.4 363.4961 38767.05 40191.95
 #> 
-#> Mean survival time: 5.25 With SE: 0.1
+#> Mean survival time: 4.79 With SE: 0.1
 ```
 
 ## References
