@@ -65,7 +65,8 @@ $$\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^
 The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the
 complete case with the probability of censoring at the event time.
 
-$$\hat{\mu}_{BT} = \frac{1}{n}\sum^n_{i=1}\frac{\Delta_i M_i}{\hat{K}(T_i)}$$
+$$\hat{\mu}_{BT} = \frac{1}{n} \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}$$
+
 If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
@@ -149,15 +150,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4019        1000           597 9.972284  3500.114    9.972284
+#> N         4240        1000           590 9.969404  3737.974    9.969404
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 28962.27 190278.9 436.2097 28107.30 29817.24
-#> CC 38326.56 139932.4 374.0753 37593.37 39059.75
-#> BT 40218.65 150093.2 387.4186 39459.31 40977.99
-#> ZT 40154.14 149684.3 386.8905 39395.83 40912.44
+#> AS 29410.15 188193.2 433.8124 28559.88 30260.42
+#> CC 39083.76 123879.0 351.9645 38393.91 39773.61
+#> BT 40704.19 128670.1 358.7061 40001.12 41407.25
+#> ZT 40475.94 133238.8 365.0189 39760.50 41191.37
 #> 
-#> Mean survival time: 5.01 With SE: 0.11
+#> Mean survival time: 5.25 With SE: 0.1
 ```
 
 ## References

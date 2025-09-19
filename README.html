@@ -687,10 +687,10 @@ being removed, and this would normally also give a downward bias.</p>
 <p>The BT estimator <em>(Bang and Tsiatis, 2000)</em>, weights the cost
 for the complete case with the probability of censoring at the event
 time.</p>
-<p><span class="math display">\[\hat{\mu}_{BT} =
-\frac{1}{n}\sum^n_{i=1}\frac{\Delta_i M_i}{\hat{K}(T_i)}\]</span> If
-cost history is present, the above estimator may be improved by using
-the ZT estimator <em>(Zhao and Tian, 2001)</em>.</p>
+<p><span class="math display">\[\hat{\mu}_{BT} = \frac{1}{n}
+\sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}\]</span></p>
+<p>If cost history is present, the above estimator may be improved by
+using the ZT estimator <em>(Zhao and Tian, 2001)</em>.</p>
 <p>$$\hat{\mu}<em>{ZT} = \frac{1}{n} \sum</em>{i=1}^{n} \left[ \Delta_i
 \frac{M_i}{\hat{K}(T_i)}</p>
 <ul>
@@ -821,15 +821,15 @@ format based on the method from <em>(Lin et al, 1997)</em>.</p>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; ccostr - Estimates of mean cost with censored data</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; N         4019        1000           597 9.972284  3500.114    9.972284</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; N         4240        1000           590 9.969404  3737.974    9.969404</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;    Estimate Variance       SE  0.95LCL  0.95UCL</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; AS 28962.27 190278.9 436.2097 28107.30 29817.24</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; CC 38326.56 139932.4 374.0753 37593.37 39059.75</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; BT 40218.65 150093.2 387.4186 39459.31 40977.99</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; ZT 40154.14 149684.3 386.8905 39395.83 40912.44</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; AS 29410.15 188193.2 433.8124 28559.88 30260.42</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; CC 39083.76 123879.0 351.9645 38393.91 39773.61</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; BT 40704.19 128670.1 358.7061 40001.12 41407.25</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; ZT 40475.94 133238.8 365.0189 39760.50 41191.37</span></span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Mean survival time: 5.01 With SE: 0.11</span></span></code></pre></div>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Mean survival time: 5.25 With SE: 0.1</span></span></code></pre></div>
 <h2 id="references">References</h2>
 <ol style="list-style-type: decimal">
 <li><p>Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. (1997)
