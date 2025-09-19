@@ -6,7 +6,7 @@
 [![status](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
 [![Build
 Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://travis-ci.org/LarsHernandez/ccostr)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
 
 ccostr is an R package to calculate estimates of mean total cost in
 censored cost data. Censoring is a frequent obstacle when working with
@@ -23,8 +23,8 @@ who proposed three different estimators. Later *(Bang and Tsiatis,
 2000)* proposed another method based on inverse probability weighting,
 where complete (fully observed) cases are weighted with the probability
 of being censored at their event time. *(Zhao and Tian, 2001)* proposed
-an extension of the \(BT\) estimator, \(ZT\), which includes cost
-history from both censored and fully observed cases.
+an extension of the $BT$ estimator, $ZT$, which includes cost history
+from both censored and fully observed cases.
 
 The primary function of ccostr is the implementation of the BT and ZT
 estimator
@@ -44,10 +44,10 @@ devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--n
 The main function of ccostr is ccmean(), which implements 4 estimators,
 these are:
 
-  - “Available Sample” estimator
-  - “Complete Case” estimator
-  - Bang and Tsiatis’s estimator: *(Bang and Tsiatis, 2000)*
-  - Zhao and Tian’s estimator: *(Zhao and Tian, 2001)*
+- “Available Sample” estimator
+- “Complete Case” estimator
+- Bang and Tsiatis’s estimator: *(Bang and Tsiatis, 2000)*
+- Zhao and Tian’s estimator: *(Zhao and Tian, 2001)*
 
 ## Explanation of the estimators
 
@@ -60,39 +60,27 @@ real costs due to missing information. The second is the complete cases
 a bias towards short cases as they have a greater chance of not being
 removed, and this would normally also give a downward bias.
 
-<p align="center">
-
-<img src="img/f1.png" height="55"/>
-
-</p>
+$$\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^n_{i=1}\Delta_i M_i}{\sum^n_{i=1}\Delta_i}$$
 
 The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the
 complete case with the probability of censoring at the event time.
 
-<p align="center">
-
-<img src="img/f2.png" height="60"/>
-
-</p>
+$$\hat{\mu}_{BT} = \frac{1}{n} \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}$$
 
 If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
-<p align="center">
+$$\hat{\mu}_{ZT} = \frac{1}{n} \sum^n_{i=1} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} + (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)} \right]$$
 
-<img src="img/f3.png" height="65"/>
-
-</p>
-
-For all formulas above \(n\) is number of individuals, \(M_i\) and
-\(\Delta_i\) are the total cost and event indicator for individual
-\(i\), with \(\Delta_i = 1\) or \(\Delta_i = 0\) for respectively fully
-observed and censored cases. \(\hat{K}(T_i)\) is the Kaplan-Meier
-estimator of the probability of censoring at time \(T_i\), i.e. the time
-of event for individual \(i\). \(\overline{M(C_i)}\) is the average of
-cost until time \(C_i\) among individuals with event time later than
-\(C_i\), and \(\hat{K}(C_i)\) is the Kaplan-Meier estimator of the
-censoring probability at the time \(T_i\).
+For all formulas above $n$ is number of individuals, $M_i$ and
+$\Delta_i$ are the total cost and event indicator for individual $i$,
+with $\Delta_i = 1$ or $\Delta_i = 0$ for respectively fully observed
+and censored cases. $\hat{K}(T_i)$ is the Kaplan-Meier estimator of the
+probability of censoring at time $T_i$, i.e. the time of event for
+individual $i$. $\overline{M(C_i)}$ is the average of cost until time
+$C_i$ among individuals with event time later than $C_i$, and
+$\hat{K}(C_i)$ is the Kaplan-Meier estimator of the censoring
+probability at the time $T_i$.
 
 ## Data format
 
@@ -114,15 +102,15 @@ df <- data.frame(id    = c("A", "A", "A", "B" ,"C", "C", "D"),
 kable(df)
 ```
 
-| id | start | stop | cost | delta | surv |
-| :- | ----: | ---: | ---: | ----: | ---: |
-| A  |     1 |    1 |  550 |     0 |  343 |
-| A  |    30 |   82 | 1949 |     0 |  343 |
-| A  |    88 |   88 |   45 |     0 |  343 |
-| B  |    18 |  198 | 4245 |     0 |  903 |
-| C  |     1 |    5 |   23 |     1 |  445 |
-| C  |    67 |   88 |  567 |     1 |  445 |
-| D  |    43 |   44 |  300 |     1 |  652 |
+| id  | start | stop | cost | delta | surv |
+|:----|------:|-----:|-----:|------:|-----:|
+| A   |     1 |    1 |  550 |     0 |  343 |
+| A   |    30 |   82 | 1949 |     0 |  343 |
+| A   |    88 |   88 |   45 |     0 |  343 |
+| B   |    18 |  198 | 4245 |     0 |  903 |
+| C   |     1 |    5 |   23 |     1 |  445 |
+| C   |    67 |   88 |  567 |     1 |  445 |
+| D   |    43 |   44 |  300 |     1 |  652 |
 
 ## Estimating the mean cost
 
@@ -131,8 +119,7 @@ calculated using ccmean.
 
 ``` r
 library(ccostr)
-#> Warning: replacing previous import 'dplyr::first' by 'data.table::first'
-#> when loading 'ccostr'
+#> Warning: package 'ccostr' was built under R version 4.5.1
 ccmean(df, L = 1000)
 #> ccostr - Estimates of mean cost with censored data
 #> 
@@ -160,15 +147,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4109        1000           593 9.970939  3591.758    9.970939
+#> N         4013        1000           620 9.970404  3497.012    9.970404
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29324.66 187561.2 433.0833 28475.82 30173.51
-#> CC 38682.71 132458.2 363.9480 37969.37 39396.04
-#> BT 40458.67 139632.8 373.6747 39726.27 41191.08
-#> ZT 40504.96 141481.2 376.1398 39767.73 41242.20
+#> AS 29293.67 179300.9 423.4394 28463.73 30123.62
+#> CC 37964.57 119893.4 346.2562 37285.91 38643.23
+#> BT 39726.52 125363.6 354.0673 39032.55 40420.49
+#> ZT 39648.41 132217.6 363.6174 38935.72 40361.10
 #> 
-#> Mean survival time: 5.1 With SE: 0.11
+#> Mean survival time: 4.86 With SE: 0.11
 ```
 
 ## References
