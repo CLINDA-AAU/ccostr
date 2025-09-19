@@ -44,21 +44,23 @@ The main function of ccostr is ccmean(), which implements 4 estimators, these ar
 ## Explanation of the estimators
 The package calculates two naive estimates of the mean cost. The first is the available sample (AS) estimator which divides total costs of all observations with the number of observations. This is correct if there is no censoring present. With censored data it is underestimating the real costs due to missing information. The second is the complete cases  (CC) estimator, here all incomplete cases is filtered out. This creates a bias towards short cases as they have a greater chance of not being removed, and this would normally also give a downward bias.
 
-<p align="center">
-  <img src="img/f1.png" height="55"/>
-</p>
+$$
+\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^n_{i=1}\Delta_i M_i}{\sum^n_{i=1}\Delta_i}
+$$
 
 The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the complete case with the probability of censoring at the event time.
 
-<p align="center">
-<img src="img/f2.png" height="60"/>
-</p>
-
+$$
+\hat{\mu}_{BT} = \frac{1}{n}\sum^n_{i=1}\frac{\Delta_i M_i}{\hat{K}(T_i)}
+$$
 If cost history is present, the above estimator may be improved by using the ZT estimator *(Zhao and Tian, 2001)*.
 
-<p align="center">
-<img src="img/f3.png" height="65"/>
-</p>
+$$
+\hat{\mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[ 
+\Delta_i \frac{M_i}{\hat{K}(T_i)} 
++ (1 - \Delta_i) \frac{\{ M_i - \overline{M(C_i)} \}}{\hat{K}(C_i)} 
+\right]
+$$
 
 For all formulas above $n$ is number of individuals, $M_i$ and $\Delta_i$ are the total cost and event indicator for individual $i$, with $\Delta_i = 1$ or $\Delta_i = 0$ for respectively fully observed and censored cases. $\hat{K}(T_i)$ is the Kaplan-Meier estimator of the probability of censoring at time $T_i$, i.e. the time of event for individual $i$.   $\overline{M(C_i)}$ is the average of cost until time $C_i$ among individuals with event time later than $C_i$, and $\hat{K}(C_i)$ is the Kaplan-Meier estimator of the censoring probability at the time $T_i$.
 
