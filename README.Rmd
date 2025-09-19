@@ -57,10 +57,8 @@ $$
 If cost history is present, the above estimator may be improved by using the ZT estimator *(Zhao and Tian, 2001)*.
 
 $$
-\hat{ \mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[ 
-\Delta_i \frac{M_i}{ \hat{K}(T_i)} 
-+ (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}}{ \hat{K}(C_i)} 
-\right]
+\hat{\mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} 
++ (1 - \Delta_i) \frac{\{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)} \right]
 $$
 
 For all formulas above $n$ is number of individuals, $M_i$ and $\Delta_i$ are the total cost and event indicator for individual $i$, with $\Delta_i = 1$ or $\Delta_i = 0$ for respectively fully observed and censored cases. $\hat{K}(T_i)$ is the Kaplan-Meier estimator of the probability of censoring at time $T_i$, i.e. the time of event for individual $i$.   $\overline{M(C_i)}$ is the average of cost until time $C_i$ among individuals with event time later than $C_i$, and $\hat{K}(C_i)$ is the Kaplan-Meier estimator of the censoring probability at the time $T_i$.
