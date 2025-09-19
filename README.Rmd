@@ -53,6 +53,7 @@ The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the complete c
 $$
 \hat{\mu}_{BT} = \frac{1}{n}\sum^n_{i=1}\frac{\Delta_i M_i}{\hat{K}(T_i)}
 $$
+
 If cost history is present, the above estimator may be improved by using the ZT estimator *(Zhao and Tian, 2001)*.
 
 $$
