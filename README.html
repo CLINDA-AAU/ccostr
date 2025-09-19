@@ -691,12 +691,10 @@ time.</p>
 \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}\]</span></p>
 <p>If cost history is present, the above estimator may be improved by
 using the ZT estimator <em>(Zhao and Tian, 2001)</em>.</p>
-<p>$$\hat{\mu}<em>{ZT} = \frac{1}{n} \sum^n</em>{i=1} \left[\Delta_i
-\frac{M_i}{ \hat{K}(T_i)}</p>
-<ul>
-<li>(1 - \Delta_i) \frac{ { M_i - \overline{M(C_i)} }} { \hat{K}(C_i)}
-\right]$$</li>
-</ul>
+<p><span class="math display">\[\hat{\mu}_{ZT} = \frac{1}{n}
+\sum^n_{i=1} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} + (1 - \Delta_i)
+\frac{ \{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)}
+\right]\]</span></p>
 <p>For all formulas above <span class="math inline">\(n\)</span> is
 number of individuals, <span class="math inline">\(M_i\)</span> and
 <span class="math inline">\(\Delta_i\)</span> are the total cost and
@@ -821,15 +819,15 @@ format based on the method from <em>(Lin et al, 1997)</em>.</p>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; ccostr - Estimates of mean cost with censored data</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; N         4106        1000           617 9.987312  3601.709    9.987312</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; N         4013        1000           620 9.970404  3497.012    9.970404</span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;    Estimate Variance       SE  0.95LCL  0.95UCL</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; AS 29521.16 179993.8 424.2568 28689.62 30352.70</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; CC 38271.52 121574.5 348.6753 37588.12 38954.92</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; BT 40050.73 123307.0 351.1509 39362.47 40738.99</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; ZT 39968.94 127306.4 356.8003 39269.61 40668.27</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; AS 29293.67 179300.9 423.4394 28463.73 30123.62</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; CC 37964.57 119893.4 346.2562 37285.91 38643.23</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; BT 39726.52 125363.6 354.0673 39032.55 40420.49</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; ZT 39648.41 132217.6 363.6174 38935.72 40361.10</span></span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Mean survival time: 4.96 With SE: 0.1</span></span></code></pre></div>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Mean survival time: 4.86 With SE: 0.11</span></span></code></pre></div>
 <h2 id="references">References</h2>
 <ol style="list-style-type: decimal">
 <li><p>Lin, D. Y., E. J. Feuer, R. Etzioni, and Y. Wax. (1997)
