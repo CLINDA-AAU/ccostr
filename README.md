@@ -60,26 +60,19 @@ real costs due to missing information. The second is the complete cases
 a bias towards short cases as they have a greater chance of not being
 removed, and this would normally also give a downward bias.
 
-<p align="center">
-
-<img src="img/f1.png" height="55"/>
-</p>
+$$\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^n_{i=1}\Delta_i M_i}{\sum^n_{i=1}\Delta_i}$$
 
 The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the
 complete case with the probability of censoring at the event time.
 
-<p align="center">
-
-<img src="img/f2.png" height="60"/>
-</p>
-
+$$\hat{\mu}_{BT} = \frac{1}{n}\sum^n_{i=1}\frac{\Delta_i M_i}{\hat{K}(T_i)}$$
 If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
-<p align="center">
-
-<img src="img/f3.png" height="65"/>
-</p>
+$$\hat{\mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[ 
+\Delta_i \frac{M_i}{\hat{K}(T_i)} 
++ (1 - \Delta_i) \frac{\{ M_i - \overline{M(C_i)} \}}{\hat{K}(C_i)} 
+\right]$$
 
 For all formulas above $n$ is number of individuals, $M_i$ and
 $\Delta_i$ are the total cost and event indicator for individual $i$,
@@ -156,15 +149,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4162        1000           601 9.991941  3651.418    9.991941
+#> N         4019        1000           597 9.972284  3500.114    9.972284
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29476.83 179939.5 424.1928 28645.41 30308.25
-#> CC 38556.02 120849.4 347.6340 37874.66 39237.38
-#> BT 40359.05 136261.6 369.1363 39635.54 41082.55
-#> ZT 40169.96 138760.7 372.5059 39439.84 40900.07
+#> AS 28962.27 190278.9 436.2097 28107.30 29817.24
+#> CC 38326.56 139932.4 374.0753 37593.37 39059.75
+#> BT 40218.65 150093.2 387.4186 39459.31 40977.99
+#> ZT 40154.14 149684.3 386.8905 39395.83 40912.44
 #> 
-#> Mean survival time: 5.08 With SE: 0.11
+#> Mean survival time: 5.01 With SE: 0.11
 ```
 
 ## References
