@@ -4,7 +4,7 @@ author: "Lars Børty Nielsen, Martin Bøgsted, and Rasmus Brøndum"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
 vignette: >
-  %\VignetteIndexEntry{Example replicating st0399 results}
+  %\VignetteIndexEntry{Example: Replicating st0399 results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

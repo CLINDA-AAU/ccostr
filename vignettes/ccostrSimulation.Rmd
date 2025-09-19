@@ -4,7 +4,7 @@ author: "Lars Børty Nielsen, Martin Bøgsted, and Rasmus Brøndum"
 output: rmarkdown::html_vignette
 bibliography: ../inst/REFERENCES.bib
 vignette: >
-  %\VignetteIndexEntry{Simulation of bias and coverage}
+  %\VignetteIndexEntry{Simulation study: Bias and coverage of the estimators}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

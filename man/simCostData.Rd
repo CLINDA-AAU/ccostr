@@ -4,8 +4,7 @@
 \alias{simCostData}
 \title{Simulates censored cost data}
 \usage{
-simCostData(n = 100, dist = "unif", censor = "light",
-  cdist = "exp", L = 10)
+simCostData(n = 100, dist = "unif", censor = "light", cdist = "exp", L = 10)
 }
 \arguments{
 \item{n}{Number of individuals to simulate}

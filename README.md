@@ -34,9 +34,9 @@ estimator
 ccostr may be installed using the following command
 
 ``` r
-devtools::install_github("HaemAalborg/ccostr")
+devtools::install_github("CLINDA-AAU/ccostr")
 # Or including a vignette that demonstrates the bias and coverage of the estimators
-devtools::install_github("HaemAalborg/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+devtools::install_github("CLINDA-AAU/ccostr", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 # Overview
@@ -60,17 +60,23 @@ real costs due to missing information. The second is the complete cases
 a bias towards short cases as they have a greater chance of not being
 removed, and this would normally also give a downward bias.
 
-$$\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^n_{i=1}\Delta_i M_i}{\sum^n_{i=1}\Delta_i}$$
+$$
+\hat{\mu}_{AS} = \frac{\sum^n_{i=1}M_i}{n} \qquad \hat{\mu}_{CC} = \frac{\sum^n_{i=1}\Delta_i M_i}{\sum^n_{i=1}\Delta_i}
+$$
 
 The BT estimator *(Bang and Tsiatis, 2000)*, weights the cost for the
 complete case with the probability of censoring at the event time.
 
-$$\hat{\mu}_{BT} = \frac{1}{n} \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}$$
+$$
+\hat{\mu}_{BT} = \frac{1}{n} \sum^n_{i=1} \frac{\Delta_i M_i}{\hat{K}(T_i)}
+$$
 
 If cost history is present, the above estimator may be improved by using
 the ZT estimator *(Zhao and Tian, 2001)*.
 
-$$\hat{\mu}_{ZT} = \frac{1}{n} \sum^n_{i=1} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} + (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)} \right]$$
+$$
+\hat{\mu}_{ZT} = \frac{1}{n} \sum^n_{i=1} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} + (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)} \right]
+$$
 
 For all formulas above $n$ is number of individuals, $M_i$ and
 $\Delta_i$ are the total cost and event indicator for individual $i$,
@@ -119,7 +125,6 @@ calculated using ccmean.
 
 ``` r
 library(ccostr)
-#> Warning: package 'ccostr' was built under R version 4.5.1
 ccmean(df, L = 1000)
 #> ccostr - Estimates of mean cost with censored data
 #> 
@@ -147,15 +152,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4013        1000           620 9.970404  3497.012    9.970404
+#> N         4102        1000           603 9.998052  3586.351    9.998052
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29293.67 179300.9 423.4394 28463.73 30123.62
-#> CC 37964.57 119893.4 346.2562 37285.91 38643.23
-#> BT 39726.52 125363.6 354.0673 39032.55 40420.49
-#> ZT 39648.41 132217.6 363.6174 38935.72 40361.10
+#> AS 29368.25 183439.1 428.2979 28528.78 30207.71
+#> CC 38358.38 132195.3 363.5868 37645.75 39071.01
+#> BT 40171.19 133417.3 365.2633 39455.27 40887.10
+#> ZT 40246.57 138259.7 371.8329 39517.77 40975.36
 #> 
-#> Mean survival time: 4.86 With SE: 0.11
+#> Mean survival time: 5.06 With SE: 0.11
 ```
 
 ## References
