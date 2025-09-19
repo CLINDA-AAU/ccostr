@@ -57,7 +57,7 @@ $$
 If cost history is present, the above estimator may be improved by using the ZT estimator *(Zhao and Tian, 2001)*.
 
 $$
-\hat{\mu}_{ZT} = \frac{1}{n} \sum_{i=1}^{n} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} 
+\hat{\mu}_{ZT} = \frac{1}{n} \sum^n_{i=1} \left[\Delta_i \frac{M_i}{ \hat{K}(T_i)} 
 + (1 - \Delta_i) \frac{ \{ M_i - \overline{M(C_i)} \}} { \hat{K}(C_i)} \right]
 $$
 
