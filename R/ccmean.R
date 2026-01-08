@@ -228,6 +228,7 @@ ccmean <- function(x, L = max(x$surv), addInterPol = 0) {
   surv <- NULL
   start <- NULL # Hack to avoid NSE error in data.table
   cost <- NULL
+  id <- NULL
   
   # For each censored individual the cost is calculated for longer 
   # surviving individuals up till time ti
