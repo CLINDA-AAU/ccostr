@@ -1,7 +1,7 @@
 Package: ccostr
 Type: Package
 Title: Estimation of Mean Costs in Censored Data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Lars", "Boerty", email = "lars.borty@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3715-8528")),
     person("Rasmus", "Broendum", role = "aut", comment = c(ORCID = "0000-0001-5537-6767")),
@@ -12,6 +12,8 @@ Description: Implementation of estimators for inferring
     BT from Bang and Tsiatis (2000) <doi:10.1093/biomet/87.2.329> and 
     ZT from Zhao and Tian (2001) <doi:10.1111/j.0006-341X.2001.01002.x>.
 License: MIT + file LICENSE
+URL: https://github.com/CLINDA-AAU/ccostr
+BugReports: https://github.com/CLINDA-AAU/ccostr/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.3
