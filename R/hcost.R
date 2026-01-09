@@ -20,7 +20,7 @@
 #' @references 
 #' \insertRef{Chen2015}{ccostr}
 #'
-#' @source \href{http://shuaichen.weebly.com/developed-package.html}{Blog}
+#' @source \href{https://shuaichen.weebly.com/developed-software.html}{Blog}
 #'
 #' @examples
 #' data(hcost)

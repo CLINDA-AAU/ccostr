@@ -14,9 +14,9 @@ library(knitr)
 ```
 
 # ccostr
-[![status](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](http://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
+[![status](https://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](https://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
 [![Build Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://travis-ci.org/LarsHernandez/ccostr)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
 
 ccostr is an R package to calculate estimates of mean total cost in censored cost data. Censoring is a frequent obstacle when working with time to event data, as e.g. not all patients in a medical study can be observed until death. For estimating the distribution of time to event the Kaplan-Meier estimator is useful, but when estimating mean costs it is not, since costs, opposed to time, do typically not accumulate at a constant rate. Often costs accumulate a at a higher rate at the beginning (e.g. at diagnosis) and end (e.g. death).
 
