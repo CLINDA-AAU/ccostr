@@ -3,9 +3,9 @@
 
 # ccostr
 
-[![status](https://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954/status.svg)](https://joss.theoj.org/papers/0b9e631729dd9fadff3d6875e84ed954)
+[![status](https://joss.theoj.org/papers/10.21105/joss.01593/status.svg)](https://joss.theoj.org/papers/10.21105/joss.01593)
 [![Build
-Status](https://travis-ci.org/LarsHernandez/ccostr.svg?branch=master)](https://travis-ci.org/LarsHernandez/ccostr)
+Status](https://app.travis-ci.com/LarsHernandez/ccostr.svg?branch=master)](https://app.travis-ci.com/LarsHernandez/ccostr)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ccostr)](https://cran.r-project.org/package=ccostr)
 
 ccostr is an R package to calculate estimates of mean total cost in
@@ -152,15 +152,15 @@ ccmean(sim$censoredCostHistory)
 #> ccostr - Estimates of mean cost with censored data
 #> 
 #>   Observations Individuals FullyObserved   Limits TotalTime MaxSurvival
-#> N         4087        1000           607 9.984502  3563.244    9.984502
+#> N         4022        1000           624 9.988503  3507.512    9.988503
 #> 
 #>    Estimate Variance       SE  0.95LCL  0.95UCL
-#> AS 29154.43 177606.7 421.4341 28328.41 29980.44
-#> CC 37850.65 131133.3 362.1234 37140.89 38560.41
-#> BT 39641.57 147615.4 384.2075 38888.53 40394.62
-#> ZT 39629.85 142059.8 376.9082 38891.11 40368.59
+#> AS 29773.44 183209.4 428.0297 28934.50 30612.38
+#> CC 38382.71 124232.8 352.4667 37691.88 39073.55
+#> BT 40021.33 135372.5 367.9300 39300.19 40742.47
+#> ZT 40080.27 134623.2 366.9103 39361.12 40799.41
 #> 
-#> Mean survival time: 4.99 With SE: 0.11
+#> Mean survival time: 4.86 With SE: 0.11
 ```
 
 ## References
