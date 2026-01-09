@@ -17,7 +17,7 @@ A data frame with 9882 rows and 7 variables:
 }
 }
 \source{
-\href{http://shuaichen.weebly.com/developed-package.html}{Blog}
+\href{https://shuaichen.weebly.com/developed-software.html}{Blog}
 }
 \usage{
 data(hcost)
